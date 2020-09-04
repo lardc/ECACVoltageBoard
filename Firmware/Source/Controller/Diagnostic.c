@@ -29,6 +29,18 @@ bool DIAG_HandleDiagnosticAction(uint16_t ActionID, uint16_t *pUserError)
 			}
 			break;
 
+		case ACT_DBG_SET_STATE_POW_RELAY:
+			{
+				DBGACT_SetStateRelay(RELAY_POW, DataTable[REG_DBG_RELAY_POW_STATE]);
+			}
+			break;
+
+		case ACT_DBG_SET_STATE_CTRL_RELAY:
+			{
+				DBGACT_SetStateRelay(RELAY_CTRL, DataTable[REG_DBG_RELAY_CTRL_STATE]);
+			}
+			break;
+
 		default:
 			return false;
 	}

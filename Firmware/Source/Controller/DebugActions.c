@@ -25,3 +25,9 @@ void DBGACT_GenerateImpulseLineSync2()
 	LL_SetSync2State(FALSE);
 }
 //-----------------------------
+
+void DBGACT_SetStateRelay(uint8_t NumRelay, bool NewState)
+{
+	LL_SetStateRelay(NumRelay, NewState);
+}
+//-----------------------------
