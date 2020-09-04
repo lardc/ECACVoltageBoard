@@ -18,12 +18,28 @@ void INITCFG_ConfigIO()
 	// Включение тактирования портов
 	RCC_GPIO_Clk_EN(PORTA);
 	RCC_GPIO_Clk_EN(PORTB);
+	RCC_GPIO_Clk_EN(PORTC);
 	
 	// Выходы
+	GPIO_InitPushPullOutput(GPIO_LED);
+	GPIO_InitPushPullOutput(GPIO_LED_EXT);
 	GPIO_InitPushPullOutput(GPIO_CTRL_SYNC_1);
 	GPIO_InitPushPullOutput(GPIO_CTRL_SYNC_2);
-	GPIO_InitPushPullOutput(GPIO_LED);
+	GPIO_InitPushPullOutput(GPIO_I_RANGE_H);
+	GPIO_InitPushPullOutput(GPIO_I_RANGE_M);
+	GPIO_InitPushPullOutput(GPIO_I_RANGE_L);
+	GPIO_InitPushPullOutput(GPIO_U_RANGE);
+	GPIO_InitPushPullOutput(GPIO_CTRL_RELAY_1);
+	GPIO_InitPushPullOutput(GPIO_CTRL_RELAY_2);
+	GPIO_InitPushPullOutput(GPIO_CTRL_PWMSD_1);
+	GPIO_InitPushPullOutput(GPIO_CTRL_PWMSD_2);
+	GPIO_InitPushPullOutput(GPIO_CTRL_PWM_1);
+	GPIO_InitPushPullOutput(GPIO_CTRL_PWM_2);
 	
+	// Входы аналоговые
+	GPIO_InitAnalog(GPIO_MEAS_U);
+	GPIO_InitAnalog(GPIO_MEAS_I);
+
 	// Альтернативные функции
 	GPIO_InitAltFunction(GPIO_ALT_CAN_RX, AltFn_9);
 	GPIO_InitAltFunction(GPIO_ALT_CAN_TX, AltFn_9);
