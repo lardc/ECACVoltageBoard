@@ -10,8 +10,6 @@
 #include "LowLevel.h"
 #include "SysConfig.h"
 #include "DebugActions.h"
-#include "Commutation.h"
-#include "Safety.h"
 #include "Diagnostic.h"
 #include "BCCIxParams.h"
 
@@ -34,8 +32,6 @@ void CONTROL_SwitchToFault(Int16U Reason);
 void CONTROL_DelayMs(uint32_t Delay);
 void CONTROL_UpdateWatchDog();
 void CONTROL_ResetToDefaultState();
-void SFTY_CheckSafety();
-void SFTY_DisconnectAndSetStopState();
 
 // Functions
 //
@@ -51,10 +47,6 @@ void CONTROL_Init()
 	// Сброс значений
 	DEVPROFILE_ResetControlSection();
 	CONTROL_ResetToDefaultState();
-
-	COMM_InitTable();			// Создание и заполнение таблиц
-
-	COMM_DisconnectAllRelay();
 }
 //------------------------------------------
 
@@ -64,7 +56,6 @@ void CONTROL_ResetToDefaultState()
 	DataTable[REG_DISABLE_REASON] = DF_NONE;
 	DataTable[REG_PROBLEM] = PROBLEM_NONE;
 	DataTable[REG_OP_RESULT] = OPRESULT_NONE;
-	DataTable[REG_BUTTON_START] = BUTT_START_IS_UNPRESSED;
 
 	DEVPROFILE_ResetScopes(0);
 	DEVPROFILE_ResetEPReadState();
@@ -78,7 +69,6 @@ void CONTROL_Idle()
 {
 	DEVPROFILE_ProcessRequests();
 	CONTROL_UpdateWatchDog();
-	SFTY_CheckSafety();
 }
 //------------------------------------------
 
@@ -93,18 +83,7 @@ static Boolean CONTROL_DispatchAction(Int16U ActionID, pInt16U pUserError)
 				DataTable[REG_OP_RESULT] = OPRESULT_NONE;
 				if((CONTROL_State == DS_None) || (CONTROL_State == DS_Disabled))
 				{
-					COMM_DisconnectAllRelay();
-					if(SafetyState.SafetyIsActive)
-					{
-						SFTY_SwitchInterruptState(true);
-						CONTROL_SetDeviceState(DS_SafetyEnabled);
-					}
-					else
-					{
-						SFTY_SwitchInterruptState(false);
-						CONTROL_SetDeviceState(DS_Enabled);
-					}
-
+					CONTROL_SetDeviceState(DS_Enabled);
 					DataTable[REG_OP_RESULT] = OPRESULT_OK;
 				}
 				else
@@ -120,10 +99,7 @@ static Boolean CONTROL_DispatchAction(Int16U ActionID, pInt16U pUserError)
 			if((CONTROL_State == DS_None) || (CONTROL_State == DS_Enabled) || (CONTROL_State == DS_SafetyEnabled)
 					|| (CONTROL_State == DS_SafetyDanger))
 			{
-				COMM_DisconnectAllRelay();
-				SFTY_SwitchInterruptState(false);
 				CONTROL_SetDeviceState(DS_Disabled);
-				DataTable[REG_OP_RESULT] = OPRESULT_OK;
 			}
 			else
 			{
@@ -140,30 +116,6 @@ static Boolean CONTROL_DispatchAction(Int16U ActionID, pInt16U pUserError)
 		case ACT_FAULT_CLEAR:
 			{
 				CONTROL_ResetToDefaultState();
-			}
-			break;
-
-		case ACT_SET_RELAY_NONE:
-			{
-				DataTable[REG_OP_RESULT] = OPRESULT_NONE;
-				COMM_DisconnectAllRelay();
-				DataTable[REG_OP_RESULT] = OPRESULT_OK;
-			}
-			break;
-
-		case ACT_SET_RELAY_GROUP:
-			{
-				DataTable[REG_OP_RESULT] = OPRESULT_NONE;
-				if(COMM_ReturnResultConnectGroup())
-				{
-					DataTable[REG_OP_RESULT] = OPRESULT_OK;
-					*pUserError = ERR_NONE;
-				}
-				else
-				{
-					DataTable[REG_OP_RESULT] = OPRESULT_FAIL;
-					*pUserError = ERR_DEVICE_NOT_READY;
-				}
 			}
 			break;
 

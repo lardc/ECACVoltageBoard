@@ -4,7 +4,6 @@
 
 // Header
 #include "Constraints.h"
-#include "CommutationTable.h"
 
 // Constants
 //
@@ -142,17 +141,17 @@ const TableItemConstraint NVConstraint[DATA_TABLE_NV_SIZE] = {
 const TableItemConstraint VConstraint[DATA_TABLE_WP_START - DATA_TABLE_WR_START] = {
 		{0, 0, 0},																	// 128
 		{0, 0, 0},																	// 129
-		{0, MAX_TUPE_MEASURE, 0},													// 130
-		{0, MAX_TUPE_CASE, 0},														// 131
-		{0, MAX_TUPE_POS_CASE, 0},													// 132
-		{0, MAX_TUPE_CTRL, 0},														// 133
-		{0, MAX_TUPE_LEAKAGE, 0},													// 134
-		{0, MAX_TUPE_POLARITY, 0},													// 135
+		{0, 0, 0},																	// 130
+		{0, 0, 0},																	// 131
+		{0, 0, 0},																	// 132
+		{0, 0, 0},																	// 133
+		{0, 0, 0},																	// 134
+		{0, 0, 0},																	// 135
 		{0, 0, 0},																	// 136
 		{0, 0, 0},																	// 137
 		{0, 0, 0},																	// 138
 		{0, 0, 0},																	// 139
-		{0, MAX_COUNTER_TABLE, 0},													// 140
+		{0, 0, 0},																	// 140
 		{0, 0, 0},																	// 141
 		{0, 0, 0},																	// 142
 		{0, 0, 0},																	// 143
@@ -162,8 +161,8 @@ const TableItemConstraint VConstraint[DATA_TABLE_WP_START - DATA_TABLE_WR_START]
 		{0, 0, 0},																	// 147
 		{0, 0, 0},																	// 148
 		{0, 0, 0},																	// 149
-		{NO, YES, NO},																// 150
-		{0, MAX_NUM_RELAY, 0},														// 151
+		{0, 0, 0},																	// 150
+		{0, 0, 0},																	// 151
 		{0, 0, 0},																	// 152
 		{0, 0, 0},																	// 153
 		{0, 0, 0},																	// 154
