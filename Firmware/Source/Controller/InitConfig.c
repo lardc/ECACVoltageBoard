@@ -1,12 +1,16 @@
+// Header
 #include "InitConfig.h"
-#include "Board.h"
-#include "SysConfig.h"
+
+// Include
 #include "BCCIxParams.h"
-#include "LowLevel.h"
+#include "Board.h"
 #include "Delay.h"
+#include "LowLevel.h"
+#include "PWM.h"
+#include "SysConfig.h"
+#include "ZwDMA.h"
 
 // Functions
-//
 Boolean INITCFG_ConfigSystemClock()
 {
 	return RCC_PLL_HSE_Config(QUARTZ_FREQUENCY, PREDIV_4, PLL_14);
@@ -33,9 +37,7 @@ void INITCFG_ConfigIO()
 	GPIO_InitPushPullOutput(GPIO_CTRL_RELAY_2);
 	GPIO_InitPushPullOutput(GPIO_CTRL_PWMSD_1);
 	GPIO_InitPushPullOutput(GPIO_CTRL_PWMSD_2);
-	GPIO_InitPushPullOutput(GPIO_CTRL_PWM_1);
-	GPIO_InitPushPullOutput(GPIO_CTRL_PWM_2);
-	
+
 	// ¬ходы аналоговые
 	GPIO_InitAnalog(GPIO_MEAS_U);
 	GPIO_InitAnalog(GPIO_MEAS_I);
@@ -45,6 +47,8 @@ void INITCFG_ConfigIO()
 	GPIO_InitAltFunction(GPIO_ALT_CAN_TX, AltFn_9);
 	GPIO_InitAltFunction(GPIO_ALT_UART_RX, AltFn_7);
 	GPIO_InitAltFunction(GPIO_ALT_UART_TX, AltFn_7);
+	GPIO_InitAltFunction(GPIO_CTRL_PWM_1, AltFn_6);
+	GPIO_InitAltFunction(GPIO_CTRL_PWM_2, AltFn_4);
 }
 //------------------------------------------------
 
@@ -77,5 +81,11 @@ void INITCFG_ConfigWatchDog()
 {
 	IWDG_Config();
 	IWDG_ConfigureFastUpdate();
+}
+//------------------------------------------------
+
+void INITCFG_PWM()
+{
+	PWM_ConfigureTIM1_Ch1(SYSCLK, TIMER1_uS);
 }
 //------------------------------------------------

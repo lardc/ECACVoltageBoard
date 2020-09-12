@@ -25,7 +25,10 @@ int main()
 	
 	// Настройка системного счетчика
 	INITCFG_ConfigTimer7();
-	
+
+	// Настройка ШИМ
+	INITCFG_PWM();
+
 	// Настройка сторожевого таймера
 	INITCFG_ConfigWatchDog();
 	
