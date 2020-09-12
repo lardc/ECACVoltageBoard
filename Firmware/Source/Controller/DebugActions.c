@@ -2,18 +2,15 @@
 #include "DebugActions.h"
 
 // Include
-#include "LowLevel.h"
-#include "Board.h"
 #include "Delay.h"
-#include "Controller.h"
-#include "DataTable.h"
+#include "LowLevel.h"
+#include "PWM.h"
 
 // Functions
-//
 void DBGACT_GenerateImpulseLineSync1()
 {
 	LL_SetSync1State(TRUE);
-	CONTROL_DelayMs(10);
+	DELAY_MS(10);
 	LL_SetSync1State(FALSE);
 }
 //-----------------------------
@@ -21,7 +18,7 @@ void DBGACT_GenerateImpulseLineSync1()
 void DBGACT_GenerateImpulseLineSync2()
 {
 	LL_SetSync2State(TRUE);
-	CONTROL_DelayMs(10);
+	DELAY_MS(10);
 	LL_SetSync2State(FALSE);
 }
 //-----------------------------
@@ -29,5 +26,11 @@ void DBGACT_GenerateImpulseLineSync2()
 void DBGACT_SetStateRelay(uint8_t NumRelay, bool NewState)
 {
 	LL_SetStateRelay(NumRelay, NewState);
+}
+//-----------------------------
+
+void DBGACT_GenerateOneSin(uint16_t Voltage, uint16_t Current, uint8_t Polarity)
+{
+	PWM_PrepareAndGenerateSignal(Voltage, Current, Polarity);
 }
 //-----------------------------
