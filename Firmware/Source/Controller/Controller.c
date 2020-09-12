@@ -2,6 +2,7 @@
 #include "Controller.h"
 //
 // Includes
+#include "DebugActions.h"
 #include "Board.h"
 #include "Delay.h"
 #include "DeviceProfile.h"
@@ -9,7 +10,8 @@
 #include "Global.h"
 #include "LowLevel.h"
 #include "SysConfig.h"
-#include "DebugActions.h"
+
+
 #include "Diagnostic.h"
 #include "BCCIxParams.h"
 
@@ -96,8 +98,7 @@ static Boolean CONTROL_DispatchAction(Int16U ActionID, pInt16U pUserError)
 			
 		case ACT_DISABLE_POWER:
 			DataTable[REG_OP_RESULT] = OPRESULT_NONE;
-			if((CONTROL_State == DS_None) || (CONTROL_State == DS_Enabled) || (CONTROL_State == DS_SafetyEnabled)
-					|| (CONTROL_State == DS_SafetyDanger))
+			if((CONTROL_State == DS_None) || (CONTROL_State == DS_Enabled))
 			{
 				CONTROL_SetDeviceState(DS_Disabled);
 			}
