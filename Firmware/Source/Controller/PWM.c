@@ -16,6 +16,9 @@
 #define PWM_TIM1_OUT_DISABLE	(TIM1->BDTR &= ~TIM_BDTR_MOE)
 #define PWM_TIM1_GenerateEvent	(TIM1->EGR |= TIM_EGR_UG);
 
+// Variables
+volatile uint16_t TIM1_DMA_Buffer[SIN_BUFF_SIZE + 1] = {0};
+
 // Functions
 void PWM_ConfigureTIM1_Ch1(float SystemClock, uint16_t Period)
 {

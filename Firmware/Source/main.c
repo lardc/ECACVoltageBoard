@@ -25,6 +25,9 @@ int main()
 	
 	// Настройка системного счетчика
 	INITCFG_ConfigTimer7();
+	
+	// Настройка DMA
+	INITCFG_DMA();
 
 	// Настройка ШИМ
 	INITCFG_PWM();
