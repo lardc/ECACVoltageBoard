@@ -23,6 +23,12 @@
 // Сохраняемые регистры
 
 // Несохраняемы регистры чтения-записи
+#define REG_SIN_VOLTAGE					128 // Амплитуда напряжение выходного сигнала, В
+#define REG_SIN_CURRENT					129 // Амплитуда тока выходного сигнала, x10 мкА
+#define REG_SIN_POLARITY				130 // Полярность
+#define REG_SIN_LONG					131 // Длительность импульса
+#define REG_SIN_TO_LINE					132 // Канал подачи сигнала POW, CTRL или в никуда
+
 #define REG_DBG_RELAY_CTRL_STATE		150	// Регистр состояния
 #define REG_DBG_RELAY_POW_STATE			151	// Регистр состояния
 
