@@ -9,6 +9,7 @@
 #include "PWM.h"
 #include "SysConfig.h"
 #include "ZwDMA.h"
+#include "Global.h"
 
 // Variables
 extern volatile uint16_t TIM1_DMA_Buffer[SIN_BUFF_SIZE +1 ];
@@ -99,10 +100,27 @@ void INITCFG_PWM()
 void INITCFG_DMA()
 {
 	DMA_Clk_Enable(DMA1_ClkEN);
+	DMA_Clk_Enable(DMA2_ClkEN);
+
+	/*TIM1 DMA1_CH2*/
 	DMA_Reset(DMA1_Channel2);
 	DMAChannelX_DataConfig(DMA1_Channel2, (uint32_t)TIM1_DMA_Buffer, (uint32_t)(&TIM1->DMAR), SIN_BUFF_SIZE + 1);
 	DMAChannelX_Config(DMA1_Channel2, DMA_MEM2MEM_DIS, DMA_LvlPriority_HIGHT,
-					   DMA_MSIZE_16BIT, DMA_PSIZE_16BIT, DMA_MINC_EN, DMA_PINC_DIS,
-					   DMA_CIRCMODE_DIS, DMA_READ_FROM_MEM);
+	DMA_MSIZE_16BIT, DMA_PSIZE_16BIT, DMA_MINC_EN, DMA_PINC_DIS,
+	DMA_CIRCMODE_DIS, DMA_READ_FROM_MEM);
+
+	/*ADC1 DMA1*/
+	DMA_Reset(DMA1_Channel1);
+	DMAChannelX_DataConfig(DMA1_Channel1, (uint32_t)ADC1DMABuff, (uint32_t)(&ADC1->DR), ADC_BUFF_SIZE);
+	DMAChannelX_Config(DMA1_Channel1, DMA_MEM2MEM_DIS, DMA_LvlPriority_MEDIUM,
+	DMA_MSIZE_16BIT, DMA_PSIZE_16BIT, DMA_MINC_EN, DMA_PINC_DIS,
+	DMA_CIRCMODE_DIS, DMA_READ_FROM_PERIPH);
+
+	/*ADC2 DMA2*/
+	DMA_Reset(DMA2_Channel1);
+	DMAChannelX_DataConfig(DMA2_Channel1, (uint32_t)ADC2DMABuff, (uint32_t)(&ADC2->DR), ADC_BUFF_SIZE);
+	DMAChannelX_Config(DMA2_Channel1, DMA_MEM2MEM_DIS, DMA_LvlPriority_MEDIUM,
+	DMA_MSIZE_16BIT, DMA_PSIZE_16BIT, DMA_MINC_EN, DMA_PINC_DIS,
+	DMA_CIRCMODE_DIS, DMA_READ_FROM_PERIPH);
 }
 //------------------------------------------------

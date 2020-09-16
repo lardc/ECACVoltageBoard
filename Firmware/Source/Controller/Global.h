@@ -9,11 +9,10 @@
 #define ENABLE_LOCKING			FALSE	// Защита NV регистров паролем
 
 // Временные параметры
-#define TIME_LED_BLINK			500	// Мигание светодиодом (в мс)
+#define TIME_LED_BLINK			500		// Мигание светодиодом (в мс)
 
-//
 #define SIN_BUFF_SIZE 			101		// Размер буфера ДМА для ШИМ
-#define ADC_DMA_BUFF_SIZE 		8		// Размер буфера ДМА для АЦП
+#define ADC_BUFF_SIZE 			101		// Размер буфера ДМА для АЦП
 
 #define HW_MAX_VOLTAGE			310		// Максимальное выходное амплитудное напряжение (в В)
 #define HW_MAX_CURRENT			11000	// Максимальный ток	(x10 в мкА)
