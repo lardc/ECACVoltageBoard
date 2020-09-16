@@ -10,9 +10,13 @@
 #include "SysConfig.h"
 #include "ZwDMA.h"
 #include "Global.h"
+#include "ZwADC.h"
+#include "Measure.h"
 
 // Variables
 extern volatile uint16_t TIM1_DMA_Buffer[SIN_BUFF_SIZE +1 ];
+extern volatile uint16_t ADC1DMABuff[ADC_BUFF_SIZE];
+extern volatile uint16_t ADC2DMABuff[ADC_BUFF_SIZE];
 
 // Functions
 Boolean INITCFG_ConfigSystemClock()
@@ -122,5 +126,35 @@ void INITCFG_DMA()
 	DMAChannelX_Config(DMA2_Channel1, DMA_MEM2MEM_DIS, DMA_LvlPriority_MEDIUM,
 	DMA_MSIZE_16BIT, DMA_PSIZE_16BIT, DMA_MINC_EN, DMA_PINC_DIS,
 	DMA_CIRCMODE_DIS, DMA_READ_FROM_PERIPH);
+}
+//------------------------------------------------
+
+void INITCFG_ADC()
+{
+	RCC_ADC_Clk_EN(ADC_12_ClkEN);
+	ADC1_2_SetDualMode(true);
+	ADC_Calibration(ADC1);
+
+	ADC_SoftTrigConfig(ADC1);
+	ADC_SoftTrigConfig(ADC2);
+
+	ADC1->CFGR |= ADC_CFGR_EXTSEL_0;
+	ADC1->CFGR |= ADC_CFGR_EXTEN_0;
+	ADC2->CFGR |= ADC_CFGR_EXTSEL_0;
+	ADC2->CFGR |= ADC_CFGR_EXTEN_0;
+
+	ADC_ChannelSeqLen(ADC1, ADC_BUFF_SIZE);
+	ADC_ChannelSet_Sequence(ADC1, 1, 1);
+	ADC_ChannelSet_SampleTime(ADC1, 5, ADC_SMPL_TIME_7_5);
+
+	ADC_ChannelSeqLen(ADC2, ADC_BUFF_SIZE);
+	ADC_ChannelSet_Sequence(ADC2, 1, 1);
+	ADC_ChannelSet_SampleTime(ADC2, 1, ADC_SMPL_TIME_7_5);
+
+	ADC_DMAEnable(ADC1, true);
+	ADC_DMAEnable(ADC2, true);
+
+	ADC_Enable(ADC1);
+	ADC_Enable(ADC2);
 }
 //------------------------------------------------

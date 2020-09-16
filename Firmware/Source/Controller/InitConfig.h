@@ -14,5 +14,6 @@ void INITCFG_ConfigTimer7();
 void INITCFG_ConfigWatchDog();
 void INITCFG_PWM();
 void INITCFG_DMA();
+void INITCFG_ADC();
 
 #endif //__INITCONFIG_H

@@ -32,6 +32,9 @@ int main()
 	// Настройка ШИМ
 	INITCFG_PWM();
 
+	// Настройка АЦП
+	INITCFG_ADC();
+
 	// Настройка сторожевого таймера
 	INITCFG_ConfigWatchDog();
 	

@@ -2,16 +2,16 @@
 #include "Measure.h"
 
 // Includes
-#include "Global.h"
 #include "Board.h"
 
 // Variables
-void MEAS_SetCurrentRange(uint16_t Current);
-void MEAS_SetVoltageRange(uint16_t Voltage);
 volatile uint16_t ADC1DMABuff[ADC_BUFF_SIZE] = {0};
 volatile uint16_t ADC2DMABuff[ADC_BUFF_SIZE] = {0};
 
 // Functions
+void MEAS_SetCurrentRange(uint16_t Current);
+void MEAS_SetVoltageRange(uint16_t Voltage);
+
 void MEAS_SetMeasureRange(uint16_t Voltage, uint16_t Current)
 {
 	MEAS_SetVoltageRange(Voltage);
