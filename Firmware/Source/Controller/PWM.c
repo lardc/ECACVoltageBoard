@@ -10,6 +10,7 @@
 #include "Delay.h"
 #include "ZwDMA.h"
 #include "Global.h"
+#include "ZwADC.h"
 
 // Defines
 #define DMA1_CHANEL2			32
@@ -40,6 +41,7 @@ void PWM_PrepareAndGenerateSignal(uint16_t Voltage, uint32_t Current, uint8_t Po
 {
 	MEAS_SetMeasureRange(Voltage, Current);
 	PWM_PrepareTable(Voltage);
+	ADC_SamplingStart(ADC1);
 	switch (Polarity)
 	{
 		case POLARITY_FULL:
@@ -63,6 +65,7 @@ void PWM_PrepareAndGenerateSignal(uint16_t Voltage, uint32_t Current, uint8_t Po
 		default:
 			break;
 	}
+	ADC_SamplingStop(ADC1);
 	PWM_SET_DISABLE_OUT;
 }
 //------------------------------------------
