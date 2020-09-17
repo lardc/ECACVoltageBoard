@@ -11,6 +11,7 @@
 #include "ZwDMA.h"
 #include "Global.h"
 #include "ZwADC.h"
+#include "Controller.h"
 
 // Defines
 #define DMA1_CHANEL2			32
@@ -36,6 +37,10 @@ void PWM_NegativePulse();
 void PWM_Stop();
 void PWM_Start();
 void PWM_WaitEndPulse();
+void PWM_SaveEndPoint();
+void PWM_CopyRAWFromDMAToEndPoint(uint32_t *AdressDMABuff, uint32_t *AdressEndPoin);
+void PWM_CopyVoltageFromDMAToEndPoint(uint32_t *AdressDMABuff, uint32_t *AdressEndPoin);
+void PWM_CopyCurrentFromDMAToEndPoint(uint32_t *AdressDMABuff, uint32_t *AdressEndPoin);
 
 void PWM_PrepareAndGenerateSignal(uint16_t Voltage, uint32_t Current, uint8_t Polarity)
 {
@@ -67,6 +72,7 @@ void PWM_PrepareAndGenerateSignal(uint16_t Voltage, uint32_t Current, uint8_t Po
 	}
 	ADC_SamplingStop(ADC1);
 	PWM_SET_DISABLE_OUT;
+	PWM_SaveEndPoint();
 }
 //------------------------------------------
 
@@ -156,3 +162,62 @@ void PWM_ConfigureTIM1_Ch1(float SystemClock, uint16_t Period)
 }
 //------------------------------------------------
 
+void PWM_SaveEndPoint()
+{
+	//Сохраняем данные в endpoints
+	PWM_CopyRAWFromDMAToEndPoint((uint32_t*)&ADC1DMABuff, (uint32_t*)&CONTROL_BuffRAWCurrent);
+	PWM_CopyRAWFromDMAToEndPoint((uint32_t*)&ADC2DMABuff, (uint32_t*)&CONTROL_BuffRAWVoltage);
+	PWM_CopyVoltageFromDMAToEndPoint((uint32_t*)&ADC1DMABuff, (uint32_t*)&CONTROL_BuffCurrent);
+	PWM_CopyCurrentFromDMAToEndPoint((uint32_t*)&ADC2DMABuff, (uint32_t*)&CONTROL_BuffVoltage);
+}
+//------------------------------------------------
+
+void PWM_CopyRAWFromDMAToEndPoint(uint32_t *AdressDMABuff, uint32_t *AdressEndPoin)
+{
+	for(uint16_t i = 0; i < (VALUES_x_SIZE + 1); i++)
+	{
+		AdressEndPoin[i] = AdressDMABuff[i];
+	}
+}
+//------------------------------------------------
+
+void PWM_CopyVoltageFromDMAToEndPoint(uint32_t *AdressDMABuff, uint32_t *AdressEndPoin)
+{
+	double_t Resistance = 1;
+
+	if(LL_GetStateKI_L())
+	{
+		Resistance = R_L;
+	}
+	else
+	{
+		if(LL_GetStateKI_M())
+		{
+			Resistance = R_M;
+		}
+		else
+		{
+			Resistance = R_H;
+		}
+	}
+
+	for(uint16_t i = 0; i < (VALUES_x_SIZE + 1); i++)
+	{
+		AdressEndPoin[i] = (uint16_t)((AdressDMABuff[i] * (double_t)ADC_RESOLUTION) / Resistance);
+	}
+}
+//------------------------------------------------
+
+void PWM_CopyCurrentFromDMAToEndPoint(uint32_t *AdressDMABuff, uint32_t *AdressEndPoin)
+{
+	double_t KU = 1;
+
+	if(LL_GetStateKU())
+		KU = 7.6;
+
+	for(uint16_t i = 0; i < (VALUES_x_SIZE + 1); i++)
+	{
+		AdressEndPoin[i] = (uint16_t)(AdressDMABuff[i] * (double_t)ADC_RESOLUTION * KU * KU_DEVIDER);
+	}
+}
+//------------------------------------------------

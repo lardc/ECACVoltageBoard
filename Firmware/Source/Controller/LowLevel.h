@@ -20,5 +20,9 @@ void LL_SetSync1State(bool NewState);
 void LL_SetSync2State(bool NewState);
 void LL_SetStateRelay(uint8_t NumChanel, bool NewState);
 void LL_SetStatePWMOutput(bool NewState);
+bool LL_GetStateKU();
+bool LL_GetStateKI_H();
+bool LL_GetStateKI_M();
+bool LL_GetStateKI_L();
 
 #endif //__LOWLEVEL_H

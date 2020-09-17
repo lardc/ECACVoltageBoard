@@ -50,6 +50,12 @@
 #define OPRESULT_OK						1	// Operation was successful
 #define OPRESULT_FAIL					2	// Operation failed
 
+// ENDPOINTS
+#define EP_I_RAW						1	// Сырые значения I
+#define EP_V_RAW						2	// Сырые значения V
+#define EP_I							3	// Расчетное значение I
+#define EP_V							4	// Расчетное значение V
+
 //  Fault and disable codes
 #define DF_NONE							0
 
