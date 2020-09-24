@@ -7,15 +7,15 @@
 #include "SysConfig.h"
 
 // Defines
-#define T1PWMCLOCK			20000
-#define T1PWMPERIOD			(1000000L / T1PWMCLOCK)
-#define T1PWMMAX_OUTPUT		0.95f
+#define T1PWM_CLOCK			20000
+#define T1PWM_PERIOD		(1000000L / T1PWM_CLOCK)
+#define T1PWM_MAX_OUTPUT	0.95f
 
 // Variables
 static uint32_t PWMBase = 0;
 
 // Functions
-void T1PWMInit(float SystemClock, uint16_t Period)
+void T1PWM_Init(float SystemClock, uint16_t Period)
 {
 	// Расчёт размерности ШИМ
 	uint32_t Prescaler = (uint32_t)(SystemClock / 1000000 * Period / 65536);
@@ -23,7 +23,7 @@ void T1PWMInit(float SystemClock, uint16_t Period)
 
 	// Стандартная инициализация
 	TIM_Clock_En(TIM_1);
-	TIM_Config(TIM1, SYSCLK, T1PWMPERIOD);
+	TIM_Config(TIM1, SYSCLK, T1PWM_PERIOD);
 	TIM_Interupt(TIM1, 0, true);
 
 	// Выбор режима ШИМ - PWM mode 1
@@ -65,18 +65,18 @@ void T1PWM_SetDutyCycle(float Value)
 		TIM1->CCER &= ~(TIM_CCER_CC1E | TIM_CCER_CC1NE);
 
 	// Проверка значения на насыщение
-	float MaxOutput = T1PWMMAX_OUTPUT * PWMBase;
+	float MaxOutput = T1PWM_MAX_OUTPUT * PWMBase;
 	TIM1->ARR = (uint32_t)((Value > MaxOutput) ? MaxOutput : Value);
 }
 //------------------------------------------------
 
-void T1PWMStart()
+void T1PWM_Start()
 {
 	TIM_Start(TIM1);
 }
 //------------------------------------------------
 
-void T1PWMStop()
+void T1PWM_Stop()
 {
 	T1PWM_SetDutyCycle(0);
 	TIM_Stop(TIM1);
