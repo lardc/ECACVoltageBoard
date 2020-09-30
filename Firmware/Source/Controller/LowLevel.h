@@ -5,12 +5,6 @@
 #include "stdinc.h"
 
 // Defines
-#define RELAY_CTRL		1
-#define RELAY_POW		2
-
-#define CONNECT			true
-#define DISCONNECT		false
-
 #define ENABLE			true
 #define DISABLE			false
 
@@ -18,7 +12,8 @@
 void LL_ToggleBoardLED();
 void LL_SetSync1State(bool NewState);
 void LL_SetSync2State(bool NewState);
-void LL_SetStateRelay(uint8_t NumChanel, bool NewState);
+void LL_ConnectPOWRelay(bool NewState);
+void LL_ConnectCTRLRelay(bool NewState);
 void LL_SetStatePWMOutput(bool NewState);
 bool LL_GetStateKU();
 bool LL_GetStateKI_H();

@@ -23,23 +23,19 @@ void LL_SetSync2State(bool NewState)
 	GPIO_SetState(GPIO_CTRL_SYNC_2, NewState);
 }
 //-----------------------------
-
-void LL_SetStateRelay(uint8_t NumChanel, bool NewState)
+void LL_ConnectPOWRelay(bool NewState)
 {
-	if(NumChanel == RELAY_POW)
-	{
-		if(NewState)
-		{
-			GPIO_SetState(GPIO_CTRL_RELAY_1, true);
-			GPIO_SetState(GPIO_CTRL_RELAY_2, true);
-		}
-		else
-		{
-			GPIO_SetState(GPIO_CTRL_RELAY_1, false);
-			GPIO_SetState(GPIO_CTRL_RELAY_2, false);
-		}
-	}
+	GPIO_SetState(GPIO_POW_RELAY_1, NewState);
+	GPIO_SetState(GPIO_POW_RELAY_2, NewState);
 }
+
+//-----------------------------
+void LL_ConnectCTRLRelay(bool NewState)
+{
+	GPIO_SetState(GPIO_CTRL_RELAY_1, NewState);
+	GPIO_SetState(GPIO_CTRL_RELAY_2, NewState);
+}
+
 //-----------------------------
 
 void LL_SetStatePWMOutput(bool NewState)

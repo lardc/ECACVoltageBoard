@@ -59,7 +59,8 @@ void INITCFG_ConfigIO()
 	GPIO_InitAltFunction(GPIO_CTRL_PWM_2, AltFn_4);
 
 	LL_SetStatePWMOutput(ENABLE);
-	LL_SetStateRelay(RELAY_POW, DISCONNECT);
+	LL_ConnectPOWRelay(false);
+	LL_ConnectCTRLRelay(false);
 }
 //------------------------------------------------
 

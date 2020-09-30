@@ -23,9 +23,14 @@ void DBGACT_GenerateImpulseLineSync2()
 }
 //-----------------------------
 
-void DBGACT_SetStateRelay(uint8_t NumRelay, bool NewState)
+void DBGACT_SetStatePOWRelay(bool NewState)
 {
-	LL_SetStateRelay(NumRelay, NewState);
+	LL_ConnectPOWRelay(NewState);
+}
+//-----------------------------
+void DBGACT_SetStateCTRLRelay(bool NewState)
+{
+	LL_ConnectCTRLRelay(NewState);
 }
 //-----------------------------
 
