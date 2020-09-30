@@ -153,6 +153,7 @@ void PWM_ConfigureTIM1_Ch1(float SystemClock, uint16_t Period)
 	TIM1->DCR &= ~TIM_DCR_DBA;
 	TIM1->DCR &= ~TIM_DCR_DBL;
 	TIM1->DCR |= (TIM_DCR_DBA_3 | TIM_DCR_DBA_2 | TIM_DCR_DBA_0);
+	TIM1->CR2 |= TIM_CR2_MMS2_1;
 	PWM_TIM1_GenerateEvent;
 	while((TIM1->EGR & TIM_EGR_UG) == true)
 	{
