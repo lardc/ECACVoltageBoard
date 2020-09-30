@@ -19,7 +19,6 @@
 // Определения для выходных портов
 GPIO_PortPinSettingMacro GPIO_CTRL_PWMSD_1 = {GPIOA, Pin_6};
 GPIO_PortPinSettingMacro GPIO_CTRL_PWMSD_2 = {GPIOA, Pin_7};
-GPIO_PortPinSettingMacro GPIO_CTRL_PWM_1 = {GPIOA, Pin_8};
 
 GPIO_PortPinSettingMacro GPIO_CTRL_RELAY_1 = {GPIOB, Pin_4};
 GPIO_PortPinSettingMacro GPIO_CTRL_RELAY_2 = {GPIOB, Pin_5};
@@ -33,8 +32,6 @@ GPIO_PortPinSettingMacro GPIO_I_RANGE_H = {GPIOB, Pin_13};
 GPIO_PortPinSettingMacro GPIO_I_RANGE_L = {GPIOB, Pin_14};
 GPIO_PortPinSettingMacro GPIO_U_RANGE = {GPIOB, Pin_15};
 
-GPIO_PortPinSettingMacro GPIO_CTRL_PWM_2 = {GPIOC, Pin_13};
-
 // Определения для входныхпортов
 GPIO_PortPinSettingMacro GPIO_MEAS_U = {GPIOA, Pin_0};
 GPIO_PortPinSettingMacro GPIO_MEAS_I = {GPIOA, Pin_4};
@@ -46,5 +43,7 @@ GPIO_PortPinSettingMacro GPIO_ALT_CAN_RX = {GPIOA, Pin_11};
 GPIO_PortPinSettingMacro GPIO_ALT_CAN_TX = {GPIOA, Pin_12};
 GPIO_PortPinSettingMacro GPIO_ALT_UART_RX = {GPIOA, Pin_10};
 GPIO_PortPinSettingMacro GPIO_ALT_UART_TX = {GPIOA, Pin_9};
+GPIO_PortPinSettingMacro GPIO_CTRL_PWM_1 = {GPIOA, Pin_8};
+GPIO_PortPinSettingMacro GPIO_CTRL_PWM_2 = {GPIOC, Pin_13};
 
 #endif // __BOARD_H
