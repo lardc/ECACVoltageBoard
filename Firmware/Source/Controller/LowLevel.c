@@ -25,15 +25,13 @@ void LL_SetSync2State(bool NewState)
 //-----------------------------
 void LL_ConnectPOWRelay(bool NewState)
 {
-	GPIO_SetState(GPIO_POW_RELAY_1, NewState);
-	GPIO_SetState(GPIO_POW_RELAY_2, NewState);
+	GPIO_SetState(GPIO_POW_RELAY, NewState);
 }
 
 //-----------------------------
 void LL_ConnectCTRLRelay(bool NewState)
 {
-	GPIO_SetState(GPIO_CTRL_RELAY_1, NewState);
-	GPIO_SetState(GPIO_CTRL_RELAY_2, NewState);
+	GPIO_SetState(GPIO_CTRL_RELAY, NewState);
 }
 
 //-----------------------------

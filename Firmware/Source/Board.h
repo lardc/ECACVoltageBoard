@@ -20,10 +20,8 @@
 GPIO_PortPinSettingMacro GPIO_CTRL_PWMSD_1 = {GPIOA, Pin_6};
 GPIO_PortPinSettingMacro GPIO_CTRL_PWMSD_2 = {GPIOA, Pin_7};
 
-GPIO_PortPinSettingMacro GPIO_POW_RELAY_1 = {GPIOB, Pin_4};
-GPIO_PortPinSettingMacro GPIO_POW_RELAY_2 = {GPIOB, Pin_5};
-GPIO_PortPinSettingMacro GPIO_CTRL_RELAY_1 = {GPIOA, Pin_15};
-GPIO_PortPinSettingMacro GPIO_CTRL_RELAY_2 = {GPIOB, Pin_3};
+GPIO_PortPinSettingMacro GPIO_POW_RELAY = {GPIOB, Pin_5};
+GPIO_PortPinSettingMacro GPIO_CTRL_RELAY = {GPIOB, Pin_4};
 
 GPIO_PortPinSettingMacro GPIO_CTRL_SYNC_1 = {GPIOB, Pin_9};
 GPIO_PortPinSettingMacro GPIO_CTRL_SYNC_2 = {GPIOB, Pin_8};

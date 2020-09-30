@@ -41,8 +41,8 @@ void INITCFG_ConfigIO()
 	GPIO_InitPushPullOutput(GPIO_I_RANGE_M);
 	GPIO_InitPushPullOutput(GPIO_I_RANGE_L);
 	GPIO_InitPushPullOutput(GPIO_U_RANGE);
-	GPIO_InitPushPullOutput(GPIO_CTRL_RELAY_1);
-	GPIO_InitPushPullOutput(GPIO_CTRL_RELAY_2);
+	GPIO_InitPushPullOutput(GPIO_POW_RELAY);
+	GPIO_InitPushPullOutput(GPIO_CTRL_RELAY);
 	GPIO_InitPushPullOutput(GPIO_CTRL_PWMSD_1);
 	GPIO_InitPushPullOutput(GPIO_CTRL_PWMSD_2);
 
