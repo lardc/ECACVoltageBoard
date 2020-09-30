@@ -122,11 +122,14 @@ void INITCFG_DMA()
 	DMA_CIRCMODE_DIS, DMA_READ_FROM_PERIPH);
 
 	/*ADC2 DMA2*/
-	DMA_Reset(DMA2_Channel1);
-	DMAChannelX_DataConfig(DMA2_Channel1, (uint32_t)ADC2DMABuff, (uint32_t)(&ADC2->DR), ADC_BUFF_SIZE);
-	DMAChannelX_Config(DMA2_Channel1, DMA_MEM2MEM_DIS, DMA_LvlPriority_MEDIUM,
+	DMA_Reset(DMA2_Channel2);
+	DMAChannelX_DataConfig(DMA2_Channel2, (uint32_t)ADC2DMABuff, (uint32_t)(&ADC2->DR), ADC_BUFF_SIZE);
+	DMAChannelX_Config(DMA2_Channel2, DMA_MEM2MEM_DIS, DMA_LvlPriority_MEDIUM,
 	DMA_MSIZE_16BIT, DMA_PSIZE_16BIT, DMA_MINC_EN, DMA_PINC_DIS,
 	DMA_CIRCMODE_DIS, DMA_READ_FROM_PERIPH);
+
+	DMA_ChannelEnable(DMA1_Channel1, true);
+	DMA_ChannelEnable(DMA2_Channel2, true);
 }
 //------------------------------------------------
 
