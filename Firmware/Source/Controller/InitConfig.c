@@ -149,11 +149,11 @@ void INITCFG_ADC()
 
 	ADC_ChannelSeqLen(ADC1, ADC_BUFF_SIZE);
 	ADC_ChannelSet_Sequence(ADC1, 1, 1);
-	ADC_ChannelSet_SampleTime(ADC1, 5, ADC_SMPL_TIME_7_5);
+	ADC_ChannelSet_SampleTime(ADC1, 1, ADC_SMPL_TIME_7_5);
 
 	ADC_ChannelSeqLen(ADC2, ADC_BUFF_SIZE);
-	ADC_ChannelSet_Sequence(ADC2, 1, 1);
-	ADC_ChannelSet_SampleTime(ADC2, 1, ADC_SMPL_TIME_7_5);
+	ADC_ChannelSet_Sequence(ADC2, 2, 1);
+	ADC_ChannelSet_SampleTime(ADC2, 2, ADC_SMPL_TIME_7_5);
 
 	ADC_DMAEnable(ADC1, true);
 	ADC_DMAEnable(ADC2, true);

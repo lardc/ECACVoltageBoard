@@ -12,7 +12,7 @@
 #define TIME_LED_BLINK			500		// Мигание светодиодом (в мс)
 
 #define SIN_BUFF_SIZE 			101		// Размер буфера ДМА для ШИМ
-#define ADC_BUFF_SIZE 			101		// Размер буфера ДМА для АЦП
+#define ADC_BUFF_SIZE 			5		// Размер буфера ДМА для АЦП
 #define VALUES_x_SIZE			101		// Размер буфера Epoint
 
 #define KU_DEVIDER				206.66	// Коэффициент делителя по напряжению
