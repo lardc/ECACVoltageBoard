@@ -27,12 +27,12 @@ Boolean INITCFG_ConfigSystemClock()
 
 void INITCFG_ConfigIO()
 {
-	// Включение тактирования портов
+	// Р’РєР»СЋС‡РµРЅРёРµ С‚Р°РєС‚РёСЂРѕРІР°РЅРёСЏ РїРѕСЂС‚РѕРІ
 	RCC_GPIO_Clk_EN(PORTA);
 	RCC_GPIO_Clk_EN(PORTB);
 	RCC_GPIO_Clk_EN(PORTC);
 	
-	// Выходы
+	// Р’С‹С…РѕРґС‹
 	GPIO_InitPushPullOutput(GPIO_LED);
 	GPIO_InitPushPullOutput(GPIO_LED_EXT);
 	GPIO_InitPushPullOutput(GPIO_CTRL_SYNC_1);
@@ -46,11 +46,11 @@ void INITCFG_ConfigIO()
 	GPIO_InitPushPullOutput(GPIO_CTRL_PWMSD_1);
 	GPIO_InitPushPullOutput(GPIO_CTRL_PWMSD_2);
 
-	// Входы аналоговые
+	// Р’С…РѕРґС‹ Р°РЅР°Р»РѕРіРѕРІС‹Рµ
 	GPIO_InitAnalog(GPIO_MEAS_U);
 	GPIO_InitAnalog(GPIO_MEAS_I);
 
-	// Альтернативные функции
+	// РђР»СЊС‚РµСЂРЅР°С‚РёРІРЅС‹Рµ С„СѓРЅРєС†РёРё
 	GPIO_InitAltFunction(GPIO_ALT_CAN_RX, AltFn_9);
 	GPIO_InitAltFunction(GPIO_ALT_CAN_TX, AltFn_9);
 	GPIO_InitAltFunction(GPIO_ALT_UART_RX, AltFn_7);

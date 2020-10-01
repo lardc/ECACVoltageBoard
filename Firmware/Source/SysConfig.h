@@ -9,22 +9,22 @@
 //-----------------------------------------------
 
 // System clock
-#define SYSCLK							70000000	// Тактовая частота системной шины процессора
-#define QUARTZ_FREQUENCY				20000000	// Частота кварца
+#define SYSCLK							70000000	// РўР°РєС‚РѕРІР°СЏ С‡Р°СЃС‚РѕС‚Р° СЃРёСЃС‚РµРјРЅРѕР№ С€РёРЅС‹ РїСЂРѕС†РµСЃСЃРѕСЂР°
+#define QUARTZ_FREQUENCY				20000000	// Р§Р°СЃС‚РѕС‚Р° РєРІР°СЂС†Р°
 // ----------------------------------------------
 
 // USART
-#define USART_BAUDRATE					115200		// Скорость USART
-#define USART_FIFOlen					32			// Длина FIFO USART
+#define USART_BAUDRATE					115200		// РЎРєРѕСЂРѕСЃС‚СЊ USART
+#define USART_FIFOlen					32			// Р”Р»РёРЅР° FIFO USART
 // ----------------------------------------------
 
 // Timers
-#define TIMER1_uS						50			// в мкс
-#define TIMER7_uS						1000		// в мкс
+#define TIMER1_uS						50			// РІ РјРєСЃ
+#define TIMER7_uS						1000		// РІ РјРєСЃ
 // ----------------------------------------------
 
 // CAN
-#define CAN_BAUDRATE					1000000		// Битрейт CAN
+#define CAN_BAUDRATE					1000000		// Р‘РёС‚СЂРµР№С‚ CAN
 // ----------------------------------------------
 
 #endif // __SYSCONFIG_H

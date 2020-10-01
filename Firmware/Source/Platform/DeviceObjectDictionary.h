@@ -1,43 +1,43 @@
 #ifndef __DEV_OBJ_DIC_H
 #define __DEV_OBJ_DIC_H
 
-// Команды
-#define ACT_ENABLE_POWER				1	// Переход в состояние ожидания
-#define ACT_DISABLE_POWER				2	// Отключение блока
-#define ACT_FAULT_CLEAR					3	// Очистка fault
-#define ACT_WARNING_CLEAR				4	// Очистка warning
-#define ACT_DBG_SYNC_1_IMPULSE			50 // Сигнал синхронизации
-#define ACT_DBG_SYNC_2_IMPULSE			51 // Сигнал синхронизации
-#define ACT_DBG_SET_STATE_CTRL_RELAY	52 // Изменить состояние реле цепи CTRL
-#define ACT_DBG_SET_STATE_POW_RELAY		53 // Изменить состояние реле цепи POW
-#define ACT_DBG_SIN						54 // Запуск формирования сигнала
+// РљРѕРјР°РЅРґС‹
+#define ACT_ENABLE_POWER				1	// РџРµСЂРµС…РѕРґ РІ СЃРѕСЃС‚РѕСЏРЅРёРµ РѕР¶РёРґР°РЅРёСЏ
+#define ACT_DISABLE_POWER				2	// РћС‚РєР»СЋС‡РµРЅРёРµ Р±Р»РѕРєР°
+#define ACT_FAULT_CLEAR					3	// РћС‡РёСЃС‚РєР° fault
+#define ACT_WARNING_CLEAR				4	// РћС‡РёСЃС‚РєР° warning
+#define ACT_DBG_SYNC_1_IMPULSE			50 // РЎРёРіРЅР°Р» СЃРёРЅС…СЂРѕРЅРёР·Р°С†РёРё
+#define ACT_DBG_SYNC_2_IMPULSE			51 // РЎРёРіРЅР°Р» СЃРёРЅС…СЂРѕРЅРёР·Р°С†РёРё
+#define ACT_DBG_SET_STATE_CTRL_RELAY	52 // РР·РјРµРЅРёС‚СЊ СЃРѕСЃС‚РѕСЏРЅРёРµ СЂРµР»Рµ С†РµРїРё CTRL
+#define ACT_DBG_SET_STATE_POW_RELAY		53 // РР·РјРµРЅРёС‚СЊ СЃРѕСЃС‚РѕСЏРЅРёРµ СЂРµР»Рµ С†РµРїРё POW
+#define ACT_DBG_SIN						54 // Р—Р°РїСѓСЃРє С„РѕСЂРјРёСЂРѕРІР°РЅРёСЏ СЃРёРіРЅР°Р»Р°
 
-#define ACT_SAVE_TO_ROM					200	// Сохранение пользовательских данных во FLASH процессора
-#define ACT_RESTORE_FROM_ROM			201	// Восстановление данных из FLASH
-#define ACT_RESET_TO_DEFAULT			202	// Сброс DataTable в состояние по умолчанию
+#define ACT_SAVE_TO_ROM					200	// РЎРѕС…СЂР°РЅРµРЅРёРµ РїРѕР»СЊР·РѕРІР°С‚РµР»СЊСЃРєРёС… РґР°РЅРЅС‹С… РІРѕ FLASH РїСЂРѕС†РµСЃСЃРѕСЂР°
+#define ACT_RESTORE_FROM_ROM			201	// Р’РѕСЃСЃС‚Р°РЅРѕРІР»РµРЅРёРµ РґР°РЅРЅС‹С… РёР· FLASH
+#define ACT_RESET_TO_DEFAULT			202	// РЎР±СЂРѕСЃ DataTable РІ СЃРѕСЃС‚РѕСЏРЅРёРµ РїРѕ СѓРјРѕР»С‡Р°РЅРёСЋ
 
-#define ACT_BOOT_LOADER_REQUEST			320	// Перезапуск процессора с целью перепрограммирования
+#define ACT_BOOT_LOADER_REQUEST			320	// РџРµСЂРµР·Р°РїСѓСЃРє РїСЂРѕС†РµСЃСЃРѕСЂР° СЃ С†РµР»СЊСЋ РїРµСЂРµРїСЂРѕРіСЂР°РјРјРёСЂРѕРІР°РЅРёСЏ
 // -----------------------------
 
-// Регистры
-// Сохраняемые регистры
+// Р РµРіРёСЃС‚СЂС‹
+// РЎРѕС…СЂР°РЅСЏРµРјС‹Рµ СЂРµРіРёСЃС‚СЂС‹
 
-// Несохраняемы регистры чтения-записи
-#define REG_SIN_VOLTAGE					128 // Амплитуда напряжение выходного сигнала, В
-#define REG_SIN_CURRENT					129 // Амплитуда тока выходного сигнала, x10 мкА
-#define REG_SIN_POLARITY				130 // Полярность
-#define REG_SIN_LONG					131 // Длительность импульса
-#define REG_SIN_TO_LINE					132 // Канал подачи сигнала POW, CTRL или в никуда
+// РќРµСЃРѕС…СЂР°РЅСЏРµРјС‹ СЂРµРіРёСЃС‚СЂС‹ С‡С‚РµРЅРёСЏ-Р·Р°РїРёСЃРё
+#define REG_SIN_VOLTAGE					128 // РђРјРїР»РёС‚СѓРґР° РЅР°РїСЂСЏР¶РµРЅРёРµ РІС‹С…РѕРґРЅРѕРіРѕ СЃРёРіРЅР°Р»Р°, Р’
+#define REG_SIN_CURRENT					129 // РђРјРїР»РёС‚СѓРґР° С‚РѕРєР° РІС‹С…РѕРґРЅРѕРіРѕ СЃРёРіРЅР°Р»Р°, x10 РјРєРђ
+#define REG_SIN_POLARITY				130 // РџРѕР»СЏСЂРЅРѕСЃС‚СЊ
+#define REG_SIN_LONG					131 // Р”Р»РёС‚РµР»СЊРЅРѕСЃС‚СЊ РёРјРїСѓР»СЊСЃР°
+#define REG_SIN_TO_LINE					132 // РљР°РЅР°Р» РїРѕРґР°С‡Рё СЃРёРіРЅР°Р»Р° POW, CTRL РёР»Рё РІ РЅРёРєСѓРґР°
 
-#define REG_DBG_RELAY_CTRL_STATE		150	// Регистр состояния
-#define REG_DBG_RELAY_POW_STATE			151	// Регистр состояния
+#define REG_DBG_RELAY_CTRL_STATE		150	// Р РµРіРёСЃС‚СЂ СЃРѕСЃС‚РѕСЏРЅРёСЏ
+#define REG_DBG_RELAY_POW_STATE			151	// Р РµРіРёСЃС‚СЂ СЃРѕСЃС‚РѕСЏРЅРёСЏ
 
-// Регистры только чтение
-#define REG_DEV_STATE					192	// Регистр состояния
-#define REG_FAULT_REASON				193	// Регистр Fault
-#define REG_DISABLE_REASON				194	// Регистр Disable
-#define REG_PROBLEM						196	// Регистр Problem
-#define REG_OP_RESULT					197	// Регистр результата операции
+// Р РµРіРёСЃС‚СЂС‹ С‚РѕР»СЊРєРѕ С‡С‚РµРЅРёРµ
+#define REG_DEV_STATE					192	// Р РµРіРёСЃС‚СЂ СЃРѕСЃС‚РѕСЏРЅРёСЏ
+#define REG_FAULT_REASON				193	// Р РµРіРёСЃС‚СЂ Fault
+#define REG_DISABLE_REASON				194	// Р РµРіРёСЃС‚СЂ Disable
+#define REG_PROBLEM						196	// Р РµРіРёСЃС‚СЂ Problem
+#define REG_OP_RESULT					197	// Р РµРіРёСЃС‚СЂ СЂРµР·СѓР»СЊС‚Р°С‚Р° РѕРїРµСЂР°С†РёРё
 // -----------------------------
 #define REG_FWINFO_SLAVE_NID			256	// Device CAN slave node ID
 #define REG_FWINFO_MASTER_NID			257	// Device CAN master node ID (if presented)
@@ -51,10 +51,10 @@
 #define OPRESULT_FAIL					2	// Operation failed
 
 // ENDPOINTS
-#define EP_I_RAW						1	// Сырые значения I
-#define EP_V_RAW						2	// Сырые значения V
-#define EP_I							3	// Расчетное значение I
-#define EP_V							4	// Расчетное значение V
+#define EP_I_RAW						1	// РЎС‹СЂС‹Рµ Р·РЅР°С‡РµРЅРёСЏ I
+#define EP_V_RAW						2	// РЎС‹СЂС‹Рµ Р·РЅР°С‡РµРЅРёСЏ V
+#define EP_I							3	// Р Р°СЃС‡РµС‚РЅРѕРµ Р·РЅР°С‡РµРЅРёРµ I
+#define EP_V							4	// Р Р°СЃС‡РµС‚РЅРѕРµ Р·РЅР°С‡РµРЅРёРµ V
 
 //  Fault and disable codes
 #define DF_NONE							0
@@ -67,9 +67,9 @@
 
 //  User Errors
 #define ERR_NONE						0
-#define ERR_CONFIGURATION_LOCKED		1	//  Устройство защищено от записи
-#define ERR_OPERATION_BLOCKED			2	//  Операция не может быть выполнена в текущем состоянии устройства
-#define ERR_DEVICE_NOT_READY			3	//  Устройство не готово для смены состояния
-#define ERR_WRONG_PWD					4	//  Неправильный ключ
+#define ERR_CONFIGURATION_LOCKED		1	//  РЈСЃС‚СЂРѕР№СЃС‚РІРѕ Р·Р°С‰РёС‰РµРЅРѕ РѕС‚ Р·Р°РїРёСЃРё
+#define ERR_OPERATION_BLOCKED			2	//  РћРїРµСЂР°С†РёСЏ РЅРµ РјРѕР¶РµС‚ Р±С‹С‚СЊ РІС‹РїРѕР»РЅРµРЅР° РІ С‚РµРєСѓС‰РµРј СЃРѕСЃС‚РѕСЏРЅРёРё СѓСЃС‚СЂРѕР№СЃС‚РІР°
+#define ERR_DEVICE_NOT_READY			3	//  РЈСЃС‚СЂРѕР№СЃС‚РІРѕ РЅРµ РіРѕС‚РѕРІРѕ РґР»СЏ СЃРјРµРЅС‹ СЃРѕСЃС‚РѕСЏРЅРёСЏ
+#define ERR_WRONG_PWD					4	//  РќРµРїСЂР°РІРёР»СЊРЅС‹Р№ РєР»СЋС‡
 
 #endif //  __DEV_OBJ_DIC_H

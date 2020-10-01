@@ -16,7 +16,7 @@
 #include "ZwNFLASH.h"
 #include "ZwSPI.h"
 
-// Определения для выходных портов
+// РћРїСЂРµРґРµР»РµРЅРёСЏ РґР»СЏ РІС‹С…РѕРґРЅС‹С… РїРѕСЂС‚РѕРІ
 GPIO_PortPinSettingMacro GPIO_CTRL_PWMSD_1 = {GPIOA, Pin_6};
 GPIO_PortPinSettingMacro GPIO_CTRL_PWMSD_2 = {GPIOA, Pin_7};
 
@@ -32,13 +32,13 @@ GPIO_PortPinSettingMacro GPIO_I_RANGE_H = {GPIOB, Pin_13};
 GPIO_PortPinSettingMacro GPIO_I_RANGE_L = {GPIOB, Pin_14};
 GPIO_PortPinSettingMacro GPIO_U_RANGE = {GPIOB, Pin_15};
 
-// Определения для входныхпортов
+// РћРїСЂРµРґРµР»РµРЅРёСЏ РґР»СЏ РІС…РѕРґРЅС‹С…РїРѕСЂС‚РѕРІ
 GPIO_PortPinSettingMacro GPIO_MEAS_U = {GPIOA, Pin_0};
 GPIO_PortPinSettingMacro GPIO_MEAS_I = {GPIOA, Pin_4};
 GPIO_PortPinSettingMacro GPIO_SYNC_1 = {GPIOB, Pin_6};
 GPIO_PortPinSettingMacro GPIO_SYNC_2 = {GPIOB, Pin_7};
 
-// Определения для портов альтернативных функций
+// РћРїСЂРµРґРµР»РµРЅРёСЏ РґР»СЏ РїРѕСЂС‚РѕРІ Р°Р»СЊС‚РµСЂРЅР°С‚РёРІРЅС‹С… С„СѓРЅРєС†РёР№
 GPIO_PortPinSettingMacro GPIO_ALT_CAN_RX = {GPIOA, Pin_11};
 GPIO_PortPinSettingMacro GPIO_ALT_CAN_TX = {GPIOA, Pin_12};
 GPIO_PortPinSettingMacro GPIO_ALT_UART_RX = {GPIOA, Pin_10};

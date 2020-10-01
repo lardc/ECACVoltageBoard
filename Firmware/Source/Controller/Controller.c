@@ -43,22 +43,22 @@ void CONTROL_ResetToDefaultState();
 //
 void CONTROL_Init()
 {
-	// Переменные для конфигурации EndPoint
+	// РџРµСЂРµРјРµРЅРЅС‹Рµ РґР»СЏ РєРѕРЅС„РёРіСѓСЂР°С†РёРё EndPoint
 	Int16U EPIndexes[EP_COUNT] = {EP_I_RAW, EP_V_RAW, EP_I, EP_V};
 	Int16U EPSized[EP_COUNT] = {VALUES_x_SIZE, VALUES_x_SIZE, VALUES_x_SIZE, VALUES_x_SIZE};
 	pInt16U EPCounters[EP_COUNT] = {(pInt16U)&CONTROL_BuffCounterRAWCurrent, (pInt16U)&CONTROL_BuffCounterRAWVoltage,
 			(pInt16U)&CONTROL_BuffCounterCurrent, (pInt16U)&CONTROL_BuffCounterVoltage};
 	pInt16U EPDatas[EP_COUNT] = {(pInt16U)&CONTROL_BuffRAWCurrent, (pInt16U)&CONTROL_BuffRAWVoltage, (pInt16U)&CONTROL_BuffCurrent, (pInt16U)&CONTROL_BuffCounterVoltage};
 
-	// Конфигурация сервиса работы Data-table и EPROM
+	// РљРѕРЅС„РёРіСѓСЂР°С†РёСЏ СЃРµСЂРІРёСЃР° СЂР°Р±РѕС‚С‹ Data-table Рё EPROM
 	EPROMServiceConfig EPROMService = {(FUNC_EPROM_WriteValues)&NFLASH_WriteDT, (FUNC_EPROM_ReadValues)&NFLASH_ReadDT};
-	// Инициализация data table
+	// РРЅРёС†РёР°Р»РёР·Р°С†РёСЏ data table
 	DT_Init(EPROMService, false);
 	DT_SaveFirmwareInfo(CAN_SLAVE_NID, 0);
-	// Инициализация device profile
+	// РРЅРёС†РёР°Р»РёР·Р°С†РёСЏ device profile
 	DEVPROFILE_Init(&CONTROL_DispatchAction, &CycleActive);
 	DEVPROFILE_InitEPService(EPIndexes, EPSized, EPCounters, EPDatas);
-	// Сброс значений
+	// РЎР±СЂРѕСЃ Р·РЅР°С‡РµРЅРёР№
 	DEVPROFILE_ResetControlSection();
 	CONTROL_ResetToDefaultState();
 }
