@@ -122,6 +122,9 @@ void INITCFG_DMA()
 	DMA_MSIZE_16BIT, DMA_PSIZE_16BIT, DMA_MINC_EN, DMA_PINC_DIS,
 	DMA_CIRCMODE_DIS, DMA_READ_FROM_PERIPH);
 
+	DMA_Interrupt(DMA1_Channel1, DMA_CCR_TCIE, 0, true);
+	DMA_Interrupt(DMA2_Channel2, DMA_CCR_TCIE, 0, true);
+
 	DMA_ChannelEnable(DMA1_Channel1, true);
 	DMA_ChannelEnable(DMA2_Channel2, true);
 }

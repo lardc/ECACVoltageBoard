@@ -8,6 +8,8 @@
 #include "Global.h"
 #include "DataTable.h"
 #include "DeviceObjectDictionary.h"
+#include "ZwDMA.h"
+#include "Measure.h"
 
 // Functions
 //
@@ -52,5 +54,43 @@ void TIM7_IRQHandler()
 void INITCFG_ConfigInterrupt()
 {
 
+}
+//-----------------------------------------
+
+void DMA1_Channel1_IRQHandler()
+{
+	if(DMA1->ISR & DMA_ISR_GIF1)
+	{
+		DMA1->IFCR |= DMA_IFCR_CGIF1;
+
+		if((DMA1->ISR & DMA_ISR_TCIF1))
+		{
+			DMA1->IFCR |= DMA_IFCR_CTCIF1;
+			MEASURE_VoltageDone = true;
+			if(MEASURE_VoltageDone && MEASURE_CurrentDone)
+			{
+
+			}
+		}
+	}
+}
+//-----------------------------------------
+
+void DMA2_Channel2_IRQHandler()
+{
+	if(DMA2->ISR & DMA_ISR_GIF2)
+	{
+		DMA2->IFCR |= DMA_IFCR_CGIF2;
+
+		if((DMA2->ISR & DMA_ISR_TCIF2))
+		{
+			DMA2->IFCR |= DMA_IFCR_CTCIF2;
+			MEASURE_CurrentDone = true;
+			if(MEASURE_VoltageDone && MEASURE_CurrentDone)
+			{
+
+			}
+		}
+	}
 }
 //-----------------------------------------

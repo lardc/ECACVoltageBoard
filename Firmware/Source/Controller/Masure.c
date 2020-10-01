@@ -7,6 +7,8 @@
 // Variables
 volatile uint16_t ADC1DMABuff[ADC_BUFF_SIZE] = {0};
 volatile uint16_t ADC2DMABuff[ADC_BUFF_SIZE] = {0};
+volatile bool MEASURE_VoltageDone = false;
+volatile bool MEASURE_CurrentDone = false;
 
 // Functions
 void MEAS_SetCurrentRange(uint16_t Current);
