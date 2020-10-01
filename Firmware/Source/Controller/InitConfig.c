@@ -14,7 +14,6 @@
 #include "Measure.h"
 
 // Variables
-extern volatile uint16_t TIM1_DMA_Buffer[SIN_BUFF_SIZE +1 ];
 extern volatile uint16_t ADC1DMABuff[ADC_BUFF_SIZE];
 extern volatile uint16_t ADC2DMABuff[ADC_BUFF_SIZE];
 
@@ -98,7 +97,7 @@ void INITCFG_ConfigWatchDog()
 
 void INITCFG_PWM()
 {
-	PWM_ConfigureTIM1_Ch1(SYSCLK, TIMER1_uS);
+
 }
 //------------------------------------------------
 
@@ -106,13 +105,6 @@ void INITCFG_DMA()
 {
 	DMA_Clk_Enable(DMA1_ClkEN);
 	DMA_Clk_Enable(DMA2_ClkEN);
-
-	/*TIM1 DMA1_CH2*/
-	DMA_Reset(DMA1_Channel2);
-	DMAChannelX_DataConfig(DMA1_Channel2, (uint32_t)TIM1_DMA_Buffer, (uint32_t)(&TIM1->DMAR), SIN_BUFF_SIZE + 1);
-	DMAChannelX_Config(DMA1_Channel2, DMA_MEM2MEM_DIS, DMA_LvlPriority_HIGHT,
-	DMA_MSIZE_16BIT, DMA_PSIZE_16BIT, DMA_MINC_EN, DMA_PINC_DIS,
-	DMA_CIRCMODE_DIS, DMA_READ_FROM_MEM);
 
 	/*ADC1 DMA1*/
 	DMA_Reset(DMA1_Channel1);

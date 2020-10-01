@@ -11,7 +11,6 @@
 // Временные параметры
 #define TIME_LED_BLINK			500		// Мигание светодиодом (в мс)
 
-#define SIN_BUFF_SIZE 			101		// Размер буфера ДМА для ШИМ
 #define ADC_BUFF_SIZE 			5		// Размер буфера ДМА для АЦП
 #define VALUES_x_SIZE			101		// Размер буфера Epoint
 
