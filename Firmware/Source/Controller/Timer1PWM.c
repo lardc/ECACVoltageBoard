@@ -17,29 +17,28 @@ static uint32_t PWMBase = 0;
 // Functions
 void T1PWM_Init(float SystemClock, uint16_t Period)
 {
-	// Ðàñ÷¸ò ðàçìåðíîñòè ØÈÌ
+	// Ð Ð°ÑÑ‡Ñ‘Ñ‚ Ñ€Ð°Ð·Ð¼ÐµÑ€Ð½Ð¾ÑÑ‚Ð¸ Ð¨Ð˜Ðœ
 	uint32_t Prescaler = (uint32_t)(SystemClock / 1000000 * Period / 65536);
 	PWMBase = (uint32_t)((SystemClock / ((Prescaler + 1) * 1000000)) * Period);
 
-	// Ñòàíäàðòíàÿ èíèöèàëèçàöèÿ
+	// Ð¡Ñ‚Ð°Ð½Ð´Ð°Ñ€Ñ‚Ð½Ð°Ñ Ð¸Ð½Ð¸Ñ†Ð¸Ð°Ð»Ð¸Ð·Ð°Ñ†Ð¸Ñ
 	TIM_Clock_En(TIM_1);
 	TIM_Config(TIM1, SYSCLK, T1PWM_PERIOD);
 	TIM_Interupt(TIM1, 0, true);
 
-	// Âûáîð ðåæèìà ØÈÌ - PWM mode 1
+	// Ð’Ñ‹Ð±Ð¾Ñ€ Ñ€ÐµÐ¶Ð¸Ð¼Ð° Ð¨Ð˜Ðœ - PWM mode 1
 	TIM1->CCMR1 |= TIM_CCMR1_OC1M_2 | TIM_CCMR1_OC1M_1;
 
-	// Àêòèâàöèÿ ôóíêöèè Preload
+	// ÐÐºÑ‚Ð¸Ð²Ð°Ñ†Ð¸Ñ Ñ„ÑƒÐ½ÐºÑ†Ð¸Ð¸ Preload
 	TIM1->CCMR1 |= TIM_CCMR1_OC1PE;
-	// Àêòèâàöèÿ ôóíêöèè AutoPreload
+	// ÐÐºÑ‚Ð¸Ð²Ð°Ñ†Ð¸Ñ Ñ„ÑƒÐ½ÐºÑ†Ð¸Ð¸ AutoPreload
 	TIM1->CR1 |= TIM_CR1_ARPE;
-	// Àêòèâàöèÿ ðåæèìà Preload äëÿ íàñòðîåê ïîëÿðíîñòè
+	// ÐÐºÑ‚Ð¸Ð²Ð°Ñ†Ð¸Ñ Ñ€ÐµÐ¶Ð¸Ð¼Ð° Preload Ð´Ð»Ñ Ð½Ð°ÑÑ‚Ñ€Ð¾ÐµÐº Ð¿Ð¾Ð»ÑÑ€Ð½Ð¾ÑÑ‚Ð¸
 	TIM1->CR2 |= TIM_CR2_CCPC;
-
-	// Ðàçðåøåíèå ðàáîòû òàéìåðà íà âûõîä
+	// Ð Ð°Ð·Ñ€ÐµÑˆÐµÐ½Ð¸Ðµ Ñ€Ð°Ð±Ð¾Ñ‚Ñ‹ Ñ‚Ð°Ð¹Ð¼ÐµÑ€Ð° Ð½Ð° Ð²Ñ‹Ñ…Ð¾Ð´
 	TIM1->BDTR |= TIM_BDTR_MOE;
 
-	// Èíèöèàëèçàöèÿ îáíîâëåíèÿ ðåãèñòðîâ
+	// Ð˜Ð½Ð¸Ñ†Ð¸Ð°Ð»Ð¸Ð·Ð°Ñ†Ð¸Ñ Ð¾Ð±Ð½Ð¾Ð²Ð»ÐµÐ½Ð¸Ñ Ñ€ÐµÐ³Ð¸ÑÑ‚Ñ€Ð¾Ð²
 	TIM1->EGR |= TIM_EGR_UG;
 	TIM1->SR &= ~TIM_SR_UIF;
 }
@@ -47,7 +46,7 @@ void T1PWM_Init(float SystemClock, uint16_t Period)
 
 void T1PWM_SetDutyCycle(float Value)
 {
-	// Âûáîð ïîëÿðíîñòè ôîðìèðîâàòåëÿ
+	// Ð’Ñ‹Ð±Ð¾Ñ€ Ð¿Ð¾Ð»ÑÑ€Ð½Ð¾ÑÑ‚Ð¸ Ñ„Ð¾Ñ€Ð¼Ð¸Ñ€Ð¾Ð²Ð°Ñ‚ÐµÐ»Ñ
 	if(Value > 0)
 	{
 		TIM1->CCER |= TIM_CCER_CC1E;
@@ -58,13 +57,13 @@ void T1PWM_SetDutyCycle(float Value)
 		TIM1->CCER &= ~TIM_CCER_CC1E;
 		TIM1->CCER |= TIM_CCER_CC1NE;
 
-		// Ñìåíà çíàêà äëÿ îòðèöàòåëüíûõ çíà÷åíèé
+		// Ð¡Ð¼ÐµÐ½Ð° Ð·Ð½Ð°ÐºÐ° Ð´Ð»Ñ Ð¾Ñ‚Ñ€Ð¸Ñ†Ð°Ñ‚ÐµÐ»ÑŒÐ½Ñ‹Ñ… Ð·Ð½Ð°Ñ‡ÐµÐ½Ð¸Ð¹
 		Value = -Value;
 	}
 	else
 		TIM1->CCER &= ~(TIM_CCER_CC1E | TIM_CCER_CC1NE);
 
-	// Ïðîâåðêà çíà÷åíèÿ íà íàñûùåíèå
+	// ÐŸÑ€Ð¾Ð²ÐµÑ€ÐºÐ° Ð·Ð½Ð°Ñ‡ÐµÐ½Ð¸Ñ Ð½Ð° Ð½Ð°ÑÑ‹Ñ‰ÐµÐ½Ð¸Ðµ
 	float MaxOutput = T1PWM_MAX_OUTPUT * PWMBase;
 	TIM1->ARR = (uint32_t)((Value > MaxOutput) ? MaxOutput : Value);
 }

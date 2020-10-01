@@ -12,6 +12,7 @@
 #include "Global.h"
 #include "ZwADC.h"
 #include "Measure.h"
+#include "Timer1PWM.h"
 
 // Variables
 extern volatile uint16_t ADC1DMABuff[ADC_BUFF_SIZE];
@@ -97,7 +98,8 @@ void INITCFG_ConfigWatchDog()
 
 void INITCFG_PWM()
 {
-
+	T1PWM_Init(SYSCLK, TIMER1_uS);
+	T1PWM_SetDutyCycle(0);
 }
 //------------------------------------------------
 

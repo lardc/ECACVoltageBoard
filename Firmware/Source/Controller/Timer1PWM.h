@@ -5,7 +5,7 @@
 #include "stdinc.h"
 
 // Functions
-void T1PWM_InitTIM1(float SystemClock, uint16_t Period);
+void T1PWM_Init(float SystemClock, uint16_t Period);
 void T1PWM_SetDutyCycle(float Value);
 void T1PWM_Start();
 void T1PWM_Stop();
