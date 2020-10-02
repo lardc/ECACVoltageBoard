@@ -54,7 +54,7 @@ typedef struct __SinControl
 	uint16_t Point;
 } SinControl;
 
-SinControl Regulator = {0};
+volatile SinControl Regulator = {0};
 
 // Variables
 static const double Steper = M_PI * (2 * (1 / PWM_MAX_STEP_PWM));
@@ -66,7 +66,7 @@ void PWM_CopyRAWFromDMAToEndPoint(uint32_t *AdressDMABuff, uint32_t *AdressEndPo
 void PWM_CopyVoltageFromDMAToEndPoint(uint32_t *AdressDMABuff, uint32_t *AdressEndPoin);
 void PWM_CopyCurrentFromDMAToEndPoint(uint32_t *AdressDMABuff, uint32_t *AdressEndPoin);
 void PWM_SinRegulation();
-void PWM_StepUpdate(uint16_t PositionInSignal);
+void PWM_StepUpdate();
 uint16_t Duty();
 void PWM_UpdateMeasValue();
 void PWM_ChekEndOfSignal();
@@ -74,11 +74,18 @@ void PWM_UpdateKoeff();
 
 void PWM_SignalStart(uint16_t Voltage, uint32_t Current)
 {
-	// задать формулу синуса и получить первую точку
-	VoltageTarget = Voltage;
-	CurrentTarget = Current;
+	Regulator.Voltage.Set = Voltage;
+	Regulator.Current.Set = Current;
+
+	PWM_UpdateMeasValue();
+	PWM_UpdateKoeff();
+	PWM_ChekEndOfSignal();
+
 	MEAS_SetMeasureRange(Voltage, Current);
+
 	PWM_ResetCounters();
+	PWM_StepUpdate();
+
 	T1PWM_Start();
 }
 //------------------------------------------------
@@ -105,19 +112,19 @@ void PWM_SinRegulation()
 
 	// Задание значения ШИМ
 	T1PWM_SetDutyCycle(Regulator.Duty);
-	PWM_StepUpdate(Regulator.Point);
+	PWM_StepUpdate();
 }
 
 //------------------------------------------------
-void PWM_StepUpdate(uint16_t PositionInSignal)
+void PWM_StepUpdate()
 {
-	if(PositionInSignal >= PWM_MAX_STEP_PWM)
+	if(Regulator.Point >= PWM_MAX_STEP_PWM)
 	{
-		PositionInSignal++;
+		Regulator.Point++;
 	}
 	else
 	{
-		PositionInSignal = 0;
+		Regulator.Point = 0;
 	}
 }
 //------------------------------------------------

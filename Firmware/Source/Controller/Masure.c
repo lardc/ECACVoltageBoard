@@ -5,7 +5,6 @@
 #include "Board.h"
 
 // Variables
-volatile uint16_t VoltageTarget, CurrentTarget;
 volatile uint16_t ADC1DMABuff[ADC_BUFF_SIZE] = {0};
 volatile uint16_t ADC2DMABuff[ADC_BUFF_SIZE] = {0};
 volatile bool MEASURE_VoltageDone = false;

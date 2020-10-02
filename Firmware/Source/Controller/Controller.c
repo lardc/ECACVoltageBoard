@@ -11,6 +11,7 @@
 #include "SysConfig.h"
 #include "Diagnostic.h"
 #include "BCCIxParams.h"
+#include "PWM.h"
 
 // Types
 //
@@ -129,6 +130,41 @@ static Boolean CONTROL_DispatchAction(Int16U ActionID, pInt16U pUserError)
 		case ACT_FAULT_CLEAR:
 			{
 				CONTROL_ResetToDefaultState();
+			}
+			break;
+
+		case ACT_START_SIGNAL:
+			{
+				DataTable[REG_OP_RESULT] = OPRESULT_NONE;
+				if((CONTROL_State == DS_Enabled) && (DataTable[REG_SIGNAL_OUT] == false))
+				{
+					PWM_SignalStart(DataTable[REG_SIN_VOLTAGE], DataTable[REG_SIN_CURRENT]);
+					DataTable[REG_SIGNAL_OUT] = true;
+					DataTable[REG_OP_RESULT] = OPRESULT_OK;
+				}
+				else
+				{
+					DataTable[REG_OP_RESULT] = OPRESULT_FAIL;
+					*pUserError = ERR_DEVICE_NOT_READY;
+				}
+				break;
+			}
+			break;
+
+		case ACT_STOP_SIGNAL:
+			{
+				DataTable[REG_OP_RESULT] = OPRESULT_NONE;
+				if((CONTROL_State == DS_Enabled))
+				{
+					PWM_SignalStop();
+					DataTable[REG_OP_RESULT] = OPRESULT_OK;
+					DataTable[REG_SIGNAL_OUT] = false;
+				}
+				else
+				{
+					DataTable[REG_OP_RESULT] = OPRESULT_FAIL;
+					*pUserError = ERR_DEVICE_NOT_READY;
+				}
 			}
 			break;
 

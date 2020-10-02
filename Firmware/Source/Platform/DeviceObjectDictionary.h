@@ -6,6 +6,10 @@
 #define ACT_DISABLE_POWER				2	// Отключение блока
 #define ACT_FAULT_CLEAR					3	// Очистка fault
 #define ACT_WARNING_CLEAR				4	// Очистка warning
+
+#define ACT_START_SIGNAL				20	// Запуск формирования сигнала
+#define ACT_STOP_SIGNAL					21	// Остановка формирования сигнала
+
 #define ACT_DBG_SYNC_1_IMPULSE			50 // Сигнал синхронизации
 #define ACT_DBG_SYNC_2_IMPULSE			51 // Сигнал синхронизации
 #define ACT_DBG_SET_STATE_CTRL_RELAY	52 // Изменить состояние реле цепи CTRL
@@ -26,7 +30,7 @@
 
 // Несохраняемы регистры чтения-записи
 #define REG_SIN_VOLTAGE					128 // Амплитуда напряжение выходного сигнала, В
-#define REG_SIN_CURRENT					129 // Амплитуда тока выходного сигнала, x10 мкА
+#define REG_SIN_CURRENT					129 // Амплитуда тока выходного сигнала, мкА
 #define REG_SIN_POLARITY				130 // Полярность
 #define REG_SIN_LONG					131 // Длительность импульса
 #define REG_SIN_TO_LINE					132 // Канал подачи сигнала POW, CTRL или в никуда
@@ -40,6 +44,7 @@
 #define REG_DISABLE_REASON				194	// Регистр Disable
 #define REG_PROBLEM						196	// Регистр Problem
 #define REG_OP_RESULT					197	// Регистр результата операции
+#define REG_SIGNAL_OUT					198 // Состояние выходной цепи
 // -----------------------------
 #define REG_FWINFO_SLAVE_NID			256	// Device CAN slave node ID
 #define REG_FWINFO_MASTER_NID			257	// Device CAN master node ID (if presented)
