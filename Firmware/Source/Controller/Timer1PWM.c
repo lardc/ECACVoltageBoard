@@ -12,14 +12,14 @@
 #define T1PWM_MAX_OUTPUT	0.95f
 
 // Variables
-static uint32_t PWMBase = 0;
+volatile uint32_t T1PWM_PWMBase = 0;
 
 // Functions
 void T1PWM_Init(float SystemClock, uint16_t Period)
 {
 	// Расчёт размерности ШИМ
 	uint32_t Prescaler = (uint32_t)(SystemClock / 1000000 * Period / 65536);
-	PWMBase = (uint32_t)((SystemClock / ((Prescaler + 1) * 1000000)) * Period);
+	T1PWM_PWMBase = (uint32_t)((SystemClock / ((Prescaler + 1) * 1000000)) * Period);
 
 	// Стандартная инициализация
 	TIM_Clock_En(TIM_1);
@@ -64,7 +64,7 @@ void T1PWM_SetDutyCycle(float Value)
 		TIM1->CCER &= ~(TIM_CCER_CC1E | TIM_CCER_CC1NE);
 
 	// Проверка значения на насыщение
-	float MaxOutput = T1PWM_MAX_OUTPUT * PWMBase;
+	float MaxOutput = T1PWM_MAX_OUTPUT * T1PWM_PWMBase;
 	TIM1->ARR = (uint32_t)((Value > MaxOutput) ? MaxOutput : Value);
 }
 //------------------------------------------------

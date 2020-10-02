@@ -8,8 +8,8 @@
 // Constants
 //
 const TableItemConstraint NVConstraint[DATA_TABLE_NV_SIZE] = {
-		{0, 0, 0},																	// 0
-		{0, 0, 0},																	// 1
+		{0, SW_MAX_KOEFF_P, 1000},													// 0
+		{0, SW_MAX_KOEFF_I, 1000},													// 1
 		{0, 0, 0},																	// 2
 		{0, 0, 0},																	// 3
 		{0, 0, 0},																	// 4

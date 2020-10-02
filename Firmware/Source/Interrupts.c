@@ -10,6 +10,7 @@
 #include "DeviceObjectDictionary.h"
 #include "ZwDMA.h"
 #include "Measure.h"
+#include "PWM.h"
 
 // Functions
 //
@@ -62,14 +63,13 @@ void DMA1_Channel1_IRQHandler()
 	if(DMA1->ISR & DMA_ISR_GIF1)
 	{
 		DMA1->IFCR |= DMA_IFCR_CGIF1;
-
 		if((DMA1->ISR & DMA_ISR_TCIF1))
 		{
 			DMA1->IFCR |= DMA_IFCR_CTCIF1;
 			MEASURE_VoltageDone = true;
 			if(MEASURE_VoltageDone && MEASURE_CurrentDone)
 			{
-
+				PWM_SinRegulation();
 			}
 		}
 	}
@@ -88,7 +88,7 @@ void DMA2_Channel2_IRQHandler()
 			MEASURE_CurrentDone = true;
 			if(MEASURE_VoltageDone && MEASURE_CurrentDone)
 			{
-
+				PWM_SinRegulation();
 			}
 		}
 	}
