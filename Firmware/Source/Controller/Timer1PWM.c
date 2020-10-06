@@ -7,8 +7,6 @@
 #include "SysConfig.h"
 
 // Defines
-#define T1PWM_CLOCK			20000
-#define T1PWM_PERIOD		(1000000L / T1PWM_CLOCK)
 #define T1PWM_MAX_OUTPUT	0.95f
 
 // Variables
@@ -23,23 +21,26 @@ void T1PWM_Init(float SystemClock, uint16_t Period)
 
 	// Стандартная инициализация
 	TIM_Clock_En(TIM_1);
-	TIM_Config(TIM1, SYSCLK, T1PWM_PERIOD);
-	TIM_Interupt(TIM1, 0, true);
-
+	TIM_Config(TIM1, SystemClock, Period);
 	// Выбор режима ШИМ - PWM mode 1
 	TIM1->CCMR1 |= TIM_CCMR1_OC1M_2 | TIM_CCMR1_OC1M_1;
-
 	// Активация функции Preload
 	TIM1->CCMR1 |= TIM_CCMR1_OC1PE;
 	// Активация функции AutoPreload
 	TIM1->CR1 |= TIM_CR1_ARPE;
 	// Активация режима Preload для настроек полярности
 	TIM1->CR2 |= TIM_CR2_CCPC;
+	// Режим master mode для АЦП
+	TIM1->CR2 |= TIM_CR2_MMS2_1;
 	// Разрешение работы таймера на выход
 	TIM1->BDTR |= TIM_BDTR_MOE;
-
+	// Разрешение прерывания при появлении события оновления
+	TIM1->DIER |=  TIM_DIER_UIE;
 	// Инициализация обновления регистров
 	TIM1->EGR |= TIM_EGR_UG;
+	// Ожидание появления обновления
+	while(TIM1->SR & TIM_SR_UIF);
+	// Сборс флага обновления
 	TIM1->SR &= ~TIM_SR_UIF;
 }
 //------------------------------------------------
