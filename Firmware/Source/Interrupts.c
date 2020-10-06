@@ -60,37 +60,34 @@ void INITCFG_ConfigInterrupt()
 
 void DMA1_Channel1_IRQHandler()
 {
-	if(DMA1->ISR & DMA_ISR_GIF1)
+	if((DMA1->ISR & DMA_ISR_TCIF1))
 	{
-		DMA1->IFCR |= DMA_IFCR_CGIF1;
-		if((DMA1->ISR & DMA_ISR_TCIF1))
+		DMA1->IFCR |= DMA_IFCR_CTCIF1;
+		MEASURE_VoltageDone = true;
+		if(MEASURE_VoltageDone && MEASURE_CurrentDone)
 		{
-			DMA1->IFCR |= DMA_IFCR_CTCIF1;
-			MEASURE_VoltageDone = true;
-			if(MEASURE_VoltageDone && MEASURE_CurrentDone)
-			{
-				PWM_SinRegulation();
-			}
+			MEASURE_VoltageDone = MEASURE_CurrentDone = 0;
+			PWM_SinRegulation();
+			ADC_SamplingStart(ADC1);
 		}
 	}
+	DMA1->IFCR |= DMA_IFCR_CGIF1;
 }
 //-----------------------------------------
 
-void DMA2_Channel2_IRQHandler()
+void DMA2_Channel1_IRQHandler()
 {
-	if(DMA2->ISR & DMA_ISR_GIF2)
+	if((DMA2->ISR & DMA_ISR_TCIF1))
 	{
-		DMA2->IFCR |= DMA_IFCR_CGIF2;
-
-		if((DMA2->ISR & DMA_ISR_TCIF2))
+		DMA2->IFCR |= DMA_IFCR_CTCIF1;
+		MEASURE_CurrentDone = true;
+		if(MEASURE_VoltageDone && MEASURE_CurrentDone)
 		{
-			DMA2->IFCR |= DMA_IFCR_CTCIF2;
-			MEASURE_CurrentDone = true;
-			if(MEASURE_VoltageDone && MEASURE_CurrentDone)
-			{
-				PWM_SinRegulation();
-			}
+			MEASURE_VoltageDone = MEASURE_CurrentDone = 0;
+			PWM_SinRegulation();
+			ADC_SamplingStart(ADC1);
 		}
 	}
+	DMA2->IFCR |= DMA_IFCR_CGIF1;
 }
 //-----------------------------------------
