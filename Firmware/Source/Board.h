@@ -44,6 +44,6 @@ GPIO_PortPinSettingMacro GPIO_ALT_CAN_TX = {GPIOA, Pin_12};
 GPIO_PortPinSettingMacro GPIO_ALT_UART_RX = {GPIOA, Pin_10};
 GPIO_PortPinSettingMacro GPIO_ALT_UART_TX = {GPIOA, Pin_9};
 GPIO_PortPinSettingMacro GPIO_CTRL_PWM_1 = {GPIOA, Pin_8};
-GPIO_PortPinSettingMacro GPIO_CTRL_PWM_2 = {GPIOC, Pin_13};
+GPIO_PortPinSettingMacro GPIO_CTRL_PWM_2 = {GPIOB, Pin_0};
 
 #endif // __BOARD_H
