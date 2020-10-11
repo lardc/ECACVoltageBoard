@@ -29,11 +29,11 @@ int main()
 	// Настройка DMA
 	INITCFG_DMA();
 
-	// Настройка ШИМ
-	INITCFG_PWM();
-
 	// Настройка АЦП
 	INITCFG_ADC();
+
+	// Настройка ШИМ
+	INITCFG_PWM();
 
 	// Настройка сторожевого таймера
 	INITCFG_ConfigWatchDog();
