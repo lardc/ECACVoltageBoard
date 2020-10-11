@@ -42,6 +42,5 @@
 // Параметры АЦП
 #define ADC_REF					3300	// Опорное напряжение
 #define ADC_12BIT_MAX_VAL		4095	// Максимальное разрешение АЦП
-#define ADC_RESOLUTION			(ADC_12BIT_MAX_VAL / ADC_REF) // Разрешение АЦП
 
 #endif //  __GLOBAL_H
