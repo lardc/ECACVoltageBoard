@@ -22,51 +22,59 @@ void T1PWM_Init(float SystemClock, uint16_t Period)
 	// Стандартная инициализация
 	TIM_Clock_En(TIM_1);
 	TIM_Config(TIM1, SystemClock, Period);
-	// Выбор режима ШИМ - PWM mode 1
-	TIM1->CCMR1 |= TIM_CCMR1_OC1M_2 | TIM_CCMR1_OC1M_1;
-	// Активация функции Preload
-	TIM1->CCMR1 |= TIM_CCMR1_OC1PE;
-	// Активация функции AutoPreload
+
+	// Активация функции AutoPreload ARR регистра
 	TIM1->CR1 |= TIM_CR1_ARPE;
-	// Активация режима Preload для настроек полярности
-	TIM1->CR2 |= TIM_CR2_CCPC;
-	// Режим master mode для АЦП
+	// Режим Update mode для АЦП
 	TIM1->CR2 |= TIM_CR2_MMS2_1;
-	// Разрешение работы таймера на выход
-	TIM1->BDTR |= TIM_BDTR_MOE;
-	// Разрешение прерывания при появлении события оновления
-	TIM1->DIER |=  TIM_DIER_UIE;
+
+	// Канал 1 - положительный
+	// Режим ШИМ - PWM mode 1, c функцией Preload
+	TIM1->CCMR1 |= (TIM_CCMR1_OC1M_2 | TIM_CCMR1_OC1M_1 | TIM_CCMR1_OC1PE);
+	TIM1->CCR1 = 0;
+
+	// Канал 2 - отрицательный
+	// Режим ШИМ - PWM mode 1, c функцией Preload
+	TIM1->CCMR1 |= (TIM_CCMR1_OC2M_2 | TIM_CCMR1_OC2M_1 | TIM_CCMR1_OC2PE);
+	TIM1->CCR2 = 0;
+
+	// Разрешение прерывания при появлении события обновления
+	TIM1->DIER |=  TIM_DIER_UIE ;
 	// Инициализация обновления регистров
 	TIM1->EGR |= TIM_EGR_UG;
-	// Ожидание появления обновления
-	while(TIM1->SR & TIM_SR_UIF);
 	// Сборс флага обновления
 	TIM1->SR &= ~TIM_SR_UIF;
+
+	// Разрешение выход CH1 и CH2N
+	TIM1->CCER |= (TIM_CCER_CC1E | TIM_CCER_CC2NE);
+	// Разрешение работы таймера на выход
+	TIM1->BDTR |= TIM_BDTR_MOE;
 }
 //------------------------------------------------
 
-void T1PWM_SetDutyCycle(float Value)
+void T1PWM_SetDutyCycle(volatile float Volue)
 {
 	// Выбор полярности формирователя
-	if(Value > 0)
-	{
-		TIM1->CCER |= TIM_CCER_CC1E;
-		TIM1->CCER &= ~TIM_CCER_CC1NE;
-	}
-	else if(Value < 0)
-	{
-		TIM1->CCER &= ~TIM_CCER_CC1E;
-		TIM1->CCER |= TIM_CCER_CC1NE;
+	float MaxOutput = T1PWM_MAX_OUTPUT * T1PWM_PWMBase;
 
-		// Смена знака для отрицательных значений
-		Value = -Value;
+	if(Volue > 0)
+	{
+		TIM1->CCR1 = (uint32_t)((Volue > MaxOutput) ? MaxOutput : Volue);
+		TIM1->CCR2 = 0;
 	}
 	else
-		TIM1->CCER &= ~(TIM_CCER_CC1E | TIM_CCER_CC1NE);
-
-	// Проверка значения на насыщение
-	float MaxOutput = T1PWM_MAX_OUTPUT * T1PWM_PWMBase;
-	TIM1->ARR = (uint32_t)((Value > MaxOutput) ? MaxOutput : Value);
+	{
+		if(Volue < 0)
+		{
+			Volue = -Volue;
+			TIM1->CCR1 = 0;
+			TIM1->CCR2 = (uint32_t)((Volue > MaxOutput) ? MaxOutput : Volue);
+		}
+		else
+		{
+			TIM1->CCR1 = TIM1->CCR2 = 0;
+		}
+	}
 }
 //------------------------------------------------
 
