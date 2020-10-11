@@ -30,7 +30,6 @@ void INITCFG_ConfigIO()
 	// Включение тактирования портов
 	RCC_GPIO_Clk_EN(PORTA);
 	RCC_GPIO_Clk_EN(PORTB);
-	RCC_GPIO_Clk_EN(PORTC);
 	
 	// Выходы
 	GPIO_InitPushPullOutput(GPIO_LED);
@@ -56,7 +55,7 @@ void INITCFG_ConfigIO()
 	GPIO_InitAltFunction(GPIO_ALT_UART_RX, AltFn_7);
 	GPIO_InitAltFunction(GPIO_ALT_UART_TX, AltFn_7);
 	GPIO_InitAltFunction(GPIO_CTRL_PWM_1, AltFn_6);
-	GPIO_InitAltFunction(GPIO_CTRL_PWM_2, AltFn_4);
+	GPIO_InitAltFunction(GPIO_CTRL_PWM_2, AltFn_6);
 
 	LL_EnablePWMOut();
 	LL_ConnectPOWRelay(false);
@@ -98,7 +97,7 @@ void INITCFG_ConfigWatchDog()
 
 void INITCFG_PWM()
 {
-T1PWM_Init(SYSCLK, TIMER1_uS);
+	T1PWM_Init(SYSCLK, TIMER1_uS);
 }
 //------------------------------------------------
 
