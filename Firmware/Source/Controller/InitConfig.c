@@ -83,7 +83,11 @@ void INITCFG_ConfigTimer7()
 {
 	TIM_Clock_En(TIM_7);
 	TIM_Config(TIM7, SYSCLK, TIMER7_uS);
+
+	// Понижение приоритета
+	NVIC_SetPriority(TIM7_IRQn, (NVIC_GetPriority(TIM7_IRQn)) + 1);
 	TIM_Interupt(TIM7, 0, true);
+
 	TIM_Start(TIM7);
 }
 //------------------------------------------------
