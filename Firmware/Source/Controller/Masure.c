@@ -5,6 +5,7 @@
 #include "Board.h"
 #include "math.h"
 #include "Global.h"
+#include "DataTable.h"
 
 // Variables
 volatile uint16_t ADC1DMABuff[ADC_BUFF_SIZE] = {0};
@@ -33,7 +34,7 @@ void MEAS_SetMeasureRange(uint16_t Voltage, uint32_t Current)
 
 void MEAS_SetCurrentRange(uint32_t Current)
 {
-	if(Current <= HW_I_RANGE_L)
+	if(Current <= DataTable[REG_HW_I_RANGE_L])
 	{
 		GPIO_SetState(GPIO_I_RANGE_H, false);
 		GPIO_SetState(GPIO_I_RANGE_M, false);
@@ -42,7 +43,7 @@ void MEAS_SetCurrentRange(uint32_t Current)
 	}
 	else
 	{
-		if(Current <= HW_I_RANGE_M)
+		if(Current <= DataTable[REG_HW_I_RANGE_M])
 		{
 			GPIO_SetState(GPIO_I_RANGE_H, false);
 			GPIO_SetState(GPIO_I_RANGE_M, true);
@@ -62,7 +63,7 @@ void MEAS_SetCurrentRange(uint32_t Current)
 
 void MEAS_SetVoltageRange(uint16_t Voltage)
 {
-	if(Voltage <= HW_U_RANGE_L)
+	if(Voltage <= DataTable[REG_HW_U_RANGE_L])
 	{
 		GPIO_SetState(GPIO_U_RANGE, true);
 		VoltageKu = 7.0;

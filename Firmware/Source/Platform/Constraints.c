@@ -18,12 +18,12 @@ const TableItemConstraint NVConstraint[DATA_TABLE_NV_SIZE] = {
 		{0, 0, 0},																	// 7
 		{0, 0, 0},																	// 8
 		{0, 0, 0},																	// 9
-		{0, 0, 0},																	// 10
-		{0, 0, 0},																	// 11
-		{0, 0, 0},																	// 12
-		{0, 0, 0},																	// 13
-		{0, 0, 0},																	// 14
-		{0, 0, 0},																	// 15
+		{0, SW_MAX_U_Low, 45},														// 10
+		{0, SW_MAX_U_High, 310},													// 11
+		{0, SW_MAX_I_Low, 300},														// 12
+		{0, SW_MAX_I_Middle, 5000},													// 13
+		{0, SW_MAX_I_HighH, 1},														// 14
+		{0, SW_MAX_I_HighL, 18928},													// 15
 		{0, 0, 0},																	// 16
 		{0, 0, 0},																	// 17
 		{0, 0, 0},																	// 18
@@ -140,9 +140,9 @@ const TableItemConstraint NVConstraint[DATA_TABLE_NV_SIZE] = {
 
 const TableItemConstraint VConstraint[DATA_TABLE_WP_START - DATA_TABLE_WR_START] = {
 		{0, HW_MAX_VOLTAGE, 0},														// 128
-		{0, HW_MAX_CURRENT, 0},														// 129
-		{0, HW_MAX_VARIANT_POLARITY, 0},											// 130
-		{0, HW_MAX_TIME_PULSE, HW_MAX_TIME_PULSE},									// 131
+		{0, HW_MAX_CURRENT_HWORD, 0},												// 129
+		{0, HW_MAX_CURRENT_LWORD, 0},												// 130
+		{0, 0, 0},																	// 131
 		{0, HW_MAX_LINE, 0},														// 132
 		{0, 0, 0},																	// 133
 		{0, 0, 0},																	// 134

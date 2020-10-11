@@ -43,7 +43,7 @@ bool DIAG_HandleDiagnosticAction(uint16_t ActionID, uint16_t *pUserError)
 
 		case ACT_DBG_SIN:
 			{
-				DBGACT_GenerateOneSin(DataTable[REG_SIN_VOLTAGE], DataTable[REG_SIN_CURRENT], DataTable[REG_SIN_POLARITY]);
+				DBGACT_GenerateOneSin(DataTable[REG_SIN_VOLTAGE], 0, 0);
 			}
 			break;
 

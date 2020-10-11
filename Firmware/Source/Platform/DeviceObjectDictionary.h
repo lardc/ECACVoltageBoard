@@ -28,11 +28,16 @@
 #define REG_Kp							0	// Коэффициент регулятора П
 #define REG_Ki							1	// Коэффициент регулятора И
 
+#define REG_HW_U_RANGE_L				10	// Граница L-диапазона по напряжению
+#define REG_HW_U_RANGE_H				11	// Граница H-диапазона по напряжению
+#define REG_HW_I_RANGE_L				12	// Граница L-диапазона по току
+#define REG_HW_I_RANGE_M				13	// Граница M-диапазона по току
+#define REG_HW_I_RANGE_HH				14	// Граница H-диапазона по току HWord
+#define REG_HW_I_RANGE_HL				15	// Граница H-диапазона по току LWord
+
 // Несохраняемы регистры чтения-записи
 #define REG_SIN_VOLTAGE					128 // Амплитуда напряжение выходного сигнала, В
 #define REG_SIN_CURRENT					129 // Амплитуда тока выходного сигнала, мкА
-#define REG_SIN_POLARITY				130 // Полярность
-#define REG_SIN_LONG					131 // Длительность импульса
 #define REG_SIN_TO_LINE					132 // Канал подачи сигнала POW, CTRL или в никуда
 
 #define REG_DBG_RELAY_CTRL_STATE		150	// Регистр состояния
