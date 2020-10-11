@@ -14,7 +14,7 @@
 #include "DataTable.h"
 
 // Defines
-#define PWM_MAX_STEP_PWM 400
+#define PWM_MAX_STEP_PWM 8
 
 // Typedef
 typedef struct __Error
@@ -50,42 +50,38 @@ typedef struct __SinControl
 	Measure Current;
 	Error Error;
 	KoefficientStr	PI;
-	uint16_t Duty;
+	float Duty;
 	uint16_t Point;
+	int16_t PWMRAW[PWM_MAX_STEP_PWM];
 } SinControl;
 
 volatile SinControl Regulator = {0};
 
 // Variables
-static const double Steper = M_PI * (2 * (1 / PWM_MAX_STEP_PWM));
+static const double Steper = M_PI * (2 * (1 / (double)PWM_MAX_STEP_PWM));
 
 // Functions
-void PWM_ResetCounters();
-void PWM_SaveEndPoint();
+static void PWM_ResetDataOut();
+//static void PWM_SaveEndPoint();
 void PWM_CopyRAWFromDMAToEndPoint(uint32_t *AdressDMABuff, uint32_t *AdressEndPoin);
 void PWM_CopyVoltageFromDMAToEndPoint(uint32_t *AdressDMABuff, uint32_t *AdressEndPoin);
 void PWM_CopyCurrentFromDMAToEndPoint(uint32_t *AdressDMABuff, uint32_t *AdressEndPoin);
 void PWM_SinRegulation();
-void PWM_StepUpdate();
-uint16_t Duty();
-void PWM_UpdateMeasValue();
-void PWM_ChekEndOfSignal();
-void PWM_UpdateKoeff();
+static void PWM_StepUpdate();
+static void PWM_UpdateMeasValue();
+static void PWM_ChekEndOfSignal();
+static void PWM_UpdateKoeff();
+static void PWM_CalculateVoltageInPoint();
+static void PWM_CalculateDuty();
 
 void PWM_SignalStart(uint16_t Voltage, uint32_t Current)
 {
 	Regulator.Voltage.Set = Voltage;
 	Regulator.Current.Set = Current;
-
-	PWM_UpdateMeasValue();
-	PWM_UpdateKoeff();
-	PWM_ChekEndOfSignal();
-
+	PWM_ResetDataOut();
 	MEAS_SetMeasureRange(Voltage, Current);
-
-	PWM_ResetCounters();
-	PWM_StepUpdate();
-
+	PWM_SinRegulation();
+	ADC_SamplingStart(ADC1);
 	T1PWM_Start();
 }
 //------------------------------------------------
@@ -99,18 +95,10 @@ void PWM_SignalStop()
 void PWM_SinRegulation()
 {
 	PWM_UpdateMeasValue();
+	PWM_CalculateVoltageInPoint();
 	PWM_UpdateKoeff();
 	PWM_ChekEndOfSignal();
-
-	Regulator.PI.P.Q = Regulator.Error.Now * Regulator.PI.P.K;
-	Regulator.PI.I.Q  += Regulator.Error.Now * Regulator.PI.I.K;
-
-	Regulator.Error.Last = Regulator.Error.Now;
-	Regulator.Error.Summ += Regulator.Error.Last;
-
-	Regulator.Duty = Duty();
-
-	// Задание значения ШИМ
+	PWM_CalculateDuty();
 	T1PWM_SetDutyCycle(Regulator.Duty);
 	PWM_StepUpdate();
 }
@@ -118,20 +106,19 @@ void PWM_SinRegulation()
 //------------------------------------------------
 void PWM_StepUpdate()
 {
-	if(Regulator.Point >= PWM_MAX_STEP_PWM)
-	{
-		Regulator.Point++;
-	}
-	else
+	if(Regulator.Point >= (PWM_MAX_STEP_PWM - 1))
 	{
 		Regulator.Point = 0;
 	}
+	else
+	{
+		Regulator.Point++;
+	}
 }
 //------------------------------------------------
+
 void PWM_UpdateMeasValue()
 {
-	Regulator.Voltage.Target = Regulator.Voltage.Set * sin(Steper * Regulator.Point);
-
 	Regulator.Voltage.Now = MEAS_Voltage();
 	Regulator.Current.Now = MEAS_Current();
 }
@@ -157,31 +144,20 @@ void PWM_UpdateKoeff()
 }
 //------------------------------------------------
 
-uint16_t Duty()
-{
-	double SummQpAndQi = Regulator.PI.P.Q + Regulator.PI.I.Q;
-
-	uint16_t Duty = SummQpAndQi * ((SummQpAndQi) / 100 * T1PWM_PWMBase);
-
-	return Duty;
-}
-//------------------------------------------------
-
-void PWM_ResetCounters()
+void PWM_ResetDataOut()
 {
 	T1PWM_SetDutyCycle(0);
-	Regulator.Point = 0;
 }
 //------------------------------------------------
 
-void PWM_SaveEndPoint()
+/*void PWM_SaveEndPoint()
 {
 	//��������� ������ � endpoints
 	PWM_CopyRAWFromDMAToEndPoint((uint32_t*)&ADC1DMABuff, (uint32_t*)&CONTROL_BuffRAWCurrent);
 	PWM_CopyRAWFromDMAToEndPoint((uint32_t*)&ADC2DMABuff, (uint32_t*)&CONTROL_BuffRAWVoltage);
 	PWM_CopyVoltageFromDMAToEndPoint((uint32_t*)&ADC1DMABuff, (uint32_t*)&CONTROL_BuffCurrent);
 	PWM_CopyCurrentFromDMAToEndPoint((uint32_t*)&ADC2DMABuff, (uint32_t*)&CONTROL_BuffVoltage);
-}
+}*/
 //------------------------------------------------
 
 void PWM_CopyRAWFromDMAToEndPoint(uint32_t *AdressDMABuff, uint32_t *AdressEndPoin)
@@ -191,45 +167,23 @@ void PWM_CopyRAWFromDMAToEndPoint(uint32_t *AdressDMABuff, uint32_t *AdressEndPo
 		AdressEndPoin[i] = AdressDMABuff[i];
 	}
 }
+
 //------------------------------------------------
 
-void PWM_CopyVoltageFromDMAToEndPoint(uint32_t *AdressDMABuff, uint32_t *AdressEndPoin)
+void PWM_CalculateVoltageInPoint()
 {
-	float Resistance = 1;
-
-	if(LL_GetStateKI_L())
-	{
-		Resistance = R_L;
-	}
-	else
-	{
-		if(LL_GetStateKI_M())
-		{
-			Resistance = R_M;
-		}
-		else
-		{
-			Resistance = R_H;
-		}
-	}
-
-	for(uint16_t i = 0; i < (VALUES_x_SIZE + 1); i++)
-	{
-		AdressEndPoin[i] = (uint16_t)((AdressDMABuff[i] * (float)ADC_RESOLUTION) / Resistance);
-	}
+	Regulator.Voltage.Target = Regulator.Voltage.Set * sin(Steper * Regulator.Point);
 }
 //------------------------------------------------
 
-void PWM_CopyCurrentFromDMAToEndPoint(uint32_t *AdressDMABuff, uint32_t *AdressEndPoin)
+void PWM_CalculateDuty()
 {
-	float KU = 1;
+	Regulator.PI.P.Q = Regulator.Error.Now * Regulator.PI.P.K;
+	Regulator.PI.I.Q += Regulator.Error.Now * Regulator.PI.I.K;
 
-	if(LL_GetStateKU())
-		KU = 7.6;
+	Regulator.Error.Last = Regulator.Error.Now;
+	Regulator.Error.Summ += Regulator.Error.Last;
 
-	for(uint16_t i = 0; i < (VALUES_x_SIZE + 1); i++)
-	{
-		AdressEndPoin[i] = (uint16_t)(AdressDMABuff[i] * (float)ADC_RESOLUTION * KU * KU_DEVIDER);
-	}
+	Regulator.Duty = Regulator.PI.P.Q + Regulator.PI.I.Q;
 }
 //------------------------------------------------
