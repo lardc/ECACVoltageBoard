@@ -9,9 +9,6 @@
 #include "Controller.h"
 #include "DebugActions.h"
 
-// Variables
-extern volatile DeviceState CONTROL_State;
-
 // Functions
 bool DIAG_HandleDiagnosticAction(uint16_t ActionID, uint16_t *pUserError)
 {
@@ -44,6 +41,5 @@ bool DIAG_HandleDiagnosticAction(uint16_t ActionID, uint16_t *pUserError)
 		default:
 			return false;
 	}
-
 	return true;
 }

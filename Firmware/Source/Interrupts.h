@@ -3,6 +3,4 @@
 
 #include "stdinc.h"
 
-void INITCFG_ConfigInterrupt();
-
 #endif // __INTERRUPTS_H

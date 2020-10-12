@@ -49,7 +49,7 @@ void CONTROL_Init()
 	Int16U EPSized[EP_COUNT] = {VALUES_x_SIZE, VALUES_x_SIZE, VALUES_x_SIZE, VALUES_x_SIZE};
 	pInt16U EPCounters[EP_COUNT] = {(pInt16U)&CONTROL_BuffCounterRAWCurrent, (pInt16U)&CONTROL_BuffCounterRAWVoltage,
 			(pInt16U)&CONTROL_BuffCounterCurrent, (pInt16U)&CONTROL_BuffCounterVoltage};
-	pInt16U EPDatas[EP_COUNT] = {(pInt16U)&CONTROL_BuffRAWCurrent, (pInt16U)&CONTROL_BuffRAWVoltage, (pInt16U)&CONTROL_BuffCurrent, (pInt16U)&CONTROL_BuffCounterVoltage};
+	pInt16U EPDatas[EP_COUNT] = {(pInt16U)&CONTROL_BuffRAWCurrent, (pInt16U)&CONTROL_BuffRAWVoltage, (pInt16U)&CONTROL_BuffCurrent, (pInt16U)&CONTROL_BuffVoltage};
 
 	// Конфигурация сервиса работы Data-table и EPROM
 	EPROMServiceConfig EPROMService = {(FUNC_EPROM_WriteValues)&NFLASH_WriteDT, (FUNC_EPROM_ReadValues)&NFLASH_ReadDT};
@@ -155,7 +155,7 @@ static Boolean CONTROL_DispatchAction(Int16U ActionID, pInt16U pUserError)
 		case ACT_STOP_SIGNAL:
 			{
 				DataTable[REG_OP_RESULT] = OPRESULT_NONE;
-				if((CONTROL_State == DS_Enabled))
+				if(CONTROL_State == DS_Enabled)
 				{
 					PWM_SignalStop();
 					DataTable[REG_OP_RESULT] = OPRESULT_OK;

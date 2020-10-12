@@ -52,12 +52,6 @@ void TIM7_IRQHandler()
 }
 //-----------------------------------------
 
-void INITCFG_ConfigInterrupt()
-{
-
-}
-//-----------------------------------------
-
 void DMA1_Channel1_IRQHandler()
 {
 	if((DMA1->ISR & DMA_ISR_TCIF1))

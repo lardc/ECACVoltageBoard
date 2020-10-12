@@ -27,11 +27,11 @@
 #define SW_MAX_I_HighL			44464	// Верхняя граница диапазона имзмерения тока LoWord
 
 #define HW_MAX_VOLTAGE			310		// Максимальное задаваемое напряжение
-#define HW_MAX_CURRENT_LWORD	44464	// Максимальное задаваемый ток - младшее слово
+#define HW_MAX_CURRENT_LWORD	65535	// Максимальное задаваемый ток - младшее слово
 #define HW_MAX_CURRENT_HWORD	1		// Максимальное задаваемый ток - старшее слово
 
 // Параметры АЦП
-#define ADC_REF					3300	// Опорное напряжение
+#define ADC_REF					3300	// Опорное напряжение, мВ
 #define ADC_12BIT_MAX_VAL		4095	// Максимальное разрешение АЦП
 
 #endif //  __GLOBAL_H
