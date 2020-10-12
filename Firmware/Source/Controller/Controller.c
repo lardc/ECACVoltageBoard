@@ -138,7 +138,8 @@ static Boolean CONTROL_DispatchAction(Int16U ActionID, pInt16U pUserError)
 				DataTable[REG_OP_RESULT] = OPRESULT_NONE;
 				if((CONTROL_State == DS_Enabled) && (DataTable[REG_SIGNAL_OUT] == false))
 				{
-					PWM_SignalStart(DataTable[REG_SIN_VOLTAGE], DataTable[REG_SIN_CURRENT]);
+					uint32_t Current = DataTable[REG_SIN_CURRENT_L] + ( DataTable[REG_SIN_CURRENT_H] << 16);
+					PWM_SignalStart(DataTable[REG_SIN_VOLTAGE], Current);
 					DataTable[REG_SIGNAL_OUT] = true;
 					DataTable[REG_OP_RESULT] = OPRESULT_OK;
 				}

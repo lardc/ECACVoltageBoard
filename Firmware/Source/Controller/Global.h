@@ -23,12 +23,12 @@
 #define SW_MAX_U_High			310 	// Средн граница диапазона имзмерения тока
 #define SW_MAX_I_Low			300		// Верхняя граница диапазона имзмерения тока
 #define SW_MAX_I_Middle			5000	// Верхняя граница диапазона имзмерения тока
-#define SW_MAX_I_HighH			2		// Верхняя граница диапазона имзмерения тока HiWord
-#define SW_MAX_I_HighL			18928	// Верхняя граница диапазона имзмерения тока LoWord
+#define SW_MAX_I_HighH			1		// Верхняя граница диапазона имзмерения тока HiWord
+#define SW_MAX_I_HighL			44464	// Верхняя граница диапазона имзмерения тока LoWord
 
 #define HW_MAX_VOLTAGE			310		// Максимальное задаваемое напряжение
-#define HW_MAX_CURRENT_HWORD	2		// Максимальное задаваемое тока
-#define HW_MAX_CURRENT_LWORD	18928	// Максимальное задаваемое тока
+#define HW_MAX_CURRENT_LWORD	44464	// Максимальное задаваемый ток - младшее слово
+#define HW_MAX_CURRENT_HWORD	1		// Максимальное задаваемый ток - старшее слово
 
 // Параметры АЦП
 #define ADC_REF					3300	// Опорное напряжение
