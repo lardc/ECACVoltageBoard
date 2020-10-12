@@ -14,7 +14,7 @@ extern volatile bool MEASURE_CurrentDone;
 
 // Functions
 void MEAS_SetMeasureRange(uint16_t Voltage, uint32_t Current);
-extern double MEAS_Voltage();
-extern double MEAS_Current();
+extern float MEAS_Voltage();
+extern float MEAS_Current();
 
 #endif //__MEASURE_H

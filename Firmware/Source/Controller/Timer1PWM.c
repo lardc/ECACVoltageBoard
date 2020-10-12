@@ -55,7 +55,9 @@ void T1PWM_Init(float SystemClock, uint16_t Period)
 void T1PWM_SetDutyCycle(volatile float Volue)
 {
 	// Выбор полярности формирователя
-	float MaxOutput = T1PWM_MAX_OUTPUT * T1PWM_PWMBase;
+//	float MaxOutput = T1PWM_MAX_OUTPUT * T1PWM_PWMBase;
+
+	float MaxOutput = 1000;
 
 	if(Volue > 0)
 	{
@@ -86,6 +88,7 @@ void T1PWM_Start()
 
 void T1PWM_Stop()
 {
+	TIM1->BDTR &= ~TIM_BDTR_MOE;
 	T1PWM_SetDutyCycle(0);
 	TIM_Stop(TIM1);
 }
