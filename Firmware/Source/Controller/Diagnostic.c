@@ -41,12 +41,6 @@ bool DIAG_HandleDiagnosticAction(uint16_t ActionID, uint16_t *pUserError)
 			}
 			break;
 
-		case ACT_DBG_SIN:
-			{
-				DBGACT_GenerateOneSin(DataTable[REG_SIN_VOLTAGE], 0, 0);
-			}
-			break;
-
 		default:
 			return false;
 	}

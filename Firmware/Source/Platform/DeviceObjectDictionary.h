@@ -14,7 +14,6 @@
 #define ACT_DBG_SYNC_2_IMPULSE			51 // Сигнал синхронизации
 #define ACT_DBG_SET_STATE_CTRL_RELAY	52 // Изменить состояние реле цепи CTRL
 #define ACT_DBG_SET_STATE_POW_RELAY		53 // Изменить состояние реле цепи POW
-#define ACT_DBG_SIN						54 // Запуск формирования сигнала
 
 #define ACT_SAVE_TO_ROM					200	// Сохранение пользовательских данных во FLASH процессора
 #define ACT_RESTORE_FROM_ROM			201	// Восстановление данных из FLASH

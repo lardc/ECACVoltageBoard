@@ -33,9 +33,3 @@ void DBGACT_SetStateCTRLRelay(bool NewState)
 	LL_ConnectCTRLRelay(NewState);
 }
 //-----------------------------
-
-void DBGACT_GenerateOneSin(uint16_t Voltage, uint16_t Current, uint8_t Polarity)
-{
-
-}
-//-----------------------------
