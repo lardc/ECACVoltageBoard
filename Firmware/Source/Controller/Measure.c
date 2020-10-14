@@ -8,8 +8,9 @@
 #include "DataTable.h"
 
 // Variables
-volatile uint16_t ADC1DMABuff[ADC_BUFF_SIZE] = {0};
-volatile uint16_t ADC2DMABuff[ADC_BUFF_SIZE] = {0};
+volatile uint16_t ADC1DMAVoltageBuffer[ADC_DMA_BUFF_SIZE] = {0};
+volatile uint16_t ADC2DMACurrentBuffer[ADC_DMA_BUFF_SIZE] = {0};
+
 volatile bool MEASURE_VoltageDone = false;
 volatile bool MEASURE_CurrentDone = false;
 static const float ADCResolution = ((float)ADC_REF / (float)ADC_12BIT_MAX_VAL);
@@ -84,22 +85,22 @@ void MEAS_SetVoltageRange(uint16_t Voltage)
 
 float MEAS_Voltage()
 {
-	return ReturnVoltageFromRAW(MEAS_MeanSquare(ADC1DMABuff, ADC_BUFF_SIZE));
+	return ReturnVoltageFromRAW(MEAS_MeanSquare(ADC1DMAVoltageBuffer, ADC_DMA_BUFF_SIZE));
 }
 
 float MEAS_Current()
 {
-	return ReturnCurrentFromRAW(MEAS_MeanSquare(ADC2DMABuff, ADC_BUFF_SIZE));
+	return ReturnCurrentFromRAW(MEAS_MeanSquare(ADC2DMACurrentBuffer, ADC_DMA_BUFF_SIZE));
 }
 //------------------------------------------------
 
 float MEAS_MeanSquare(volatile uint16_t *Address, uint16_t Num)
 {
 	uint32_t Summ = 0;
-	uint32_t Buff[ADC_BUFF_SIZE] = {0};
+	uint32_t Buff[ADC_DMA_BUFF_SIZE] = {0};
 	uint32_t Mul = 0;
 
-	for(uint16_t i = 0; i < (ADC_BUFF_SIZE); i++)
+	for(uint16_t i = 0; i < ADC_DMA_BUFF_SIZE; i++)
 	{
 		Mul = (uint32_t)(*(Address + i));
 		Buff[i] = (uint32_t)(Mul * Mul);
@@ -110,7 +111,7 @@ float MEAS_MeanSquare(volatile uint16_t *Address, uint16_t Num)
 	{
 		return 0;
 	}
-	Summ = (float)Summ / (float)ADC_BUFF_SIZE;
+	Summ = (float)Summ / (float)ADC_DMA_BUFF_SIZE;
 	return sqrtf(Summ);
 }
 //------------------------------------------------

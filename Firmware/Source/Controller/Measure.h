@@ -6,9 +6,10 @@
 #include "Global.h"
 
 // Variables
+extern volatile uint16_t ADC1DMAVoltageBuffer[];
+extern volatile uint16_t ADC2DMACurrentBuffer[];
+
 extern volatile uint16_t VoltageTarget, CurrentTarget;
-extern volatile uint16_t ADC1DMABuff[ADC_BUFF_SIZE];
-extern volatile uint16_t ADC2DMABuff[ADC_BUFF_SIZE];
 extern volatile bool MEASURE_VoltageDone;
 extern volatile bool MEASURE_CurrentDone;
 

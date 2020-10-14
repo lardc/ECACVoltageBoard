@@ -27,4 +27,12 @@
 #define CAN_BAUDRATE					1000000		// Битрейт CAN
 // ----------------------------------------------
 
+// High-speed sampling
+#define DMA_ADC1_V_CHANNEL				DMA1_Channel1	// Канал DMA для АЦП напряжения
+#define DMA_ADC2_I_CHANNEL				DMA2_Channel1	// Канал DMA для АЦП тока
+//
+#define ADC1_VOLTAGE_CHANNEL			1				// АЦП1 номер канала напряжения
+#define ADC2_CURRENT_CHANNEL			1				// АЦП2 номер канала тока
+// ----------------------------------------------
+
 #endif // __SYSCONFIG_H

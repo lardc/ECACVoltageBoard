@@ -11,7 +11,7 @@
 // Временные параметры
 #define TIME_LED_BLINK			500		// Мигание светодиодом (в мс)
 
-#define ADC_BUFF_SIZE 			1		// Размер буфера ДМА для АЦП
+#define ADC_DMA_BUFF_SIZE 		4		// Размер буфера ДМА для АЦП
 #define VALUES_x_SIZE			1000	// Размер буфера Epoint
 
 #define HW_MAX_LINE				2		// Колличество ццепей для подачи сигнала
