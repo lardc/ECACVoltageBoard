@@ -22,22 +22,22 @@ static volatile uint16_t Rshunt;
 static volatile float VoltageKu;
 
 // Functions
-void MEAS_SetCurrentRange(uint32_t Current);
-void MEAS_SetVoltageRange(uint16_t Voltage);
-float MEAS_Voltage();
-float MEAS_Current();
-static float MEAS_MeanSquare(volatile uint16_t *Address, uint16_t Num);
+void MEASURE_SetCurrentRange(uint32_t Current);
+void MEASURE_SetVoltageRange(uint16_t Voltage);
+float MEASURE_Voltage();
+float MEASURE_Current();
+static float MEASURE_MeanSquare(volatile uint16_t *Address, uint16_t Num);
 static float ReturnVoltageFromRAW(float RAW);
 static float ReturnCurrentFromRAW(float RAW);
 
-void MEAS_SetMeasureRange(uint16_t Voltage, uint32_t Current)
+void MEASURE_SetMeasureRange(uint16_t Voltage, uint32_t Current)
 {
-	MEAS_SetVoltageRange(Voltage);
-	MEAS_SetCurrentRange(Current);
+	MEASURE_SetVoltageRange(Voltage);
+	MEASURE_SetCurrentRange(Current);
 }
 //------------------------------------------------
 
-void MEAS_SetCurrentRange(uint32_t Current)
+void MEASURE_SetCurrentRange(uint32_t Current)
 {
 	if(Current <= DataTable[REG_HW_I_RANGE_L])
 	{
@@ -66,7 +66,7 @@ void MEAS_SetCurrentRange(uint32_t Current)
 }
 //------------------------------------------------
 
-void MEAS_SetVoltageRange(uint16_t Voltage)
+void MEASURE_SetVoltageRange(uint16_t Voltage)
 {
 	if(Voltage <= DataTable[REG_HW_U_RANGE_L])
 	{
@@ -81,18 +81,18 @@ void MEAS_SetVoltageRange(uint16_t Voltage)
 }
 //------------------------------------------------
 
-float MEAS_Voltage()
+float MEASURE_Voltage()
 {
-	return ReturnVoltageFromRAW(MEAS_MeanSquare(ADC1DMAVoltageBuffer, ADC_DMA_BUFF_SIZE));
+	return ReturnVoltageFromRAW(MEASURE_MeanSquare(ADC1DMAVoltageBuffer, ADC_DMA_BUFF_SIZE));
 }
 
-float MEAS_Current()
+float MEASURE_Current()
 {
-	return ReturnCurrentFromRAW(MEAS_MeanSquare(ADC2DMACurrentBuffer, ADC_DMA_BUFF_SIZE));
+	return ReturnCurrentFromRAW(MEASURE_MeanSquare(ADC2DMACurrentBuffer, ADC_DMA_BUFF_SIZE));
 }
 //------------------------------------------------
 
-float MEAS_MeanSquare(volatile uint16_t *Address, uint16_t Num)
+float MEASURE_MeanSquare(volatile uint16_t *Address, uint16_t Num)
 {
 	uint32_t Summ = 0;
 	uint32_t Buff[ADC_DMA_BUFF_SIZE] = {0};
