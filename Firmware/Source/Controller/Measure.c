@@ -11,8 +11,6 @@
 volatile uint16_t ADC1DMAVoltageBuffer[ADC_DMA_BUFF_SIZE] = {0};
 volatile uint16_t ADC2DMACurrentBuffer[ADC_DMA_BUFF_SIZE] = {0};
 
-volatile bool MEASURE_VoltageDone = false;
-volatile bool MEASURE_CurrentDone = false;
 static const float ADCResolution = ((float)ADC_REF / (float)ADC_12BIT_MAX_VAL);
 static const float OptTransferKoeff = 1.34;
 static const float VoltageOffset = 2300;

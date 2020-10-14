@@ -10,8 +10,6 @@ extern volatile uint16_t ADC1DMAVoltageBuffer[];
 extern volatile uint16_t ADC2DMACurrentBuffer[];
 
 extern volatile uint16_t VoltageTarget, CurrentTarget;
-extern volatile bool MEASURE_VoltageDone;
-extern volatile bool MEASURE_CurrentDone;
 
 // Functions
 void MEAS_SetMeasureRange(uint16_t Voltage, uint32_t Current);
