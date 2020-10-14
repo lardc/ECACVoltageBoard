@@ -1,4 +1,4 @@
-// Include
+﻿// Include
 //
 #include "Global.h"
 #include "Controller.h"

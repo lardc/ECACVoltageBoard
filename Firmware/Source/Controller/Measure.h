@@ -1,4 +1,4 @@
-#ifndef __MEASURE_H
+﻿#ifndef __MEASURE_H
 #define __MEASURE_H
 
 // Include
