@@ -140,8 +140,8 @@ void PWM_StepUpdate()
 
 void PWM_UpdateMeasValue()
 {
-	Regulator.Voltage.Now = MEAS_Voltage();
-	Regulator.Current.Now = MEAS_Current();
+	Regulator.Voltage.Now = MEASURE_Voltage();
+	Regulator.Current.Now = MEASURE_Current();
 }
 //------------------------------------------------
 
@@ -160,8 +160,8 @@ void PWM_ChekEndOfSignal()
 
 void PWM_UpdateKoeff()
 {
-	Regulator.PI.P.K = (float)DataTable[REG_Kp] / 1000;
-	Regulator.PI.I.K = (float)DataTable[REG_Ki] / 1000;
+	Regulator.PI.P.K = (float)DataTable[REG_KP] / 1000;
+	Regulator.PI.I.K = (float)DataTable[REG_KI] / 1000;
 }
 //------------------------------------------------
 
