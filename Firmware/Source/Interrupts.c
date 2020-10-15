@@ -83,6 +83,7 @@ void INT_CheckCompleteCondition()
 	if(VoltageSamplingDone && CurrentSamplingDone)
 	{
 		VoltageSamplingDone = CurrentSamplingDone = false;
+		LL_DMAReload();
 		PWM_SinRegulation();
 	}
 }

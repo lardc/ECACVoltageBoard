@@ -12,5 +12,6 @@ void LL_ConnectPOWRelay(bool NewState);
 void LL_ConnectCTRLRelay(bool NewState);
 void LL_EnablePWMOut();
 void LL_DisablePWMOut();
+void LL_DMAReload();
 
 #endif //__LOWLEVEL_H

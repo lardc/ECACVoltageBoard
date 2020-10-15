@@ -4,6 +4,8 @@
 // Includes
 #include "Board.h"
 #include "Delay.h"
+#include "Global.h"
+#include "SysConfig.h"
 
 // Functions
 void LL_ToggleBoardLED()
@@ -47,5 +49,15 @@ void LL_DisablePWMOut()
 {
 	GPIO_SetState(GPIO_CTRL_PWMSD_1, false);
 	GPIO_SetState(GPIO_CTRL_PWMSD_2, false);
+}
+//-----------------------------
+
+void LL_DMAReload()
+{
+	DMA_ChannelReload(DMA_ADC1_V_CHANNEL, ADC_DMA_BUFF_SIZE);
+	DMA_ChannelReload(DMA_ADC2_I_CHANNEL, ADC_DMA_BUFF_SIZE);
+
+	DMA_ChannelEnable(DMA_ADC1_V_CHANNEL, true);
+	DMA_ChannelEnable(DMA_ADC2_I_CHANNEL, true);
 }
 //-----------------------------
