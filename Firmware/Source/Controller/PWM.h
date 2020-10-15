@@ -6,7 +6,7 @@
 #include "Global.h"
 
 // Variables
-extern volatile uint32_t T1PWM_PWMBase;
+extern volatile uint32_t PWMTimerCounter;
 
 // Functions
 void PWM_SignalStart(uint16_t Voltage, uint32_t Current);

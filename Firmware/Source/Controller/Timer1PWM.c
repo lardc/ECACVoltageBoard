@@ -54,7 +54,8 @@ void T1PWM_SetDutyCycle(float Value)
 {
 	// Проверка значения на насыщение
 	float MaxOutput = T1PWM_MAX_OUTPUT * PWMBase;
-	uint32_t IntValue = (uint32_t)((fabsf(Value) > MaxOutput) ? MaxOutput : fabsf(Value));
+	float absValue = fabsf(Value);
+	uint32_t IntValue = (uint32_t)(absValue > MaxOutput ? MaxOutput : absValue);
 
 	// Выбор полярности формирователя
 	if(Value > 0)
