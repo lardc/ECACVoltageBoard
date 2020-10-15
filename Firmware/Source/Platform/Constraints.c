@@ -8,24 +8,24 @@
 // Constants
 //
 const TableItemConstraint NVConstraint[DATA_TABLE_NV_SIZE] = {
-		{0, SW_MAX_KOEFF_P, 1000},													// 0
-		{0, SW_MAX_KOEFF_I, 1000},													// 1
-		{0, 0, 0},																	// 2
-		{0, 0, 0},																	// 3
-		{0, 0, 0},																	// 4
+		{0, REGULATOR_K_MAX, 0},													// 0
+		{0, REGULATOR_K_MAX, 0},													// 1
+		{SHUNT_RES_MIN, SHUNT_RES_MAX, SHUNT_RES_DEF},								// 2
+		{SHUNT_RES_MIN, SHUNT_RES_MAX, SHUNT_RES_DEF},								// 3
+		{SHUNT_RES_MIN, SHUNT_RES_MAX, SHUNT_RES_DEF},								// 4
 		{0, 0, 0},																	// 5
 		{0, 0, 0},																	// 6
 		{0, 0, 0},																	// 7
 		{0, 0, 0},																	// 8
 		{0, 0, 0},																	// 9
-		{0, SW_MAX_U_Low, 45},														// 10
-		{0, SW_MAX_U_High, 310},													// 11
-		{0, SW_MAX_I_Low, 300},														// 12
-		{0, SW_MAX_I_Middle, 5000},													// 13
-		{0, SW_MAX_I_HighH, 1},														// 14
-		{0, SW_MAX_I_HighL, 18928},													// 15
-		{0, 0, 0},																	// 16
-		{0, 0, 0},																	// 17
+		{VOLTAGE_OUTPUT_MIN, VOLTAGE_OUTPUT_MAX, VOLTAGE_OUTPUT_DEF},				// 10
+		{CURRENT_OUTPUT_MIN, CURRENT_OUTPUT_MAX, CURRENT_OUTPUT_DEF},				// 11
+		{CURRENT_OUTPUT_MIN, CURRENT_OUTPUT_MAX, CURRENT_OUTPUT_DEF},				// 12
+		{0, 0, 0},																	// 13
+		{0, 0, 0},																	// 14
+		{0, INT16U_MAX, 0},															// 15
+		{1, INT16U_MAX, 1000},														// 16
+		{0, INT16U_MAX, 0},															// 17
 		{0, 0, 0},																	// 18
 		{0, 0, 0},																	// 19
 		{0, 0, 0},																	// 20

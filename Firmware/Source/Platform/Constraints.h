@@ -6,9 +6,23 @@
 #include "DataTable.h"
 #include "Global.h"
 
-//Definitions
+// Definitions
 #define NO		0
 #define YES		1
+
+#define REGULATOR_K_MAX			10000
+
+#define SHUNT_RES_MIN			1
+#define SHUNT_RES_MAX			60000
+#define SHUNT_RES_DEF			1000
+
+#define VOLTAGE_OUTPUT_MIN		1
+#define VOLTAGE_OUTPUT_MAX		350
+#define VOLTAGE_OUTPUT_DEF		10
+
+#define CURRENT_OUTPUT_MIN		1
+#define CURRENT_OUTPUT_MAX		1000
+#define CURRENT_OUTPUT_DEF		10
 
 // Types
 typedef struct __TableItemConstraint
