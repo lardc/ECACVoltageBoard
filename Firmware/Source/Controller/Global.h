@@ -31,7 +31,7 @@
 #define HW_MAX_CURRENT_HWORD	1		// Максимальный задаваемый ток - старшее слово
 
 // Параметры АЦП
-#define ADC_REF					3300	// Опорное напряжение, мВ
-#define ADC_12BIT_MAX_VAL		4095	// Максимальное разрешение АЦП
+#define ADC_REF_VOLTAGE			3300.0f	// Опорное напряжение (в В)
+#define ADC_RESOLUTION			4095	// Разрешение АЦП
 
 #endif //  __GLOBAL_H

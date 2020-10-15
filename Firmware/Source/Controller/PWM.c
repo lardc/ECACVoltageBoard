@@ -85,7 +85,7 @@ void PWM_SignalStart(uint16_t Voltage, uint32_t Current)
 	Regulator.Current.Set = Current;
 	PWM_UpdateKoeff();
 	PWM_ResetDataOut();
-	MEAS_SetMeasureRange(Voltage, Current);
+	MEASURE_SetMeasureRange(Voltage, Current);
 	PWM_OneMeasure();
 	PWM_SinRegulation();
 	ADC_SamplingStart(ADC1);

@@ -23,15 +23,7 @@ volatile uint16_t ADC1DMAVoltageBuffer[ADC_DMA_BUFF_SIZE] = {0};
 volatile uint16_t ADC2DMACurrentBuffer[ADC_DMA_BUFF_SIZE] = {0};
 static MeasureSettings VoltageSettings, CurrentSettings;
 
-static const float ADCResolution = ((float)ADC_REF / (float)ADC_12BIT_MAX_VAL);
-static const float OptTransferKoeff = 1.34;
-static const float VoltageOffset = 2300;
-static const float VoltMulBeforeSum = 1.33;
-static const float CurMulBeforeSum = 1.8;
-static const float VoltDevider = 219;
-static volatile float VoltageKu;
-
-// Functions
+// Forward functions
 void MEASURE_SetCurrentRange(uint32_t Current);
 void MEASURE_SetVoltageRange(uint16_t Voltage);
 void MEASURE_CacheSettings(pMeasureSettings Storage, uint16_t RegK, uint16_t Offset, uint16_t RegP2, uint16_t RegP1,
@@ -39,13 +31,9 @@ void MEASURE_CacheSettings(pMeasureSettings Storage, uint16_t RegK, uint16_t Off
 void MEASURE_CacheVoltageSettings(uint16_t RegK, uint16_t Offset, uint16_t RegP2, uint16_t RegP1, uint16_t RegP0);
 void MEASURE_CacheCurrentSettings(uint16_t RegK, uint16_t Offset, uint16_t RegP2, uint16_t RegP1, uint16_t RegP0,
 		uint16_t RegShunt);
+float MEASURE_ArrayToValue(pMeasureSettings Storage, uint16_t *Data, uint16_t DataLen);
 
-float MEASURE_Voltage();
-float MEASURE_Current();
-static float MEASURE_MeanSquare(volatile uint16_t *Address, uint16_t Num);
-static float ReturnVoltageFromRAW(float RAW);
-static float ReturnCurrentFromRAW(float RAW);
-
+// Functions
 void MEASURE_SetMeasureRange(uint16_t Voltage, uint32_t Current)
 {
 	MEASURE_SetVoltageRange(Voltage);
@@ -108,6 +96,8 @@ void MEASURE_CacheSettings(pMeasureSettings Storage, uint16_t RegK, uint16_t Off
 	Storage->P2 = (float)((int16_t)DataTable[RegP2]) / 1e6;
 	Storage->P1 = (float)DataTable[RegP1] / 1000;
 	Storage->P0 = (float)((int16_t)DataTable[RegP0]);
+
+	Storage->Rshunt = 0;
 }
 //------------------------------------------------
 
@@ -125,53 +115,35 @@ void MEASURE_CacheCurrentSettings(uint16_t RegK, uint16_t Offset, uint16_t RegP2
 }
 //------------------------------------------------
 
+float MEASURE_ArrayToValue(pMeasureSettings Storage, uint16_t *Data, uint16_t DataLen)
+{
+	// Рассчёт среднего
+	float tmp = 0;
+	for(uint8_t i = 0; i < DataLen; ++i)
+		tmp += (float)Data[i];
+	tmp /= DataLen;
+
+	// Пересчёт тиков в милливольты
+	tmp = (tmp * ADC_REF_VOLTAGE / ADC_RESOLUTION + Storage->Offset) * Storage->K;
+
+	// Для канала тока - пересчёт в ток
+	if(Storage->Rshunt != 0)
+		tmp /= Storage->Rshunt;
+
+	// Тонкая корректировка
+	tmp = tmp * tmp * Storage->P2 + tmp * Storage->P1 + Storage->P0;
+	return (tmp > 0) ? tmp : 0;
+}
+//------------------------------------------------
+
 float MEASURE_Voltage()
 {
-	return ReturnVoltageFromRAW(MEASURE_MeanSquare(ADC1DMAVoltageBuffer, ADC_DMA_BUFF_SIZE));
+	return MEASURE_ArrayToValue(&VoltageSettings, (uint16_t *)ADC1DMAVoltageBuffer, ADC_DMA_BUFF_SIZE);
 }
 //------------------------------------------------
 
 float MEASURE_Current()
 {
-	return ReturnCurrentFromRAW(MEASURE_MeanSquare(ADC2DMACurrentBuffer, ADC_DMA_BUFF_SIZE));
+	return MEASURE_ArrayToValue(&CurrentSettings, (uint16_t *)ADC2DMACurrentBuffer, ADC_DMA_BUFF_SIZE);
 }
 //------------------------------------------------
-
-float MEASURE_MeanSquare(volatile uint16_t *Address, uint16_t Num)
-{
-	uint32_t Summ = 0;
-	uint32_t Buff[ADC_DMA_BUFF_SIZE] = {0};
-	uint32_t Mul = 0;
-	
-	for(uint16_t i = 0; i < ADC_DMA_BUFF_SIZE; i++)
-	{
-		Mul = (uint32_t)(*(Address + i));
-		Buff[i] = (uint32_t)(Mul * Mul);
-		Summ += Buff[i];
-	}
-	
-	if(Summ == 0)
-	{
-		return 0;
-	}
-	Summ = (float)Summ / (float)ADC_DMA_BUFF_SIZE;
-	return sqrtf(Summ);
-}
-//------------------------------------------------
-
-float ReturnVoltageFromRAW(float RAW)
-{
-	float VoltageOnADC = RAW * ADCResolution;
-	return ((((((VoltageOnADC * OptTransferKoeff) - VoltageOffset) / VoltMulBeforeSum) / VoltageKu) * VoltDevider)
-			/ 1000); // В
-}
-//------------------------------------------------
-
-float ReturnCurrentFromRAW(float RAW)
-{
-	float Current, Voltage;
-	float VoltageOnADC = RAW * ADCResolution;
-	Voltage = ((VoltageOnADC * OptTransferKoeff) - VoltageOffset) / CurMulBeforeSum;
-	Current = (Voltage / 1000) / (float)Rshunt; // мкА
-	return Current;
-}
