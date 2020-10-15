@@ -36,7 +36,6 @@ volatile Int16U CONTROL_BuffCounterVoltage = 0;
 static Boolean CONTROL_DispatchAction(Int16U ActionID, pInt16U pUserError);
 void CONTROL_SetDeviceState(DeviceState NewState);
 void CONTROL_SwitchToFault(Int16U Reason);
-void CONTROL_DelayMs(uint32_t Delay);
 void CONTROL_UpdateWatchDog();
 void CONTROL_ResetToDefaultState();
 
@@ -191,18 +190,9 @@ void CONTROL_SetDeviceState(DeviceState NewState)
 }
 //------------------------------------------
 
-void CONTROL_DelayMs(uint32_t Delay)
-{
-	uint64_t Counter = (uint64_t)CONTROL_TimeCounter + Delay;
-	while(Counter > CONTROL_TimeCounter)
-		CONTROL_UpdateWatchDog();
-}
-//------------------------------------------
-
 void CONTROL_UpdateWatchDog()
 {
 	if(BOOT_LOADER_VARIABLE != BOOT_LOADER_REQUEST)
 		IWDG_Refresh();
 }
 //------------------------------------------
-
