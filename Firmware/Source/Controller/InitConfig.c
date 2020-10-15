@@ -94,7 +94,7 @@ void INITCFG_ConfigWatchDog()
 
 void INITCFG_PWM()
 {
-	T1PWM_Init(SYSCLK, TIMER1_uS);
+	T1PWM_Init(SYSCLK, PWM_PERIOD);
 }
 //------------------------------------------------
 
@@ -133,7 +133,8 @@ void INITCFG_ADC()
 	ADC_Enable(ADC1);
 	ADC_Enable(ADC2);
 	
-	ADC_TrigConfig(ADC1, ADC12_TIM1_TRGO2, RISE);
+	ADC_SoftTrigConfig(ADC1);
+	ADC_SoftTrigConfig(ADC2);
 	
 	ADC_ChannelSeqReset(ADC1);
 	ADC_ChannelSeqReset(ADC2);
@@ -143,7 +144,7 @@ void INITCFG_ADC()
 		ADC_ChannelSet_Sequence(ADC1, ADC1_VOLTAGE_CHANNEL, i);
 		ADC_ChannelSet_Sequence(ADC2, ADC2_CURRENT_CHANNEL, i);
 	}
-	
+
 	ADC_ChannelSeqLen(ADC1, ADC_DMA_BUFF_SIZE);
 	ADC_ChannelSeqLen(ADC2, ADC_DMA_BUFF_SIZE);
 	

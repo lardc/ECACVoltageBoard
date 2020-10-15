@@ -1,82 +1,74 @@
-ï»¿// Header
+// Header
 #include "Timer1PWM.h"
 
 // Includes
 #include "ZwTIM.h"
 #include "ZwRCC.h"
-#include "SysConfig.h"
+#include "math.h"
 
 // Defines
 #define T1PWM_MAX_OUTPUT	0.95f
 
 // Variables
-volatile uint32_t T1PWM_PWMBase = 0;
+static uint32_t PWMBase = 0;
 
 // Functions
-void T1PWM_Init(float SystemClock, uint16_t Period)
+void T1PWM_Init(uint32_t SystemClock, uint32_t Period)
 {
-	// Ð Ð°ÑÑ‡Ñ‘Ñ‚ Ñ€Ð°Ð·Ð¼ÐµÑ€Ð½Ð¾ÑÑ‚Ð¸ Ð¨Ð˜Ðœ
-	uint32_t Prescaler = (uint32_t)(SystemClock / 1000000 * Period / 65536);
-	T1PWM_PWMBase = (uint32_t)((SystemClock / ((Prescaler + 1) * 1000000)) * Period);
+	// Ðàñ÷¸ò ðàçìåðíîñòè ØÈÌ
+	uint32_t Prescaler = (uint32_t)((float)SystemClock / 1000000 * Period / 65536);
+	PWMBase = (uint32_t)((SystemClock / ((Prescaler + 1) * 1000000)) * Period);
 
-	// Ð¡Ñ‚Ð°Ð½Ð´Ð°Ñ€Ñ‚Ð½Ð°Ñ Ð¸Ð½Ð¸Ñ†Ð¸Ð°Ð»Ð¸Ð·Ð°Ñ†Ð¸Ñ
+	// Ñòàíäàðòíàÿ èíèöèàëèçàöèÿ
 	TIM_Clock_En(TIM_1);
-	TIM_Config(TIM1, SystemClock, Period);
+	TIM_Interupt(TIM1, 0, true);
 
-	// ÐÐºÑ‚Ð¸Ð²Ð°Ñ†Ð¸Ñ Ñ„ÑƒÐ½ÐºÑ†Ð¸Ð¸ AutoPreload ARR Ñ€ÐµÐ³Ð¸ÑÑ‚Ñ€Ð°
-	TIM1->CR1 |= TIM_CR1_ARPE;
-	// Ð ÐµÐ¶Ð¸Ð¼ Update mode Ð´Ð»Ñ ÐÐ¦ÐŸ
-	TIM1->CR2 |= TIM_CR2_MMS2_1;
+	TIM1->PSC = Prescaler;
+	TIM1->ARR = PWMBase;
 
-	// ÐšÐ°Ð½Ð°Ð» 1 - Ð¿Ð¾Ð»Ð¾Ð¶Ð¸Ñ‚ÐµÐ»ÑŒÐ½Ñ‹Ð¹
-	// Ð ÐµÐ¶Ð¸Ð¼ Ð¨Ð˜Ðœ - PWM mode 1, c Ñ„ÑƒÐ½ÐºÑ†Ð¸ÐµÐ¹ Preload
-	TIM1->CCMR1 |= (TIM_CCMR1_OC1M_2 | TIM_CCMR1_OC1M_1 | TIM_CCMR1_OC1PE);
+	// Êàíàë 1 - ïîëîæèòåëüíûé
+	// Ðåæèì ØÈÌ - PWM mode 1, c ôóíêöèåé Preload
+	TIM1->CCMR1 |= TIM_CCMR1_OC1M_2 | TIM_CCMR1_OC1M_1 | TIM_CCMR1_OC1PE;
 	TIM1->CCR1 = 0;
 
-	// ÐšÐ°Ð½Ð°Ð» 2 - Ð¾Ñ‚Ñ€Ð¸Ñ†Ð°Ñ‚ÐµÐ»ÑŒÐ½Ñ‹Ð¹
-	// Ð ÐµÐ¶Ð¸Ð¼ Ð¨Ð˜Ðœ - PWM mode 1, c Ñ„ÑƒÐ½ÐºÑ†Ð¸ÐµÐ¹ Preload
-	TIM1->CCMR1 |= (TIM_CCMR1_OC2M_2 | TIM_CCMR1_OC2M_1 | TIM_CCMR1_OC2PE);
+	// Êàíàë 2 - îòðèöàòåëüíûé
+	// Ðåæèì ØÈÌ - PWM mode 1, c ôóíêöèåé Preload
+	TIM1->CCMR1 |= TIM_CCMR1_OC2M_2 | TIM_CCMR1_OC2M_1 | TIM_CCMR1_OC2PE;
 	TIM1->CCR2 = 0;
 
-	// Ð Ð°Ð·Ñ€ÐµÑˆÐµÐ½Ð¸Ðµ Ð¿Ñ€ÐµÑ€Ñ‹Ð²Ð°Ð½Ð¸Ñ Ð¿Ñ€Ð¸ Ð¿Ð¾ÑÐ²Ð»ÐµÐ½Ð¸Ð¸ ÑÐ¾Ð±Ñ‹Ñ‚Ð¸Ñ Ð¾Ð±Ð½Ð¾Ð²Ð»ÐµÐ½Ð¸Ñ
-	TIM1->DIER |=  TIM_DIER_UIE ;
-	// Ð˜Ð½Ð¸Ñ†Ð¸Ð°Ð»Ð¸Ð·Ð°Ñ†Ð¸Ñ Ð¾Ð±Ð½Ð¾Ð²Ð»ÐµÐ½Ð¸Ñ Ñ€ÐµÐ³Ð¸ÑÑ‚Ñ€Ð¾Ð²
-	TIM1->EGR |= TIM_EGR_UG;
-	// Ð¡Ð±Ð¾Ñ€Ñ Ñ„Ð»Ð°Ð³Ð° Ð¾Ð±Ð½Ð¾Ð²Ð»ÐµÐ½Ð¸Ñ
-	TIM1->SR &= ~TIM_SR_UIF;
-
-	// Ð Ð°Ð·Ñ€ÐµÑˆÐµÐ½Ð¸Ðµ Ð²Ñ‹Ñ…Ð¾Ð´ CH1 Ð¸ CH2N
-	TIM1->CCER |= (TIM_CCER_CC1E | TIM_CCER_CC2NE);
-	// Ð Ð°Ð·Ñ€ÐµÑˆÐµÐ½Ð¸Ðµ Ñ€Ð°Ð±Ð¾Ñ‚Ñ‹ Ñ‚Ð°Ð¹Ð¼ÐµÑ€Ð° Ð½Ð° Ð²Ñ‹Ñ…Ð¾Ð´
+	// Ðàçðåøåíèå âûõîä CH1 è CH2N
+	TIM1->CCER |= TIM_CCER_CC1E | TIM_CCER_CC2NE;
+	// Ðàçðåøåíèå ðàáîòû òàéìåðà íà âûõîä
 	TIM1->BDTR |= TIM_BDTR_MOE;
+
+	// Ñáðîñ âûõîäà
+	T1PWM_SetDutyCycle(0);
+
+	// Èíèöèàëèçàöèÿ îáíîâëåíèÿ ðåãèñòðîâ
+	TIM1->EGR |= TIM_EGR_UG;
+	TIM1->SR &= ~TIM_SR_UIF;
 }
 //------------------------------------------------
 
-void T1PWM_SetDutyCycle(volatile float Volue)
+void T1PWM_SetDutyCycle(float Value)
 {
-	// Ð’Ñ‹Ð±Ð¾Ñ€ Ð¿Ð¾Ð»ÑÑ€Ð½Ð¾ÑÑ‚Ð¸ Ñ„Ð¾Ñ€Ð¼Ð¸Ñ€Ð¾Ð²Ð°Ñ‚ÐµÐ»Ñ
-//	float MaxOutput = T1PWM_MAX_OUTPUT * T1PWM_PWMBase;
+	// Ïðîâåðêà çíà÷åíèÿ íà íàñûùåíèå
+	float MaxOutput = T1PWM_MAX_OUTPUT * PWMBase;
+	uint32_t IntValue = (uint32_t)((fabsf(Value) > MaxOutput) ? MaxOutput : fabsf(Value));
 
-	float MaxOutput = 1000;
-
-	if(Volue > 0)
+	// Âûáîð ïîëÿðíîñòè ôîðìèðîâàòåëÿ
+	if(Value > 0)
 	{
-		TIM1->CCR1 = (uint32_t)((Volue > MaxOutput) ? MaxOutput : Volue);
+		TIM1->CCR1 = IntValue;
 		TIM1->CCR2 = 0;
 	}
-	else
+	else if(Value < 0)
 	{
-		if(Volue < 0)
-		{
-			Volue = -Volue;
-			TIM1->CCR1 = 0;
-			TIM1->CCR2 = (uint32_t)((Volue > MaxOutput) ? MaxOutput : Volue);
-		}
-		else
-		{
-			TIM1->CCR1 = TIM1->CCR2 = 0;
-		}
+		TIM1->CCR1 = 0;
+		TIM1->CCR2 = IntValue;
 	}
+	else
+		TIM1->CCR1 = TIM1->CCR2 = 0;
 }
 //------------------------------------------------
 
@@ -88,7 +80,6 @@ void T1PWM_Start()
 
 void T1PWM_Stop()
 {
-	TIM1->BDTR &= ~TIM_BDTR_MOE;
 	T1PWM_SetDutyCycle(0);
 	TIM_Stop(TIM1);
 }

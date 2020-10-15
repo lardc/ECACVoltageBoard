@@ -13,6 +13,7 @@
 #include "DeviceObjectDictionary.h"
 #include "DataTable.h"
 #include "Board.h"
+#include "Delay.h"
 
 // Defines
 #define PWM_MAX_STEP_PWM 400
@@ -62,31 +63,20 @@ volatile SinControl Regulator = {0};
 static const float Steper = M_PI * (2 * (1 / (float)PWM_MAX_STEP_PWM));
 
 // Functions
-static void PWM_ResetDataOut();
-static void PWM_SaveEndPoint();
-
-static void PWM_SaveToEndPoint(volatile uint32_t *AdressEndPoint, volatile uint16_t Data, volatile uint32_t *Counter);
-
 void PWM_SinRegulation();
-static void PWM_StepUpdate();
-static void PWM_UpdateMeasValue();
-static void PWM_ChekEndOfSignal();
-static void PWM_UpdateKoeff();
-static void PWM_CalculateVoltageInPoint();
-static void PWM_CalculateDuty();
-static void PWM_OneMeasure();
+void PWM_StepUpdate();
+void PWM_UpdateMeasValue();
+void PWM_ChekEndOfSignal();
+void PWM_UpdateKoeff();
+void PWM_CalculateVoltageInPoint();
+void PWM_CalculateDuty();
 
 void PWM_SignalStart(uint16_t Voltage, uint32_t Current)
 {
-	DEVPROFILE_ResetScopes(0);
-	DEVPROFILE_ResetEPReadState();
-
 	Regulator.Voltage.Set = Voltage;
 	Regulator.Current.Set = Current;
 	PWM_UpdateKoeff();
-	PWM_ResetDataOut();
 	MEASURE_SetMeasureRange(Voltage, Current);
-	PWM_OneMeasure();
 	PWM_SinRegulation();
 	ADC_SamplingStart(ADC1);
 	T1PWM_Start();
@@ -102,9 +92,9 @@ void PWM_SignalStop()
 void PWM_SinRegulation()
 {
 	GPIO_SetState(GPIO_LED_EXT, true);
+	DELAY_US(5);
+	/*
 	PWM_UpdateMeasValue();
-
-	PWM_SaveEndPoint();
 
 	PWM_CalculateVoltageInPoint();
 
@@ -121,6 +111,7 @@ void PWM_SinRegulation()
 	}
 
 	PWM_StepUpdate();
+	*/
 	GPIO_SetState(GPIO_LED_EXT, false);
 }
 
@@ -171,15 +162,6 @@ void PWM_ResetDataOut()
 }
 //------------------------------------------------
 
-void PWM_SaveEndPoint()
-{
-//	PWM_CopyRAWFromDMAToEndPoint((uint32_t*)&ADC1DMABuff, (uint32_t*)&CONTROL_BuffRAWCurrent);
-//	PWM_CopyRAWFromDMAToEndPoint((uint32_t*)&ADC2DMABuff, (uint32_t*)&CONTROL_BuffRAWVoltage);
-	PWM_SaveToEndPoint((uint32_t*)&CONTROL_BuffVoltage, Regulator.Voltage.Now, (uint32_t*)&CONTROL_BuffCounterVoltage);
-	PWM_SaveToEndPoint((uint32_t*)&CONTROL_BuffCurrent, Regulator.Current.Now, (uint32_t*)&CONTROL_BuffCounterCurrent);
-}
-//------------------------------------------------
-
 void PWM_CalculateVoltageInPoint()
 {
 	Regulator.Voltage.Target = Regulator.Voltage.Set * sinf(Steper * Regulator.Point);
@@ -197,39 +179,3 @@ void PWM_CalculateDuty()
 	Regulator.Duty = Regulator.PI.P.Q + Regulator.PI.I.Q;
 }
 //------------------------------------------------
-
-void PWM_OneMeasure()
-{
-	DMA_Interrupt(DMA1_Channel1, DMA_CCR_TCIE, 0, false);
-	DMA_Interrupt(DMA2_Channel1, DMA_CCR_TCIE, 0, false);
-
-	ADC_SamplingStart(ADC1);
-
-	TIM1->EGR |= TIM_EGR_UG;
-	TIM1->SR &= ~TIM_SR_UIF;
-
-	while(((DMA2->ISR & DMA_ISR_TCIF1) && (DMA1->ISR & DMA_ISR_TCIF1)) == false);
-
-	DMA2->IFCR |= DMA_IFCR_CTCIF1;
-	DMA1->IFCR |= DMA_IFCR_CTCIF1;
-
-	DMA_Interrupt(DMA1_Channel1, DMA_CCR_TCIE, 0, true);
-	DMA_Interrupt(DMA2_Channel1, DMA_CCR_TCIE, 0, true);
-}
-//------------------------------------------------
-
-void PWM_SaveToEndPoint(volatile uint32_t *AdressEndPoint, volatile uint16_t Data, volatile uint32_t *Counter)
-{
-/*	volatile uint32_t *pAdr;
-
-	if(*Counter < VALUES_x_SIZE)
-	{
-		(*Counter)++;
-	}
-	else
-	{
-		*Counter = 0;
-	}
-	pAdr = AdressEndPoint + (*Counter) * sizeof(*Counter);
-	*pAdr = Data;*/
-}

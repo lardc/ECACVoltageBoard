@@ -18,8 +18,12 @@
 #define USART_FIFOlen					32			// Длина FIFO USART
 // ----------------------------------------------
 
+// PWM
+#define PWM_FREQUENCY					20000		// в Гц
+#define PWM_PERIOD						(1000000 / PWM_FREQUENCY)	// в мкс
+// ----------------------------------------------
+
 // Timers
-#define TIMER1_uS						50			// в мкс
 #define TIMER7_uS						1000		// в мкс
 // ----------------------------------------------
 
