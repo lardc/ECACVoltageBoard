@@ -131,8 +131,7 @@ float MEASURE_ArrayToValue(pMeasureSettings Storage, uint16_t *Data, uint16_t Da
 		tmp /= Storage->Rshunt;
 
 	// Тонкая корректировка
-	tmp = tmp * tmp * Storage->P2 + tmp * Storage->P1 + Storage->P0;
-	return (tmp > 0) ? tmp : 0;
+	return tmp * tmp * Storage->P2 + tmp * Storage->P1 + Storage->P0;
 }
 //------------------------------------------------
 
