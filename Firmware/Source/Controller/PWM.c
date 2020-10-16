@@ -21,7 +21,7 @@ static bool RequestSoftStop = false;
 void PWM_CacheParameters();
 float PWM_GetInstantVoltageSetpoint();
 float PWM_ConvertVoltageToPWM(float Voltage);
-float GetControlAdjustment(float ActualRMSVoltage);
+float PWM_GetControlAdjustment(float ActualRMSVoltage);
 void PWM_SaveResultToDataTable(float Voltage, float Current);
 
 // Functions
@@ -60,7 +60,7 @@ void PWM_SinRegulation()
 			PWM_SaveResultToDataTable(VoltageRMS, CurrentRMS);
 
 		// Получение корректировки по завершённому периоду
-		float Control = GetControlAdjustment(VoltageRMS);
+		float Control = PWM_GetControlAdjustment(VoltageRMS);
 
 		// Алгоритм нарастания уставки напряжения
 		if(ActualSetVoltageRMS < TargetVoltageRMS)
@@ -104,7 +104,7 @@ void PWM_SaveResultToDataTable(float Voltage, float Current)
 }
 //------------------------------------------------
 
-float GetControlAdjustment(float ActualRMSVoltage)
+float PWM_GetControlAdjustment(float ActualRMSVoltage)
 {
 	// Регулятор
 	float Error = ActualSetVoltageRMS - ActualRMSVoltage;
