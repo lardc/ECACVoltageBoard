@@ -73,6 +73,12 @@ void T1PWM_SetDutyCycle(float Value)
 }
 //------------------------------------------------
 
+uint32_t T1PWM_GetPWMBase()
+{
+	return PWMBase;
+}
+//------------------------------------------------
+
 void T1PWM_Start()
 {
 	TIM_Start(TIM1);
