@@ -10,6 +10,13 @@
 #include "SysConfig.h"
 #include "LogUtils.h"
 
+// Types
+typedef struct __VIPair
+{
+	float Voltage;
+	float Current;
+} VIPair, pVIPair;
+
 // Variables
 volatile uint32_t PWMTimerCounter = 0;
 static float TransformerRatio, Kp, Ki, ErrorI;
@@ -23,7 +30,10 @@ void PWM_CacheParameters();
 float PWM_GetInstantVoltageSetpoint();
 float PWM_ConvertVoltageToPWM(float Voltage);
 float PWM_GetControlAdjustment(float ActualRMSVoltage);
-void PWM_SaveResultToDataTable(float Voltage, float Current);
+void PWM_SaveResultToDataTable(VIPair Pair);
+VIPair PWM_GetMeasureData();
+void PWM_AddToRMS(VIPair Pair);
+VIPair PWM_CalculateRMSValue();
 
 // Functions
 void PWM_SignalStart()
@@ -42,28 +52,20 @@ bool PWM_SinRegulation(uint16_t *Problem)
 {
 	*Problem = PROBLEM_NONE;
 
-	// Получение мговенных значений напряжения и тока
-	float Voltage = MEASURE_Voltage();
-	float Current = MEASURE_Current();
-
-	// Набор данных для расчёта действующих значений
-	VoltageStorageRMS += Voltage * Voltage;
-	CurrentStorageRMS += Current * Current;
+	VIPair Sample = PWM_GetMeasureData();
+	PWM_AddToRMS(Sample);
 
 	// Логика, выполняемая каждый период
 	if(PWMTimerCounter == 0)
 	{
-		// Расчёт и сохранение действующих значений
-		float VoltageRMS = sqrtf(VoltageStorageRMS / PWM_SINE_COUNTER_MAX);
-		float CurrentRMS = sqrtf(CurrentStorageRMS / PWM_SINE_COUNTER_MAX);
-		VoltageStorageRMS = CurrentStorageRMS = 0;
+		VIPair ValuesRMS = PWM_CalculateRMSValue();
 
-		// Сохранение результата
+		// Сохранение результата при остановке
 		if(RequestSoftStop)
-			PWM_SaveResultToDataTable(VoltageRMS, CurrentRMS);
+			PWM_SaveResultToDataTable(ValuesRMS);
 
 		// Получение корректировки по завершённому периоду
-		float Control = PWM_GetControlAdjustment(VoltageRMS);
+		float Control = PWM_GetControlAdjustment(ValuesRMS.Voltage);
 
 		// Алгоритм нарастания уставки напряжения
 		if(ActualSetVoltageRMS < TargetVoltageRMS)
@@ -84,20 +86,20 @@ bool PWM_SinRegulation(uint16_t *Problem)
 			RequestSoftStop = true;
 		}
 		// Проверка превышения действующего значения тока
-		else if(CurrentRMS > CurrentLimitRMS)
+		else if(ValuesRMS.Current > CurrentLimitRMS)
 		{
 			*Problem = PROBLEM_RMS_OVER_CURRENT;
 			RequestSoftStop = true;
 		}
 
 		// Сохранение полученных значений
-		MU_LogRMS(ActualSetVoltageRMS, ControlSetVoltageRMS, VoltageRMS, CurrentRMS);
+		MU_LogRMS(ActualSetVoltageRMS, ControlSetVoltageRMS, ValuesRMS.Voltage, ValuesRMS.Current);
 	}
 
 	// Расчёт, сохранение и запись уставки ШИМ
 	float InstantVoltage = PWM_GetInstantVoltageSetpoint();
 	float PWMSetpoint = PWM_ConvertVoltageToPWM(InstantVoltage);
-	MU_LogFast(InstantVoltage, PWMSetpoint, Voltage, Current);
+	MU_LogFast(InstantVoltage, PWMSetpoint, Sample.Voltage, Sample.Current);
 
 	// Обработка запроса остановки
 	if(RequestSoftStop)
@@ -109,11 +111,11 @@ bool PWM_SinRegulation(uint16_t *Problem)
 }
 //------------------------------------------------
 
-void PWM_SaveResultToDataTable(float Voltage, float Current)
+void PWM_SaveResultToDataTable(VIPair Pair)
 {
-	DataTable[REG_VOLTAGE_RESULT] = (uint16_t)Voltage;
+	DataTable[REG_VOLTAGE_RESULT] = (uint16_t)Pair.Voltage;
 
-	uint32_t CurrentInt = (uint32_t)Current;
+	uint32_t CurrentInt = (uint32_t)Pair.Current;
 	DataTable[REG_CURRENT_RESULT] = CurrentInt;
 	DataTable[REG_CURRENT_RESULT_32] = CurrentInt >> 16;
 }
@@ -146,6 +148,32 @@ float PWM_GetInstantVoltageSetpoint()
 float PWM_ConvertVoltageToPWM(float Voltage)
 {
 	return Voltage / TransformerRatio / PWM_PRIMARY_VOLTAGE * T1PWM_GetPWMBase();
+}
+//------------------------------------------------
+
+VIPair PWM_GetMeasureData()
+{
+	VIPair Result;
+	Result.Voltage = MEASURE_Voltage();
+	Result.Current = MEASURE_Current();
+	return Result;
+}
+//------------------------------------------------
+
+void PWM_AddToRMS(VIPair Pair)
+{
+	VoltageStorageRMS += Pair.Voltage * Pair.Voltage;
+	CurrentStorageRMS += Pair.Current * Pair.Current;
+}
+//------------------------------------------------
+
+VIPair PWM_CalculateRMSValue()
+{
+	VIPair Result;
+	Result.Voltage = sqrtf(VoltageStorageRMS / PWM_SINE_COUNTER_MAX);
+	Result.Current = sqrtf(CurrentStorageRMS / PWM_SINE_COUNTER_MAX);
+	VoltageStorageRMS = CurrentStorageRMS = 0;
+	return Result;
 }
 //------------------------------------------------
 
