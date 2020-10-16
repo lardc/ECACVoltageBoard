@@ -101,10 +101,14 @@
 #define OPRESULT_FAIL					2	// Operation failed
 
 // ENDPOINTS
-#define EP_I_RAW						1	// Сырые значения I
-#define EP_V_RAW						2	// Сырые значения V
-#define EP_I							3	// Расчетное значение I
-#define EP_V							4	// Расчетное значение V
+#define EP_V_SETPOINT_FAST				1	// Быстрая уставка по напряжению
+#define EP_PWM_SETPOINT_FAST			2	// Быстрая уставка по ШИМ
+#define EP_V_RESULT_FAST				3	// Быстрая оцифровка напряжения
+#define EP_I_RESULT_FAST				4	// Быстрая оцифровка тока
+
+#define EP_VRMS_SETPOINT				5	// Уставка по действующему значению напряжения
+#define EP_VRMS_RESULT					6	// Результат по действующему значению напряжения
+#define EP_IRMS_RESULT					7	// Результат по действующему значению напряжения
 
 //  Fault and disable codes
 #define DF_NONE							0

@@ -17,21 +17,21 @@ typedef enum __DeviceState
 
 // Variables
 extern volatile Int64U CONTROL_TimeCounter;
-extern Int64U CONTROL_LEDTimeout;
 
-extern volatile Int16U CONTROL_BuffRAWCurrent[VALUES_x_SIZE];
-extern volatile Int16U CONTROL_BuffRAWVoltage[VALUES_x_SIZE];
-extern volatile Int16U CONTROL_BuffCurrent[VALUES_x_SIZE];
-extern volatile Int16U CONTROL_BuffVoltage[VALUES_x_SIZE];
-extern volatile Int16U CONTROL_BuffCounterRAWCurrent;
-extern volatile Int16U CONTROL_BuffCounterRAWVoltage;
-extern volatile Int16U CONTROL_BuffCounterCurrent;
-extern volatile Int16U CONTROL_BuffCounterVoltage;
+extern volatile Int16U CONTROL_VSetFast[];
+extern volatile Int16U CONTROL_PWMSetFast[];
+extern volatile Int16U CONTROL_VResultFast[];
+extern volatile Int16U CONTROL_IResultFast[];
+extern volatile Int16U CONTROL_VSetRMS[];
+extern volatile Int16U CONTROL_VResultRMS[];
+extern volatile Int16U CONTROL_IResultRMS[];
+
+extern volatile Int16U CONTROL_CounterFast;
+extern volatile Int16U CONTROL_Counter;
 
 // Functions
 void CONTROL_Init();
 void CONTROL_Idle();
-void CONTROL_DelayMs(uint32_t Delay);
 void CONTROL_SetDeviceState(DeviceState NewState);
 
 #endif // __CONTROLLER_H

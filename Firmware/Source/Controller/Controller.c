@@ -21,14 +21,16 @@ typedef void (*FUNC_AsyncDelegate)();
 volatile DeviceState CONTROL_State = DS_None;
 static Boolean CycleActive = false;
 volatile Int64U CONTROL_TimeCounter = 0;
-volatile Int16U CONTROL_BuffRAWCurrent[VALUES_x_SIZE] = {0};
-volatile Int16U CONTROL_BuffRAWVoltage[VALUES_x_SIZE] = {0};
-volatile Int16U CONTROL_BuffCurrent[VALUES_x_SIZE] = {0};
-volatile Int16U CONTROL_BuffVoltage[VALUES_x_SIZE] = {0};
-volatile Int16U CONTROL_BuffCounterRAWCurrent = 0;
-volatile Int16U CONTROL_BuffCounterRAWVoltage = 0;
-volatile Int16U CONTROL_BuffCounterCurrent = 0;
-volatile Int16U CONTROL_BuffCounterVoltage = 0;
+// Storage
+volatile Int16U CONTROL_VSetFast[VALUES_x_SIZE] = {0};
+volatile Int16U CONTROL_PWMSetFast[VALUES_x_SIZE] = {0};
+volatile Int16U CONTROL_VResultFast[VALUES_x_SIZE] = {0};
+volatile Int16U CONTROL_IResultFast[VALUES_x_SIZE] = {0};
+volatile Int16U CONTROL_VSetRMS[VALUES_x_SIZE] = {0};
+volatile Int16U CONTROL_VResultRMS[VALUES_x_SIZE] = {0};
+volatile Int16U CONTROL_IResultRMS[VALUES_x_SIZE] = {0};
+volatile Int16U CONTROL_CounterFast = 0;
+volatile Int16U CONTROL_Counter = 0;
 
 /// Forward functions
 //
@@ -44,11 +46,20 @@ void CONTROL_ResetToDefaultState();
 void CONTROL_Init()
 {
 	// Переменные для конфигурации EndPoint
-	Int16U EPIndexes[EP_COUNT] = {EP_I_RAW, EP_V_RAW, EP_I, EP_V};
-	Int16U EPSized[EP_COUNT] = {VALUES_x_SIZE, VALUES_x_SIZE, VALUES_x_SIZE, VALUES_x_SIZE};
-	pInt16U EPCounters[EP_COUNT] = {(pInt16U)&CONTROL_BuffCounterRAWCurrent, (pInt16U)&CONTROL_BuffCounterRAWVoltage,
-			(pInt16U)&CONTROL_BuffCounterCurrent, (pInt16U)&CONTROL_BuffCounterVoltage};
-	pInt16U EPDatas[EP_COUNT] = {(pInt16U)CONTROL_BuffRAWCurrent, (pInt16U)CONTROL_BuffRAWVoltage, (pInt16U)CONTROL_BuffCurrent, (pInt16U)CONTROL_BuffVoltage};
+	Int16U EPIndexes[EP_COUNT] = {EP_V_SETPOINT_FAST, EP_PWM_SETPOINT_FAST, EP_V_RESULT_FAST, EP_I_RESULT_FAST,
+			EP_VRMS_SETPOINT, EP_VRMS_RESULT, EP_IRMS_RESULT};
+
+	Int16U EPSized[EP_COUNT] = {VALUES_x_SIZE, VALUES_x_SIZE, VALUES_x_SIZE, VALUES_x_SIZE,
+			VALUES_x_SIZE, VALUES_x_SIZE, VALUES_x_SIZE};
+
+	// Сокращения
+	pInt16U cf = (pInt16U)&CONTROL_CounterFast;
+	pInt16U c = (pInt16U)&CONTROL_Counter;
+	pInt16U EPCounters[EP_COUNT] = {cf, cf, cf, cf, c, c, c};
+
+	pInt16U EPDatas[EP_COUNT] = {(pInt16U)CONTROL_VSetFast, (pInt16U)CONTROL_PWMSetFast,
+			(pInt16U)CONTROL_VResultFast, (pInt16U)CONTROL_IResultFast,
+			(pInt16U)CONTROL_VSetRMS, (pInt16U)CONTROL_VResultRMS, (pInt16U)CONTROL_IResultRMS};
 
 	// Конфигурация сервиса работы Data-table и EPROM
 	EPROMServiceConfig EPROMService = {(FUNC_EPROM_WriteValues)&NFLASH_WriteDT, (FUNC_EPROM_ReadValues)&NFLASH_ReadDT};

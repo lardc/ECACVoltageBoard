@@ -4,7 +4,7 @@
 // Параметры интерфейса
 #define	SCCI_TIMEOUT_TICKS		1000	// Таймаут интерфейса SCCI (в мс)
 #define EP_WRITE_COUNT			0		// Количество массивов для записи
-#define EP_COUNT				4		// Количество массивов для чтения
+#define EP_COUNT				7		// Количество массивов для чтения
 #define ENABLE_LOCKING			FALSE	// Защита NV регистров паролем
 #define VALUES_x_SIZE			1000	// Размер буфера Endpoint
 
