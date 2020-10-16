@@ -12,6 +12,6 @@ extern volatile uint32_t PWMTimerCounter;
 void PWM_CacheParameters();
 void PWM_SignalStart();
 void PWM_SignalStop();
-void PWM_SinRegulation();
+bool PWM_SinRegulation(uint16_t *Problem);
 
 #endif // __PWM_H

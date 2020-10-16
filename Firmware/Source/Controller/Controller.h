@@ -34,5 +34,6 @@ extern volatile Int16U CONTROL_CounterRMS;
 void CONTROL_Init();
 void CONTROL_Idle();
 void CONTROL_SetDeviceState(DeviceState NewState);
+void CONTROL_ProcessPWMStop(uint16_t Problem);
 
 #endif // __CONTROLLER_H

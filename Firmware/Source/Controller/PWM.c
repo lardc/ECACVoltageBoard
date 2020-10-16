@@ -37,7 +37,7 @@ void PWM_SignalStop()
 }
 //------------------------------------------------
 
-void PWM_SinRegulation()
+bool PWM_SinRegulation(uint16_t *Problem)
 {
 	// Получение мговенных значений напряжения и тока
 	float Voltage = MEASURE_Voltage();
@@ -91,6 +91,8 @@ void PWM_SinRegulation()
 		T1PWM_Stop();
 	else
 		T1PWM_SetDutyCycle(PWMSetpoint);
+
+	return RequestSoftStop;
 }
 //------------------------------------------------
 

@@ -166,7 +166,13 @@ static Boolean CONTROL_DispatchAction(Int16U ActionID, pInt16U pUserError)
 	}
 	return true;
 }
-//-----------------------------------------------
+//------------------------------------------
+
+void CONTROL_ProcessPWMStop(uint16_t Problem)
+{
+
+}
+//------------------------------------------
 
 void CONTROL_SwitchToFault(Int16U Reason)
 {

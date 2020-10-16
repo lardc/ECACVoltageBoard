@@ -97,7 +97,10 @@ void INT_CheckCompleteCondition()
 	{
 		VoltageSamplingDone = CurrentSamplingDone = false;
 		LL_DMAReload();
-		PWM_SinRegulation();
+
+		uint16_t Problem;
+		if(PWM_SinRegulation(&Problem))
+			CONTROL_ProcessPWMStop(Problem);
 	}
 }
 //-----------------------------------------
