@@ -36,6 +36,7 @@ static Boolean CONTROL_DispatchAction(Int16U ActionID, pInt16U pUserError);
 void CONTROL_SetDeviceState(DeviceState NewState);
 void CONTROL_SwitchToFault(Int16U Reason);
 void CONTROL_UpdateWatchDog();
+void CONTROL_ResetResults();
 void CONTROL_ResetToDefaultState();
 
 // Functions
@@ -63,16 +64,31 @@ void CONTROL_Init()
 }
 //------------------------------------------
 
-void CONTROL_ResetToDefaultState()
+void CONTROL_ResetResults()
 {
 	DataTable[REG_FAULT_REASON] = DF_NONE;
 	DataTable[REG_DISABLE_REASON] = DF_NONE;
+	DataTable[REG_WARNING] = WARNING_NONE;
 	DataTable[REG_PROBLEM] = PROBLEM_NONE;
 	DataTable[REG_OP_RESULT] = OPRESULT_NONE;
 
+	DataTable[REG_VOLTAGE_RESULT] = 0;
+	DataTable[REG_CURRENT_RESULT] = 0;
+	DataTable[REG_CURRENT_RESULT_32] = 0;
+
 	DEVPROFILE_ResetScopes(0);
 	DEVPROFILE_ResetEPReadState();
-	
+}
+//------------------------------------------
+
+void CONTROL_ResetToDefaultState()
+{
+	LL_SetSync1State(false);
+	LL_SetSync2State(false);
+	LL_ConnectPOWRelay(false);
+	LL_ConnectCTRLRelay(false);
+
+	CONTROL_ResetResults();
 	CONTROL_SetDeviceState(DS_None);
 }
 
@@ -93,77 +109,42 @@ static Boolean CONTROL_DispatchAction(Int16U ActionID, pInt16U pUserError)
 	{
 		case ACT_ENABLE_POWER:
 			{
-				DataTable[REG_OP_RESULT] = OPRESULT_NONE;
-				if((CONTROL_State == DS_None) || (CONTROL_State == DS_Disabled))
-				{
-					CONTROL_SetDeviceState(DS_Enabled);
-					DataTable[REG_OP_RESULT] = OPRESULT_OK;
-				}
-				else
-				{
-					DataTable[REG_OP_RESULT] = OPRESULT_FAIL;
+				if(CONTROL_State == DS_None)
+					CONTROL_SetDeviceState(DS_Ready);
+				else if(CONTROL_State != DS_Ready)
 					*pUserError = ERR_OPERATION_BLOCKED;
-				}
-				break;
 			}
+			break;
 			
 		case ACT_DISABLE_POWER:
-			DataTable[REG_OP_RESULT] = OPRESULT_NONE;
-			if((CONTROL_State == DS_None) || (CONTROL_State == DS_Enabled))
 			{
-				CONTROL_SetDeviceState(DS_Disabled);
+				if(CONTROL_State == DS_Ready)
+					CONTROL_SetDeviceState(DS_None);
+				else if(CONTROL_State != DS_None)
+					*pUserError = ERR_DEVICE_NOT_READY;
 			}
-			else
-			{
-				if((CONTROL_State == DS_Disabled))
-				{
-					DataTable[REG_OP_RESULT] = OPRESULT_OK;
-				}
-				else
-				{
-					DataTable[REG_OP_RESULT] = OPRESULT_FAIL;
-				}
-			}
-			
+			break;
+
 		case ACT_FAULT_CLEAR:
 			{
-				CONTROL_ResetToDefaultState();
+				if(CONTROL_State == DS_Fault)
+					CONTROL_ResetToDefaultState();
 			}
+			break;
+
+		case ACT_WARNING_CLEAR:
+			DataTable[REG_WARNING] = WARNING_NONE;
 			break;
 
 		case ACT_START_SIGNAL:
 			{
-				DataTable[REG_OP_RESULT] = OPRESULT_NONE;
-				if((CONTROL_State == DS_Enabled) && (DataTable[REG_SIGNAL_OUT] == false))
-				{
-					uint32_t Current = DataTable[REG_SIN_CURRENT_L] + ( DataTable[REG_SIN_CURRENT_H] << 16);
-					PWM_SignalStart(DataTable[REG_SIN_VOLTAGE], Current);
-					DataTable[REG_SIGNAL_OUT] = true;
-					DataTable[REG_OP_RESULT] = OPRESULT_OK;
-				}
-				else
-				{
-					DataTable[REG_OP_RESULT] = OPRESULT_FAIL;
-					*pUserError = ERR_DEVICE_NOT_READY;
-				}
-				break;
+				//
 			}
 			break;
 
 		case ACT_STOP_SIGNAL:
 			{
-				DataTable[REG_OP_RESULT] = OPRESULT_NONE;
-				if(CONTROL_State == DS_Enabled)
-				{
-					PWM_SignalStop();
-					DataTable[REG_OP_RESULT] = OPRESULT_OK;
-					DataTable[REG_SIGNAL_OUT] = false;
-				}
-				else
-				{
-					DataTable[REG_OP_RESULT] = OPRESULT_FAIL;
-					*pUserError = ERR_DEVICE_NOT_READY;
-				}
+				//
 			}
 			break;
 

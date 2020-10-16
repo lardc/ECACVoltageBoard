@@ -7,13 +7,13 @@
 #define ACT_FAULT_CLEAR					3	// Очистка fault
 #define ACT_WARNING_CLEAR				4	// Очистка warning
 
-#define ACT_START_SIGNAL				20	// Запуск формирования сигнала
-#define ACT_STOP_SIGNAL					21	// Остановка формирования сигнала
-
 #define ACT_DBG_SYNC_1_IMPULSE			50 // Сигнал синхронизации
 #define ACT_DBG_SYNC_2_IMPULSE			51 // Сигнал синхронизации
 #define ACT_DBG_SET_STATE_CTRL_RELAY	52 // Изменить состояние реле цепи CTRL
 #define ACT_DBG_SET_STATE_POW_RELAY		53 // Изменить состояние реле цепи POW
+
+#define ACT_START_SIGNAL				100	// Запуск формирования сигнала
+#define ACT_STOP_SIGNAL					101	// Остановка формирования сигнала
 
 #define ACT_SAVE_TO_ROM					200	// Сохранение пользовательских данных во FLASH процессора
 #define ACT_RESTORE_FROM_ROM			201	// Восстановление данных из FLASH
@@ -81,9 +81,13 @@
 #define REG_DEV_STATE					192	// Регистр состояния
 #define REG_FAULT_REASON				193	// Регистр Fault
 #define REG_DISABLE_REASON				194	// Регистр Disable
+#define REG_WARNING						195	// Регистр Warning
 #define REG_PROBLEM						196	// Регистр Problem
 #define REG_OP_RESULT					197	// Регистр результата операции
-#define REG_SIGNAL_OUT					198 // Состояние выходной цепи
+
+#define REG_VOLTAGE_RESULT				200 // Результат измерения напряжения (в В)
+#define REG_CURRENT_RESULT				201 // Результат измерения тока (в мкА)
+#define REG_CURRENT_RESULT_32			202 // Результат измерения тока (в мкА)
 // -----------------------------
 #define REG_FWINFO_SLAVE_NID			256	// Device CAN slave node ID
 #define REG_FWINFO_MASTER_NID			257	// Device CAN master node ID (if presented)
