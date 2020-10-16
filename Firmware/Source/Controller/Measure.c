@@ -35,10 +35,12 @@ void MEASURE_CacheCurrentSettings(uint16_t RegK, uint16_t Offset, uint16_t RegP2
 float MEASURE_ArrayToValue(pMeasureSettings Storage, uint16_t *Data, uint16_t DataLen);
 
 // Functions
-void MEASURE_SetMeasureRange(uint16_t Voltage, uint32_t Current)
+void MEASURE_SetMeasureRange()
 {
-	MEASURE_SetVoltageRange(Voltage);
-	MEASURE_SetCurrentRange(Current);
+	MEASURE_SetVoltageRange(DataTable[REG_VOLTAGE_SETPOINT]);
+
+	uint32_t PeakCurrent = (uint32_t)DataTable[REG_CURRENT_SETPOINT_32] << 16 | DataTable[REG_CURRENT_SETPOINT];
+	MEASURE_SetCurrentRange(PeakCurrent);
 }
 //------------------------------------------------
 

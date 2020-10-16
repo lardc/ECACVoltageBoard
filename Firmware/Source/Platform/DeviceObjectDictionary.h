@@ -31,10 +31,10 @@
 #define REG_CURRENT_RANGE2_RES			3	// Сопротивление шунта диаразона тока 2
 #define REG_CURRENT_RANGE3_RES			4	// Сопротивление шунта диаразона тока 3
 // 5 - 9
-#define REG_VOLTAGE_RANGE1_LIMIT		10	// Граница диапазона 1 по напряжению (в В)
-#define REG_CURRENT_RANGE1_LIMIT		11	// Граница диапазона 1 по току (в мкА)
-#define REG_CURRENT_RANGE2_LIMIT		12	// Граница диапазона 2 по току (в мкА)
-#define REG_CURRENT_RANGE3_LIMIT		13	// Граница диапазона 3 по току (в мА)
+#define REG_VOLTAGE_RANGE1_LIMIT		10	// Граница диапазона 1 по действующему напряжению (в В)
+#define REG_CURRENT_RANGE1_LIMIT		11	// Граница диапазона 1 по действующему току (в мкА)
+#define REG_CURRENT_RANGE2_LIMIT		12	// Граница диапазона 2 по действующему току (в мкА)
+#define REG_CURRENT_RANGE3_LIMIT		13	// Граница диапазона 3 по действующему току (в мА)
 // 14
 #define REG_ADC_V1_FINE_P2				15	// Коэффициент тонкой подстройки напряжения диапазона 1 P2 x1e6
 #define REG_ADC_V1_FINE_P1				16  // Коэффициент тонкой подстройки напряжения диапазона 1 P1 x1000
