@@ -16,4 +16,7 @@
 #define ADC_RESOLUTION			4095	// Разрешение АЦП
 #define ADC_DMA_BUFF_SIZE 		4		// Размер буфера ДМА для АЦП
 
+// Параметры регулятора
+#define REGULATOR_I_ERR_SAT		100.0f	// Величина насыщения интегральной ошибки
+
 #endif //  __GLOBAL_H

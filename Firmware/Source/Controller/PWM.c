@@ -12,13 +12,15 @@
 
 // Variables
 volatile uint32_t PWMTimerCounter = 0;
-static float TransformerRatio, ActualAmplitude, TargetAmplitude, AmplitudeLimit, AmplitudeRiseStep, Kp, Ki, ErrorI;
+static float TransformerRatio, Kp, Ki, ErrorI;
+static float ActualSetVoltageRMS, ControlSetVoltageRMS, ControlSetVoltageMaxRMS, TargetVoltageRMS, VoltageStepRMS;
 static float VoltageStorageRMS, CurrentStorageRMS;
 
 // Forward functions
 void PWM_CacheParameters();
 float PWM_GetInstantVoltageSetpoint();
 float PWM_ConvertVoltageToPWM(float Voltage);
+float GetControlAdjustment(float ActualRMSVoltage);
 
 // Functions
 void PWM_SignalStart(uint16_t Voltage, uint32_t Current)
@@ -47,22 +49,34 @@ void PWM_SinRegulation()
 	// Логика, выполняемая каждый период
 	if(PWMTimerCounter == 0)
 	{
-		// Алгоритм нарастания уставки напряжения
-		if(ActualAmplitude < TargetAmplitude)
-		{
-			ActualAmplitude += AmplitudeRiseStep;
-			if(ActualAmplitude > TargetAmplitude)
-				ActualAmplitude = TargetAmplitude;
-		}
-
 		// Расчёт и сохранение действующих значений
 		float VoltageRMS = sqrtf(VoltageStorageRMS / PWM_SINE_COUNTER_MAX);
 		float CurrentRMS = sqrtf(CurrentStorageRMS / PWM_SINE_COUNTER_MAX);
 		VoltageStorageRMS = CurrentStorageRMS = 0;
-		MU_LogRMS(0, VoltageRMS, CurrentRMS);
+
+		// Получение корректировки по завершённому периоду
+		float Control = GetControlAdjustment(VoltageRMS);
+
+		// Алгоритм нарастания уставки напряжения
+		if(ActualSetVoltageRMS < TargetVoltageRMS)
+		{
+			ActualSetVoltageRMS += VoltageStepRMS;
+			if(ActualSetVoltageRMS > TargetVoltageRMS)
+				ActualSetVoltageRMS = TargetVoltageRMS;
+		}
+
+		// Задание действующего значения напряжения для следующего импульса
+		ControlSetVoltageRMS = ActualSetVoltageRMS + Control;
+
+		// Проверка насыщения выходного напряжения
+		if(ControlSetVoltageRMS > ControlSetVoltageMaxRMS)
+			ControlSetVoltageRMS = ControlSetVoltageMaxRMS;
+
+		// Сохранение полученных значений
+		MU_LogRMS(ActualSetVoltageRMS, VoltageRMS, CurrentRMS);
 	}
 
-	// Запись уставки ШИМ
+	// Расчёт, сохранение и запись уставки ШИМ
 	float InstantVoltage = PWM_GetInstantVoltageSetpoint();
 	float PWMSetpoint = PWM_ConvertVoltageToPWM(InstantVoltage);
 	MU_LogFast(InstantVoltage, PWMSetpoint, Voltage, Current);
@@ -70,9 +84,27 @@ void PWM_SinRegulation()
 }
 //------------------------------------------------
 
+float GetControlAdjustment(float ActualRMSVoltage)
+{
+	// Регулятор
+	float Error = ActualSetVoltageRMS - ActualRMSVoltage;
+
+	// Если интегральная составляющая задана
+	if(Ki)
+	{
+		ErrorI += Error;
+		// Проверка насыщения интегральной ошибки
+		if(fabsf(ErrorI) > REGULATOR_I_ERR_SAT)
+			ErrorI = (ErrorI > 0) ? REGULATOR_I_ERR_SAT : -REGULATOR_I_ERR_SAT;
+	}
+
+	return Error * Kp + ErrorI * Ki;
+}
+//------------------------------------------------
+
 float PWM_GetInstantVoltageSetpoint()
 {
-	return ActualAmplitude * sinf(2 * M_PI * PWMTimerCounter / PWM_SINE_COUNTER_MAX);
+	return ControlSetVoltageRMS * M_SQRT2 * sinf(2 * M_PI * PWMTimerCounter / PWM_SINE_COUNTER_MAX);
 }
 //------------------------------------------------
 
@@ -85,16 +117,17 @@ float PWM_ConvertVoltageToPWM(float Voltage)
 void PWM_CacheParameters()
 {
 	PWMTimerCounter = 0;
+	ActualSetVoltageRMS = ControlSetVoltageRMS = 0;
 	VoltageStorageRMS = CurrentStorageRMS = 0;
 	ErrorI = 0;
 
 	Kp = (float)DataTable[REG_KP] / 1000;
 	Ki = (float)DataTable[REG_KI] / 1000;
 
-	TargetAmplitude = (float)DataTable[REG_VOLTAGE_SETPOINT] * M_SQRT2;
+	TargetVoltageRMS = (float)DataTable[REG_VOLTAGE_SETPOINT];
 
 	TransformerRatio = (float)DataTable[REG_PWM_TRANS_RATIO] / 100;
-	AmplitudeLimit = (float)DataTable[REG_PWM_OUT_VOLTAGE_LIMIT];
-	AmplitudeRiseStep = (float)DataTable[REG_PWM_VOLTAGE_RISE_RATE] / PWM_SINE_FREQ;
+	ControlSetVoltageMaxRMS = (float)DataTable[REG_PWM_OUT_VOLTAGE_LIMIT];
+	VoltageStepRMS = (float)DataTable[REG_PWM_VOLTAGE_RISE_RATE] / PWM_SINE_FREQ;
 }
 //------------------------------------------------
