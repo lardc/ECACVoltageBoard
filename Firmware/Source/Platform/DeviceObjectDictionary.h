@@ -65,17 +65,17 @@
 #define REG_ADC_I3_CONV_K				38	// Коэффициент пересчёта тока диапазона 3 x1000
 #define REG_ADC_I3_CONV_B				39	// Оффсет тока диапазона 3 (в мВ входа АЦП)
 // 40 - 59
-#define REG_PWM_PRIM_VOLTAGE			60	// Напряжение на первичной обмотке трансформатора (в В)
-#define REG_PWM_TRANS_RATIO				61	// Коэффициент трансформации x100
+#define REG_PWM_TRANS_RATIO				60	// Коэффициент трансформации x100
+#define REG_PWM_OUT_VOLTAGE_LIMIT		61	// Ограничение по выходному напряжению (в В)
+#define REG_PWM_VOLTAGE_RISE_RATE		62	// Скорость нарастания выходного напряжения (в В/с)
 
 // Несохраняемы регистры чтения-записи
-#define REG_SIN_VOLTAGE					128 // Амплитуда напряжение выходного сигнала, В
-#define REG_SIN_CURRENT_L				129 // Амплитуда тока выходного сигнала - младшее слово, мкА
-#define REG_SIN_CURRENT_H				130 // Амплитуда тока выходного сигнала - старшее слово, мкА
-#define REG_SIN_TO_LINE					132 // Канал подачи сигнала POW, CTRL или в никуда
+#define REG_VOLTAGE_SETPOINT			128 // Амплитуда напряжение выходного сигнала, В
+#define REG_CURRENT_SETPOINT			129 // Амплитуда тока выходного сигнала - младшее слово, мкА
+#define REG_CURRENT_SETPOINT_32			130 // Амплитуда тока выходного сигнала - старшее слово, мкА
+#define REG_OUTPUT_LINE					131 // Канал подачи выходного сигнала
 
-#define REG_DBG_RELAY_CTRL_STATE		150	// Регистр состояния
-#define REG_DBG_RELAY_POW_STATE			151	// Регистр состояния
+#define REG_DBG							150	// Отладочный регистр
 
 // Регистры только чтение
 #define REG_DEV_STATE					192	// Регистр состояния

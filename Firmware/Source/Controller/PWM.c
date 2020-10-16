@@ -13,7 +13,7 @@
 // Variables
 volatile uint32_t PWMTimerCounter = 0;
 static float TargetValue, Kp, Ki, ErrorI;
-static float TransformerRatio, TransformerPrimVoltage;
+static float TransformerRatio;
 
 // Forward functions
 void PWM_CacheParameters();
@@ -48,7 +48,6 @@ void PWM_CacheParameters()
 {
 	ErrorI = 0;
 
-	TransformerPrimVoltage = (float)DataTable[REG_PWM_PRIM_VOLTAGE];
 	TransformerRatio = (float)DataTable[REG_PWM_TRANS_RATIO] / 100;
 
 	Kp = (float)DataTable[REG_KP] / 1000;

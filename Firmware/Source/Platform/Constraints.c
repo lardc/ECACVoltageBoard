@@ -26,28 +26,28 @@ const TableItemConstraint NVConstraint[DATA_TABLE_NV_SIZE] = {
 		{0, INT16U_MAX, 0},															// 15
 		{1, INT16U_MAX, 1000},														// 16
 		{0, INT16U_MAX, 0},															// 17
-		{0, 0, 0},																	// 18
-		{0, 0, 0},																	// 19
-		{0, 0, 0},																	// 20
-		{0, 0, 0},																	// 21
-		{0, 0, 0},																	// 22
-		{0, 0, 0},																	// 23
-		{0, 0, 0},																	// 24
-		{0, 0, 0},																	// 25
-		{0, 0, 0},																	// 26
-		{0, 0, 0},																	// 27
-		{0, 0, 0},																	// 28
-		{0, 0, 0},																	// 29
-		{0, 0, 0},																	// 30
-		{0, 0, 0},																	// 31
-		{0, 0, 0},																	// 32
-		{0, 0, 0},																	// 33
-		{0, 0, 0},																	// 34
-		{0, 0, 0},																	// 35
-		{0, 0, 0},																	// 36
-		{0, 0, 0},																	// 37
-		{0, 0, 0},																	// 38
-		{0, 0, 0},																	// 39
+		{1, INT16U_MAX, 1000},														// 18
+		{0, INT16U_MAX, 0},															// 19
+		{0, INT16U_MAX, 0},															// 20
+		{1, INT16U_MAX, 1000},														// 21
+		{0, INT16U_MAX, 0},															// 22
+		{1, INT16U_MAX, 1000},														// 23
+		{0, INT16U_MAX, 0},															// 24
+		{0, INT16U_MAX, 0},															// 25
+		{1, INT16U_MAX, 1000},														// 26
+		{0, INT16U_MAX, 0},															// 27
+		{1, INT16U_MAX, 1000},														// 28
+		{0, INT16U_MAX, 0},															// 29
+		{0, INT16U_MAX, 0},															// 30
+		{1, INT16U_MAX, 1000},														// 31
+		{0, INT16U_MAX, 0},															// 32
+		{1, INT16U_MAX, 1000},														// 33
+		{0, INT16U_MAX, 0},															// 34
+		{0, INT16U_MAX, 0},															// 35
+		{1, INT16U_MAX, 1000},														// 36
+		{0, INT16U_MAX, 0},															// 37
+		{1, INT16U_MAX, 1000},														// 38
+		{0, INT16U_MAX, 0},															// 39
 		{0, 0, 0},																	// 40
 		{0, 0, 0},																	// 41
 		{0, 0, 0},																	// 42
@@ -68,9 +68,9 @@ const TableItemConstraint NVConstraint[DATA_TABLE_NV_SIZE] = {
 		{0, 0, 0},																	// 57
 		{0, 0, 0},																	// 58
 		{0, 0, 0},																	// 59
-		{0, 0, 0},																	// 60
-		{0, 0, 0},																	// 61
-		{0, 0, 0},																	// 62
+		{TRANSFORMER_RATIO_MIN, TRANSFORMER_RATIO_MAX, TRANSFORMER_RATIO_DEF},		// 60
+		{VOLTAGE_OUTPUT_MIN, VOLTAGE_OUTPUT_MAX, VOLTAGE_OUTPUT_DEF},				// 61
+		{VOLTAGE_RISE_RATE_MIN, VOLTAGE_RISE_RATE_MAX, VOLTAGE_RISE_RATE_DEF},		// 62
 		{0, 0, 0},																	// 63
 		{0, 0, 0},																	// 64
 		{0, 0, 0},																	// 65
@@ -139,11 +139,11 @@ const TableItemConstraint NVConstraint[DATA_TABLE_NV_SIZE] = {
 };
 
 const TableItemConstraint VConstraint[DATA_TABLE_WP_START - DATA_TABLE_WR_START] = {
-		{0, HW_MAX_VOLTAGE, 0},														// 128
-		{0, HW_MAX_CURRENT_LWORD, 0},												// 129
-		{0, HW_MAX_CURRENT_HWORD, 0},												// 130
+		{VOLTAGE_OUTPUT_MIN, VOLTAGE_OUTPUT_MAX, VOLTAGE_OUTPUT_DEF},				// 128
+		{0, INT16U_MAX, 0},															// 129
+		{0, INT16U_MAX, 0},															// 130
 		{0, 0, 0},																	// 131
-		{0, HW_MAX_LINE, 0},														// 132
+		{0, 0, 0},																	// 132
 		{0, 0, 0},																	// 133
 		{0, 0, 0},																	// 134
 		{0, 0, 0},																	// 135
@@ -161,8 +161,8 @@ const TableItemConstraint VConstraint[DATA_TABLE_WP_START - DATA_TABLE_WR_START]
 		{0, 0, 0},																	// 147
 		{0, 0, 0},																	// 148
 		{0, 0, 0},																	// 149
-		{FALSE, TRUE, FALSE},														// 150
-		{FALSE, TRUE, FALSE},														// 151
+		{0, INT16U_MAX, 0},															// 150
+		{0, 0, 0},																	// 151
 		{0, 0, 0},																	// 152
 		{0, 0, 0},																	// 153
 		{0, 0, 0},																	// 154
