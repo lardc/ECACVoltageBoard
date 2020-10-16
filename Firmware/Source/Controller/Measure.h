@@ -13,6 +13,6 @@ extern volatile uint16_t ADC2DMACurrentBuffer[];
 void MEASURE_SetMeasureRange();
 float MEASURE_Voltage();
 float MEASURE_Current();
-float MEASURE_GetCurrentLimit();
+float MEASURE_GetCurrentPeakLimit();
 
 #endif //__MEASURE_H

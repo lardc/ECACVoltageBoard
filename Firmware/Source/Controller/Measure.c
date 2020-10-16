@@ -22,7 +22,7 @@ typedef struct __MeasureSettings
 volatile uint16_t ADC1DMAVoltageBuffer[ADC_DMA_BUFF_SIZE] = {0};
 volatile uint16_t ADC2DMACurrentBuffer[ADC_DMA_BUFF_SIZE] = {0};
 static MeasureSettings VoltageSettings, CurrentSettings;
-static float CachedCurrentLimit;
+static float CachedCurrentPeakLimit;
 
 // Forward functions
 void MEASURE_SetCurrentRange(uint32_t Current);
@@ -51,7 +51,7 @@ void MEASURE_SetCurrentRange(uint32_t Current)
 		GPIO_SetState(GPIO_I_RANGE_H, false);
 		GPIO_SetState(GPIO_I_RANGE_M, false);
 		GPIO_SetState(GPIO_I_RANGE_L, true);
-		CachedCurrentLimit = (float)DataTable[REG_CURRENT_RANGE1_LIMIT];
+		CachedCurrentPeakLimit = (float)DataTable[REG_CURRENT_RANGE1_LIMIT] * M_SQRT2;
 		MEASURE_CacheCurrentSettings(REG_ADC_I1_CONV_K, REG_ADC_I1_CONV_B, REG_ADC_I1_FINE_P2, REG_ADC_I1_FINE_P1,
 				REG_ADC_I1_FINE_P0, REG_CURRENT_RANGE1_RES);
 	}
@@ -60,7 +60,7 @@ void MEASURE_SetCurrentRange(uint32_t Current)
 		GPIO_SetState(GPIO_I_RANGE_H, false);
 		GPIO_SetState(GPIO_I_RANGE_M, true);
 		GPIO_SetState(GPIO_I_RANGE_L, false);
-		CachedCurrentLimit = (float)DataTable[REG_CURRENT_RANGE2_LIMIT];
+		CachedCurrentPeakLimit = (float)DataTable[REG_CURRENT_RANGE2_LIMIT] * M_SQRT2;
 		MEASURE_CacheCurrentSettings(REG_ADC_I2_CONV_K, REG_ADC_I2_CONV_B, REG_ADC_I2_FINE_P2, REG_ADC_I2_FINE_P1,
 				REG_ADC_I2_FINE_P0, REG_CURRENT_RANGE2_RES);
 	}
@@ -69,16 +69,16 @@ void MEASURE_SetCurrentRange(uint32_t Current)
 		GPIO_SetState(GPIO_I_RANGE_H, true);
 		GPIO_SetState(GPIO_I_RANGE_M, false);
 		GPIO_SetState(GPIO_I_RANGE_L, false);
-		CachedCurrentLimit = (float)DataTable[REG_CURRENT_RANGE3_LIMIT] * 1000;
+		CachedCurrentPeakLimit = (float)DataTable[REG_CURRENT_RANGE3_LIMIT] * 1000 * M_SQRT2;
 		MEASURE_CacheCurrentSettings(REG_ADC_I3_CONV_K, REG_ADC_I3_CONV_B, REG_ADC_I3_FINE_P2, REG_ADC_I3_FINE_P1,
 				REG_ADC_I3_FINE_P0, REG_CURRENT_RANGE3_RES);
 	}
 }
 //------------------------------------------------
 
-float MEASURE_GetCurrentLimit()
+float MEASURE_GetCurrentPeakLimit()
 {
-	return CachedCurrentLimit;
+	return CachedCurrentPeakLimit;
 }
 //------------------------------------------------
 
