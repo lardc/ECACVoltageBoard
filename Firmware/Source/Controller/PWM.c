@@ -8,11 +8,12 @@
 #include "DeviceObjectDictionary.h"
 #include "DataTable.h"
 #include "SysConfig.h"
+#include "LogUtils.h"
 
 // Variables
 volatile uint32_t PWMTimerCounter = 0;
-static float ActualAmplitude, TargetAmplitude, AmplitudeLimit, AmplitudeRiseStep, Kp, Ki, ErrorI;
-static float TransformerRatio;
+static float TransformerRatio, ActualAmplitude, TargetAmplitude, AmplitudeLimit, AmplitudeRiseStep, Kp, Ki, ErrorI;
+static float VoltageStorageRMS, CurrentStorageRMS;
 
 // Forward functions
 void PWM_CacheParameters();
@@ -35,17 +36,36 @@ void PWM_SignalStop()
 
 void PWM_SinRegulation()
 {
-	// Алгоритм нарастания уставки напряжения
-	if(PWMTimerCounter == 0 && ActualAmplitude < TargetAmplitude)
+	// Получение мговенных значений напряжения и тока
+	float Voltage = MEASURE_Voltage();
+	float Current = MEASURE_Current();
+
+	// Набор данных для расчёта действующих значений
+	VoltageStorageRMS += Voltage * Voltage;
+	CurrentStorageRMS += Current * Current;
+
+	// Логика, выполняемая каждый период
+	if(PWMTimerCounter == 0)
 	{
-		ActualAmplitude += AmplitudeRiseStep;
-		if(ActualAmplitude > TargetAmplitude)
-			ActualAmplitude = TargetAmplitude;
+		// Алгоритм нарастания уставки напряжения
+		if(ActualAmplitude < TargetAmplitude)
+		{
+			ActualAmplitude += AmplitudeRiseStep;
+			if(ActualAmplitude > TargetAmplitude)
+				ActualAmplitude = TargetAmplitude;
+		}
+
+		// Расчёт и сохранение действующих значений
+		float VoltageRMS = sqrtf(VoltageStorageRMS / PWM_SINE_COUNTER_MAX);
+		float CurrentRMS = sqrtf(CurrentStorageRMS / PWM_SINE_COUNTER_MAX);
+		VoltageStorageRMS = CurrentStorageRMS = 0;
+		MU_LogRMS(0, VoltageRMS, CurrentRMS);
 	}
 
 	// Запись уставки ШИМ
 	float InstantVoltage = PWM_GetInstantVoltageSetpoint();
 	float PWMSetpoint = PWM_ConvertVoltageToPWM(InstantVoltage);
+	MU_LogFast(InstantVoltage, PWMSetpoint, Voltage, Current);
 	T1PWM_SetDutyCycle(PWMSetpoint);
 }
 //------------------------------------------------
@@ -64,7 +84,10 @@ float PWM_ConvertVoltageToPWM(float Voltage)
 
 void PWM_CacheParameters()
 {
+	PWMTimerCounter = 0;
+	VoltageStorageRMS = CurrentStorageRMS = 0;
 	ErrorI = 0;
+
 	Kp = (float)DataTable[REG_KP] / 1000;
 	Ki = (float)DataTable[REG_KI] / 1000;
 
