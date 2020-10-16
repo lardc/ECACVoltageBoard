@@ -15,6 +15,7 @@ volatile uint32_t PWMTimerCounter = 0;
 static float TransformerRatio, Kp, Ki, ErrorI;
 static float ActualSetVoltageRMS, ControlSetVoltageRMS, ControlSetVoltageMaxRMS, TargetVoltageRMS, VoltageStepRMS;
 static float VoltageStorageRMS, CurrentStorageRMS;
+static float CurrentLimitRMS;
 static bool RequestSoftStop = false;
 
 // Forward functions
@@ -39,6 +40,8 @@ void PWM_SignalStop()
 
 bool PWM_SinRegulation(uint16_t *Problem)
 {
+	*Problem = PROBLEM_NONE;
+
 	// Получение мговенных значений напряжения и тока
 	float Voltage = MEASURE_Voltage();
 	float Current = MEASURE_Current();
@@ -73,9 +76,19 @@ bool PWM_SinRegulation(uint16_t *Problem)
 		// Задание действующего значения напряжения для следующего импульса
 		ControlSetVoltageRMS = ActualSetVoltageRMS + Control;
 
+		// Проверка условий остановки формирования
 		// Проверка насыщения выходного напряжения
 		if(ControlSetVoltageRMS > ControlSetVoltageMaxRMS)
-			ControlSetVoltageRMS = ControlSetVoltageMaxRMS;
+		{
+			*Problem = PROBLEM_OUTPUT_SATURATION;
+			RequestSoftStop = true;
+		}
+		// Проверка превышения действующего значения тока
+		else if(CurrentRMS > CurrentLimitRMS)
+		{
+			*Problem = PROBLEM_RMS_OVER_CURRENT;
+			RequestSoftStop = true;
+		}
 
 		// Сохранение полученных значений
 		MU_LogRMS(ActualSetVoltageRMS, ControlSetVoltageRMS, VoltageRMS, CurrentRMS);
@@ -149,6 +162,7 @@ void PWM_CacheParameters()
 	Ki = (float)DataTable[REG_KI] / 1000;
 
 	TargetVoltageRMS = (float)DataTable[REG_VOLTAGE_SETPOINT];
+	CurrentLimitRMS = (float)(((uint32_t)DataTable[REG_CURRENT_SETPOINT_32] << 16) | DataTable[REG_CURRENT_SETPOINT]);
 
 	TransformerRatio = (float)DataTable[REG_PWM_TRANS_RATIO] / 100;
 	ControlSetVoltageMaxRMS = (float)DataTable[REG_PWM_OUT_VOLTAGE_LIMIT];
