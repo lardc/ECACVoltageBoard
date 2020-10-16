@@ -211,7 +211,7 @@ void PWM_CacheParameters()
 	TargetVoltageRMS = (float)DataTable[REG_VOLTAGE_SETPOINT];
 	CurrentLimitRMS = (float)(((uint32_t)DataTable[REG_CURRENT_SETPOINT_32] << 16) | DataTable[REG_CURRENT_SETPOINT]);
 
-	TransformerRatio = (float)DataTable[REG_PWM_TRANS_RATIO] / 100;
+	TransformerRatio = (float)DataTable[REG_PWM_TRANS_RATIO];
 	ControlSetVoltageMaxRMS = (float)DataTable[REG_PWM_OUT_VOLTAGE_LIMIT];
 	VoltageStepRMS = (float)DataTable[REG_PWM_VOLTAGE_RISE_RATE] / PWM_SINE_FREQ;
 }
