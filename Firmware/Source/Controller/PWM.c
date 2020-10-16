@@ -15,24 +15,25 @@ volatile uint32_t PWMTimerCounter = 0;
 static float TransformerRatio, Kp, Ki, ErrorI;
 static float ActualSetVoltageRMS, ControlSetVoltageRMS, ControlSetVoltageMaxRMS, TargetVoltageRMS, VoltageStepRMS;
 static float VoltageStorageRMS, CurrentStorageRMS;
+static bool RequestSoftStop = false;
 
 // Forward functions
 void PWM_CacheParameters();
 float PWM_GetInstantVoltageSetpoint();
 float PWM_ConvertVoltageToPWM(float Voltage);
 float GetControlAdjustment(float ActualRMSVoltage);
+void PWM_SaveResultToDataTable(float Voltage, float Current);
 
 // Functions
-void PWM_SignalStart(uint16_t Voltage, uint32_t Current)
+void PWM_SignalStart()
 {
-	PWM_CacheParameters();
 	T1PWM_Start();
 }
 //------------------------------------------------
 
 void PWM_SignalStop()
 {
-	T1PWM_Stop();
+	RequestSoftStop = true;
 }
 //------------------------------------------------
 
@@ -53,6 +54,10 @@ void PWM_SinRegulation()
 		float VoltageRMS = sqrtf(VoltageStorageRMS / PWM_SINE_COUNTER_MAX);
 		float CurrentRMS = sqrtf(CurrentStorageRMS / PWM_SINE_COUNTER_MAX);
 		VoltageStorageRMS = CurrentStorageRMS = 0;
+
+		// Сохранение результата
+		if(RequestSoftStop)
+			PWM_SaveResultToDataTable(VoltageRMS, CurrentRMS);
 
 		// Получение корректировки по завершённому периоду
 		float Control = GetControlAdjustment(VoltageRMS);
@@ -80,7 +85,22 @@ void PWM_SinRegulation()
 	float InstantVoltage = PWM_GetInstantVoltageSetpoint();
 	float PWMSetpoint = PWM_ConvertVoltageToPWM(InstantVoltage);
 	MU_LogFast(InstantVoltage, PWMSetpoint, Voltage, Current);
-	T1PWM_SetDutyCycle(PWMSetpoint);
+
+	// Обработка запроса остановки
+	if(RequestSoftStop)
+		T1PWM_Stop();
+	else
+		T1PWM_SetDutyCycle(PWMSetpoint);
+}
+//------------------------------------------------
+
+void PWM_SaveResultToDataTable(float Voltage, float Current)
+{
+	DataTable[REG_VOLTAGE_RESULT] = (uint16_t)Voltage;
+
+	uint32_t CurrentInt = (uint32_t)Current;
+	DataTable[REG_CURRENT_RESULT] = CurrentInt;
+	DataTable[REG_CURRENT_RESULT_32] = CurrentInt >> 16;
 }
 //------------------------------------------------
 
@@ -116,6 +136,8 @@ float PWM_ConvertVoltageToPWM(float Voltage)
 
 void PWM_CacheParameters()
 {
+	RequestSoftStop = false;
+
 	PWMTimerCounter = 0;
 	ActualSetVoltageRMS = ControlSetVoltageRMS = 0;
 	VoltageStorageRMS = CurrentStorageRMS = 0;
