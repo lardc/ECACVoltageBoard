@@ -23,6 +23,7 @@ extern volatile Int16U CONTROL_PWMSetFast[];
 extern volatile Int16U CONTROL_VResultFast[];
 extern volatile Int16U CONTROL_IResultFast[];
 extern volatile Int16U CONTROL_VSetRMS[];
+extern volatile Int16U CONTROL_VControlRMS[];
 extern volatile Int16U CONTROL_VResultRMS[];
 extern volatile Int16U CONTROL_IResultRMS[];
 

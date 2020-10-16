@@ -5,6 +5,6 @@
 #include "stdinc.h"
 
 void MU_LogFast(float VSet, float PWMSet, float ResultV, float ResultI);
-void MU_LogRMS(float VSet, float ResultV, float ResultI);
+void MU_LogRMS(float VSet, float VControlSet, float ResultV, float ResultI);
 
 #endif // __LOG_UTILS_H

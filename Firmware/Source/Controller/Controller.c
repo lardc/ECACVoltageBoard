@@ -27,6 +27,7 @@ volatile Int16U CONTROL_PWMSetFast[VALUES_x_SIZE] = {0};
 volatile Int16U CONTROL_VResultFast[VALUES_x_SIZE] = {0};
 volatile Int16U CONTROL_IResultFast[VALUES_x_SIZE] = {0};
 volatile Int16U CONTROL_VSetRMS[VALUES_x_SIZE] = {0};
+volatile Int16U CONTROL_VControlRMS[VALUES_x_SIZE] = {0};
 volatile Int16U CONTROL_VResultRMS[VALUES_x_SIZE] = {0};
 volatile Int16U CONTROL_IResultRMS[VALUES_x_SIZE] = {0};
 volatile Int16U CONTROL_CounterFast = 0;
@@ -47,19 +48,20 @@ void CONTROL_Init()
 {
 	// Переменные для конфигурации EndPoint
 	Int16U EPIndexes[EP_COUNT] = {EP_V_SETPOINT_FAST, EP_PWM_SETPOINT_FAST, EP_V_RESULT_FAST, EP_I_RESULT_FAST,
-			EP_VRMS_SETPOINT, EP_VRMS_RESULT, EP_IRMS_RESULT};
+			EP_VRMS_SETPOINT, EP_VRMS_CTRL_SETPOINT, EP_VRMS_RESULT, EP_IRMS_RESULT};
 
 	Int16U EPSized[EP_COUNT] = {VALUES_x_SIZE, VALUES_x_SIZE, VALUES_x_SIZE, VALUES_x_SIZE,
-			VALUES_x_SIZE, VALUES_x_SIZE, VALUES_x_SIZE};
+			VALUES_x_SIZE, VALUES_x_SIZE, VALUES_x_SIZE, VALUES_x_SIZE};
 
 	// Сокращения
 	pInt16U cf = (pInt16U)&CONTROL_CounterFast;
 	pInt16U cr = (pInt16U)&CONTROL_CounterRMS;
-	pInt16U EPCounters[EP_COUNT] = {cf, cf, cf, cf, cr, cr, cr};
+	pInt16U EPCounters[EP_COUNT] = {cf, cf, cf, cf, cr, cr, cr, cr};
 
 	pInt16U EPDatas[EP_COUNT] = {(pInt16U)CONTROL_VSetFast, (pInt16U)CONTROL_PWMSetFast,
 			(pInt16U)CONTROL_VResultFast, (pInt16U)CONTROL_IResultFast,
-			(pInt16U)CONTROL_VSetRMS, (pInt16U)CONTROL_VResultRMS, (pInt16U)CONTROL_IResultRMS};
+			(pInt16U)CONTROL_VSetRMS, (pInt16U)CONTROL_VControlRMS,
+			(pInt16U)CONTROL_VResultRMS, (pInt16U)CONTROL_IResultRMS};
 
 	// Конфигурация сервиса работы Data-table и EPROM
 	EPROMServiceConfig EPROMService = {(FUNC_EPROM_WriteValues)&NFLASH_WriteDT, (FUNC_EPROM_ReadValues)&NFLASH_ReadDT};

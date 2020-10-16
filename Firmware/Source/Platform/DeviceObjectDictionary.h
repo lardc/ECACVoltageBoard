@@ -112,8 +112,9 @@
 #define EP_I_RESULT_FAST				4	// Быстрая оцифровка тока
 
 #define EP_VRMS_SETPOINT				5	// Уставка по действующему значению напряжения
-#define EP_VRMS_RESULT					6	// Результат по действующему значению напряжения
-#define EP_IRMS_RESULT					7	// Результат по действующему значению напряжения
+#define EP_VRMS_CTRL_SETPOINT			6	// Регулируемая уставка по действующему значению напряжения
+#define EP_VRMS_RESULT					7	// Результат по действующему значению напряжения
+#define EP_IRMS_RESULT					8	// Результат по действующему значению напряжения
 
 //  Fault and disable codes
 #define DF_NONE							0

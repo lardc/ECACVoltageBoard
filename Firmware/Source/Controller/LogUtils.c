@@ -41,7 +41,7 @@ void MU_LogFast(float VSet, float PWMSet, float ResultV, float ResultI)
 // ----------------------------------------
 
 // Functions
-void MU_LogRMS(float VSet, float ResultV, float ResultI)
+void MU_LogRMS(float VSet, float VControlSet, float ResultV, float ResultI)
 {
 	static uint16_t ScopeLogStep = 0, LocalCounter = 0;
 
@@ -54,6 +54,7 @@ void MU_LogRMS(float VSet, float ResultV, float ResultI)
 		ScopeLogStep = 0;
 
 		CONTROL_VSetRMS[LocalCounter] = (int16_t)VSet;
+		CONTROL_VControlRMS[LocalCounter] = (int16_t)VControlSet;
 		CONTROL_VResultRMS[LocalCounter] = (int16_t)ResultV;
 		CONTROL_IResultRMS[LocalCounter] = (int16_t)ResultI;
 

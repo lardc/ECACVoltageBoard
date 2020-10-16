@@ -73,7 +73,7 @@ void PWM_SinRegulation()
 			ControlSetVoltageRMS = ControlSetVoltageMaxRMS;
 
 		// Сохранение полученных значений
-		MU_LogRMS(ActualSetVoltageRMS, VoltageRMS, CurrentRMS);
+		MU_LogRMS(ActualSetVoltageRMS, ControlSetVoltageRMS, VoltageRMS, CurrentRMS);
 	}
 
 	// Расчёт, сохранение и запись уставки ШИМ
