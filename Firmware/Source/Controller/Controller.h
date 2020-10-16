@@ -27,7 +27,7 @@ extern volatile Int16U CONTROL_VResultRMS[];
 extern volatile Int16U CONTROL_IResultRMS[];
 
 extern volatile Int16U CONTROL_CounterFast;
-extern volatile Int16U CONTROL_Counter;
+extern volatile Int16U CONTROL_CounterRMS;
 
 // Functions
 void CONTROL_Init();

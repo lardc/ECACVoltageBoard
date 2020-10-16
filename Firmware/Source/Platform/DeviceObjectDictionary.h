@@ -75,7 +75,9 @@
 #define REG_CURRENT_SETPOINT_32			130 // Действующее значение тока выходного сигнала - старшее слово, мкА
 #define REG_OUTPUT_LINE					131 // Канал подачи выходного сигнала
 
-#define REG_DBG							150	// Отладочный регистр
+#define REG_SCOPE_RATE					150	// Шаг логгирования в эндпоинты
+
+#define REG_DBG							190	// Отладочный регистр
 
 // Регистры только чтение
 #define REG_DEV_STATE					192	// Регистр состояния
@@ -88,6 +90,9 @@
 #define REG_VOLTAGE_RESULT				200 // Результат измерения напряжения (в В)
 #define REG_CURRENT_RESULT				201 // Результат измерения тока (в мкА)
 #define REG_CURRENT_RESULT_32			202 // Результат измерения тока (в мкА)
+
+#define REG_EP_LAST_POINTER_FAST		250	// Указатель на последий элемент быстрого логгирования
+#define REG_EP_LAST_POINTER_RMS			251	// Указатель на последий элемент логгирования RMS
 // -----------------------------
 #define REG_FWINFO_SLAVE_NID			256	// Device CAN slave node ID
 #define REG_FWINFO_MASTER_NID			257	// Device CAN master node ID (if presented)

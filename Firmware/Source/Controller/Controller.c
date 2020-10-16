@@ -30,7 +30,7 @@ volatile Int16U CONTROL_VSetRMS[VALUES_x_SIZE] = {0};
 volatile Int16U CONTROL_VResultRMS[VALUES_x_SIZE] = {0};
 volatile Int16U CONTROL_IResultRMS[VALUES_x_SIZE] = {0};
 volatile Int16U CONTROL_CounterFast = 0;
-volatile Int16U CONTROL_Counter = 0;
+volatile Int16U CONTROL_CounterRMS = 0;
 
 /// Forward functions
 //
@@ -54,8 +54,8 @@ void CONTROL_Init()
 
 	// Сокращения
 	pInt16U cf = (pInt16U)&CONTROL_CounterFast;
-	pInt16U c = (pInt16U)&CONTROL_Counter;
-	pInt16U EPCounters[EP_COUNT] = {cf, cf, cf, cf, c, c, c};
+	pInt16U cr = (pInt16U)&CONTROL_CounterRMS;
+	pInt16U EPCounters[EP_COUNT] = {cf, cf, cf, cf, cr, cr, cr};
 
 	pInt16U EPDatas[EP_COUNT] = {(pInt16U)CONTROL_VSetFast, (pInt16U)CONTROL_PWMSetFast,
 			(pInt16U)CONTROL_VResultFast, (pInt16U)CONTROL_IResultFast,
