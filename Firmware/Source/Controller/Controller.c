@@ -91,7 +91,6 @@ void CONTROL_ResetToDefaultState()
 	CONTROL_ResetResults();
 	CONTROL_SetDeviceState(DS_None);
 }
-
 //------------------------------------------
 
 void CONTROL_Idle()
