@@ -11,6 +11,7 @@
 #include "Diagnostic.h"
 #include "BCCIxParams.h"
 #include "PWM.h"
+#include "Measure.h"
 
 // Types
 //
@@ -131,7 +132,7 @@ static Boolean CONTROL_DispatchAction(Int16U ActionID, pInt16U pUserError)
 		case ACT_DISABLE_POWER:
 			{
 				if(CONTROL_State == DS_Ready)
-					CONTROL_SetDeviceState(DS_None);
+					CONTROL_ResetToDefaultState();
 				else if(CONTROL_State != DS_None)
 					*pUserError = ERR_DEVICE_NOT_READY;
 			}
@@ -150,13 +151,19 @@ static Boolean CONTROL_DispatchAction(Int16U ActionID, pInt16U pUserError)
 
 		case ACT_START_SIGNAL:
 			{
-				//
+				CONTROL_ResetResults();
+				MEASURE_SetMeasureRange();
+				PWM_CacheParameters();
+				DELAY_MS(200);
+				CONTROL_SetDeviceState(DS_InProcess);
+				PWM_SignalStart();
 			}
 			break;
 
 		case ACT_STOP_SIGNAL:
 			{
-				//
+				PWM_SignalStop();
+				CONTROL_SetDeviceState(DS_Ready);
 			}
 			break;
 
@@ -170,7 +177,8 @@ static Boolean CONTROL_DispatchAction(Int16U ActionID, pInt16U pUserError)
 
 void CONTROL_ProcessPWMStop(uint16_t Problem)
 {
-
+	DataTable[REG_PROBLEM] = Problem;
+	CONTROL_SetDeviceState(DS_Ready);
 }
 //------------------------------------------
 
