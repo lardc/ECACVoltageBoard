@@ -34,6 +34,8 @@ void PWM_SaveResultToDataTable(VIPair Pair);
 VIPair PWM_GetMeasureData();
 void PWM_AddToRMS(VIPair Pair);
 VIPair PWM_CalculateRMSValue();
+void PWM_ProcessPeriodRegulation(uint16_t *Problem);
+void PWM_ProcessInstantPWMOutput(VIPair Pair);
 
 // Functions
 void PWM_SignalStart()
@@ -55,7 +57,43 @@ bool PWM_SinRegulation(uint16_t *Problem)
 	VIPair Sample = PWM_GetMeasureData();
 	PWM_AddToRMS(Sample);
 
-	// Логика, выполняемая каждый период
+	PWM_ProcessPeriodRegulation(Problem);
+	PWM_ProcessInstantPWMOutput(Sample);
+
+	return RequestSoftStop;
+}
+//------------------------------------------------
+
+void PWM_SaveResultToDataTable(VIPair Pair)
+{
+	DataTable[REG_VOLTAGE_RESULT] = (uint16_t)Pair.Voltage;
+
+	uint32_t CurrentInt = (uint32_t)Pair.Current;
+	DataTable[REG_CURRENT_RESULT] = CurrentInt;
+	DataTable[REG_CURRENT_RESULT_32] = CurrentInt >> 16;
+}
+//------------------------------------------------
+
+float PWM_GetControlAdjustment(float ActualRMSVoltage)
+{
+	// Регулятор
+	float Error = ActualSetVoltageRMS - ActualRMSVoltage;
+
+	// Если интегральная составляющая задана
+	if(Ki)
+	{
+		ErrorI += Error;
+		// Проверка насыщения интегральной ошибки
+		if(fabsf(ErrorI) > REGULATOR_I_ERR_SAT)
+			ErrorI = (ErrorI > 0) ? REGULATOR_I_ERR_SAT : -REGULATOR_I_ERR_SAT;
+	}
+
+	return Error * Kp + ErrorI * Ki;
+}
+//------------------------------------------------
+
+void PWM_ProcessPeriodRegulation(uint16_t *Problem)
+{
 	if(PWMTimerCounter == 0)
 	{
 		VIPair ValuesRMS = PWM_CalculateRMSValue();
@@ -95,47 +133,21 @@ bool PWM_SinRegulation(uint16_t *Problem)
 		// Сохранение полученных значений
 		MU_LogRMS(ActualSetVoltageRMS, ControlSetVoltageRMS, ValuesRMS.Voltage, ValuesRMS.Current);
 	}
+}
+//------------------------------------------------
 
+void PWM_ProcessInstantPWMOutput(VIPair Pair)
+{
 	// Расчёт, сохранение и запись уставки ШИМ
 	float InstantVoltage = PWM_GetInstantVoltageSetpoint();
 	float PWMSetpoint = PWM_ConvertVoltageToPWM(InstantVoltage);
-	MU_LogFast(InstantVoltage, PWMSetpoint, Sample.Voltage, Sample.Current);
+	MU_LogFast(InstantVoltage, PWMSetpoint, Pair.Voltage, Pair.Current);
 
 	// Обработка запроса остановки
 	if(RequestSoftStop)
 		T1PWM_Stop();
 	else
 		T1PWM_SetDutyCycle(PWMSetpoint);
-
-	return RequestSoftStop;
-}
-//------------------------------------------------
-
-void PWM_SaveResultToDataTable(VIPair Pair)
-{
-	DataTable[REG_VOLTAGE_RESULT] = (uint16_t)Pair.Voltage;
-
-	uint32_t CurrentInt = (uint32_t)Pair.Current;
-	DataTable[REG_CURRENT_RESULT] = CurrentInt;
-	DataTable[REG_CURRENT_RESULT_32] = CurrentInt >> 16;
-}
-//------------------------------------------------
-
-float PWM_GetControlAdjustment(float ActualRMSVoltage)
-{
-	// Регулятор
-	float Error = ActualSetVoltageRMS - ActualRMSVoltage;
-
-	// Если интегральная составляющая задана
-	if(Ki)
-	{
-		ErrorI += Error;
-		// Проверка насыщения интегральной ошибки
-		if(fabsf(ErrorI) > REGULATOR_I_ERR_SAT)
-			ErrorI = (ErrorI > 0) ? REGULATOR_I_ERR_SAT : -REGULATOR_I_ERR_SAT;
-	}
-
-	return Error * Kp + ErrorI * Ki;
 }
 //------------------------------------------------
 
