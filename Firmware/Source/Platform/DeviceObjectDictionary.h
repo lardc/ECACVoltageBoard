@@ -124,6 +124,7 @@
 #define PROBLEM_NONE					0
 #define PROBLEM_OUTPUT_SATURATION		1	// Напряжение регулирования достигло предела
 #define PROBLEM_RMS_OVER_CURRENT		2	// Превышение установленного действующего значения тока
+#define PROBLEM_INSTANT_OVERCURRENT		3	// Превышение мгновенного значения тока
 
 //  Warning
 #define WARNING_NONE					0

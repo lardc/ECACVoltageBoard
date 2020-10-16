@@ -53,10 +53,17 @@ void PWM_SignalStop()
 bool PWM_SinRegulation(uint16_t *Problem)
 {
 	*Problem = PROBLEM_NONE;
-
 	VIPair Sample = PWM_GetMeasureData();
-	PWM_AddToRMS(Sample);
 
+	// Защита от КЗ
+	if(Sample.Current > MEASURE_GetCurrentPeakLimit())
+	{
+		*Problem = PROBLEM_INSTANT_OVERCURRENT;
+		T1PWM_Stop();
+		return true;
+	}
+
+	PWM_AddToRMS(Sample);
 	PWM_ProcessPeriodRegulation(Problem);
 	PWM_ProcessInstantPWMOutput(Sample);
 
