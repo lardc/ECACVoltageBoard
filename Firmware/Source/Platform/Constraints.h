@@ -12,6 +12,7 @@
 
 #define REGULATOR_K_MAX			10000
 
+// в Ом
 #define SHUNT_RES_MIN			1
 #define SHUNT_RES_MAX			INT16U_MAX
 #define SHUNT_RES_DEF			1000
@@ -20,17 +21,25 @@
 #define TRANSFORMER_RATIO_MAX	30
 #define TRANSFORMER_RATIO_DEF	10
 
+// в В (RMS)
 #define VOLTAGE_OUTPUT_MIN		1
 #define VOLTAGE_OUTPUT_MAX		350
 #define VOLTAGE_OUTPUT_DEF		10
 
+// в В/сек
 #define VOLTAGE_RISE_RATE_MIN	10
 #define VOLTAGE_RISE_RATE_MAX	100
 #define VOLTAGE_RISE_RATE_DEF	10
 
-#define CURRENT_OUTPUT_MIN		1
-#define CURRENT_OUTPUT_MAX		1000
-#define CURRENT_OUTPUT_DEF		10
+// в мкА
+#define CURRENT_OUTPUT_UA_MIN	1
+#define CURRENT_OUTPUT_UA_MAX	6000
+#define CURRENT_OUTPUT_UA_DEF	10
+
+// в мА
+#define CURRENT_OUTPUT_MA_MIN	1
+#define CURRENT_OUTPUT_MA_MAX	200
+#define CURRENT_OUTPUT_MA_DEF	100
 
 // Types
 typedef struct __TableItemConstraint
