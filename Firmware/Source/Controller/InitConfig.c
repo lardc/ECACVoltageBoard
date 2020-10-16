@@ -53,7 +53,7 @@ void INITCFG_ConfigIO()
 	GPIO_InitAltFunction(GPIO_CTRL_PWM_1, AltFn_6);
 	GPIO_InitAltFunction(GPIO_CTRL_PWM_2, AltFn_6);
 	
-	LL_EnablePWMOut();
+	LL_EnablePWMOut(true);
 	LL_ConnectPOWRelay(false);
 	LL_ConnectCTRLRelay(false);
 }

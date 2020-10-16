@@ -38,17 +38,10 @@ void LL_ConnectCTRLRelay(bool NewState)
 }
 //-----------------------------
 
-void LL_EnablePWMOut()
+void LL_EnablePWMOut(bool NewState)
 {
-	GPIO_SetState(GPIO_CTRL_PWMSD_1, true);
-	GPIO_SetState(GPIO_CTRL_PWMSD_2, true);
-}
-//-----------------------------
-
-void LL_DisablePWMOut()
-{
-	GPIO_SetState(GPIO_CTRL_PWMSD_1, false);
-	GPIO_SetState(GPIO_CTRL_PWMSD_2, false);
+	GPIO_SetState(GPIO_CTRL_PWMSD_1, NewState);
+	GPIO_SetState(GPIO_CTRL_PWMSD_2, NewState);
 }
 //-----------------------------
 
