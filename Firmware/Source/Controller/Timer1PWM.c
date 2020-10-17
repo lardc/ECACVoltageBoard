@@ -21,7 +21,6 @@ void T1PWM_Init(uint32_t SystemClock, uint32_t Period)
 
 	// Стандартная инициализация
 	TIM_Clock_En(TIM_1);
-	TIM_Interupt(TIM1, 0, true);
 
 	TIM1->PSC = Prescaler;
 	TIM1->ARR = PWMBase;
@@ -45,8 +44,13 @@ void T1PWM_Init(uint32_t SystemClock, uint32_t Period)
 	T1PWM_SetDutyCycle(0);
 
 	// Инициализация обновления регистров
-	TIM1->EGR |= TIM_EGR_UG;
 	TIM1->SR &= ~TIM_SR_UIF;
+	TIM1->EGR |= TIM_EGR_UG;
+	while(!(TIM1->SR & TIM_SR_UIF));
+	TIM1->SR &= ~TIM_SR_UIF;
+
+	// Разрешение прерывания
+	TIM_Interupt(TIM1, 0, true);
 }
 //------------------------------------------------
 
@@ -89,5 +93,17 @@ void T1PWM_Stop()
 {
 	T1PWM_SetDutyCycle(0);
 	TIM_Stop(TIM1);
+
+	// Запрет прерывания и очистка флага
+	TIM1->DIER &= ~TIM_DIER_UIE;
+	TIM1->SR &= ~TIM_SR_UIF;
+
+	// Форсирование обновления регистров таймера
+	TIM1->EGR |= TIM_EGR_UG;
+	while(!(TIM1->SR & TIM_SR_UIF));
+	TIM1->SR &= ~TIM_SR_UIF;
+
+	// Разрешение прерывания
+	TIM1->DIER |= TIM_DIER_UIE;
 }
 //------------------------------------------------
