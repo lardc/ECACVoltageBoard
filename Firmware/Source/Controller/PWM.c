@@ -24,12 +24,14 @@ static float ActualSetVoltageRMS, ControlSetVoltageRMS, ControlSetVoltageMaxRMS,
 static float VoltageStorageRMS, CurrentStorageRMS;
 static float CurrentLimitRMS;
 static bool RequestSoftStop = false;
+static float FollowingErrorLevel;
+static uint16_t FollowingErrorCounter, FollowingErrorCounterMax;
 
 // Forward functions
 void PWM_CacheParameters();
 float PWM_GetInstantVoltageSetpoint();
 float PWM_ConvertVoltageToPWM(float Voltage);
-float PWM_GetControlAdjustment(float ActualRMSVoltage);
+float PWM_GetControlAdjustment(float Error);
 void PWM_SaveResultToDataTable(VIPair Pair);
 VIPair PWM_GetMeasureData();
 void PWM_AddToRMS(VIPair Pair);
@@ -81,11 +83,8 @@ void PWM_SaveResultToDataTable(VIPair Pair)
 }
 //------------------------------------------------
 
-float PWM_GetControlAdjustment(float ActualRMSVoltage)
+float PWM_GetControlAdjustment(float Error)
 {
-	// Регулятор
-	float Error = ActualSetVoltageRMS - ActualRMSVoltage;
-
 	// Если интегральная составляющая задана
 	if(Ki)
 	{
@@ -109,8 +108,24 @@ void PWM_ProcessPeriodRegulation(uint16_t *Problem)
 		if(RequestSoftStop)
 			PWM_SaveResultToDataTable(ValuesRMS);
 
+		// Расчёт величины ошибки
+		float Error = ActualSetVoltageRMS - ValuesRMS.Voltage;
+		float RelativeError = fabsf(Error / ActualSetVoltageRMS);
+
+		// Расчёт FollowingError
+		if(RelativeError >= FollowingErrorLevel)
+		{
+			if(++FollowingErrorCounter >= FollowingErrorCounterMax)
+			{
+				*Problem = PROBLEM_FOLLOWING_ERROR;
+				RequestSoftStop = true;
+			}
+		}
+		else
+			FollowingErrorCounter = 0;
+
 		// Получение корректировки по завершённому периоду
-		float Control = PWM_GetControlAdjustment(ValuesRMS.Voltage);
+		float Control = PWM_GetControlAdjustment(Error);
 
 		// Алгоритм нарастания уставки напряжения
 		if(ActualSetVoltageRMS < TargetVoltageRMS)
@@ -200,6 +215,7 @@ void PWM_CacheParameters()
 {
 	RequestSoftStop = false;
 
+	FollowingErrorCounter = 0;
 	PWMTimerCounter = 0;
 	ActualSetVoltageRMS = ControlSetVoltageRMS = 0;
 	VoltageStorageRMS = CurrentStorageRMS = 0;
@@ -214,5 +230,8 @@ void PWM_CacheParameters()
 	TransformerRatio = (float)DataTable[REG_PWM_TRANS_RATIO];
 	ControlSetVoltageMaxRMS = (float)DataTable[REG_PWM_OUT_VOLTAGE_LIMIT];
 	VoltageStepRMS = (float)DataTable[REG_PWM_VOLTAGE_RISE_RATE] / PWM_SINE_FREQ;
+
+	FollowingErrorLevel = (float)DataTable[REG_FE_LEVEL] / 100;
+	FollowingErrorCounterMax = DataTable[REG_FE_COUNTER_MAX];
 }
 //------------------------------------------------

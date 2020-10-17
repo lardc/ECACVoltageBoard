@@ -69,6 +69,10 @@
 #define REG_PWM_TRANS_RATIO				60	// Коэффициент трансформации
 #define REG_PWM_OUT_VOLTAGE_LIMIT		61	// Ограничение по выходному напряжению (в В)
 #define REG_PWM_VOLTAGE_RISE_RATE		62	// Скорость нарастания выходного напряжения (в В/с)
+// 63 - 69
+#define REG_FE_ENABLE					70	// Разрешение контроля FollowingError
+#define REG_FE_LEVEL					71	// Уровень ошибки срабатывания счётчика FE (в %)
+#define REG_FE_COUNTER_MAX				72	// Максимальное значение счётчика FE
 
 // Несохраняемы регистры чтения-записи
 #define REG_VOLTAGE_SETPOINT			128 // Действующее значение напряжения выходного сигнала, В
@@ -125,6 +129,7 @@
 #define PROBLEM_OUTPUT_SATURATION		1	// Напряжение регулирования достигло предела
 #define PROBLEM_RMS_OVER_CURRENT		2	// Превышение установленного действующего значения тока
 #define PROBLEM_INSTANT_OVERCURRENT		3	// Превышение мгновенного значения тока
+#define PROBLEM_FOLLOWING_ERROR			4	// Ошибка регулирования
 
 //  Warning
 #define WARNING_NONE					0

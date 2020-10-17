@@ -41,6 +41,14 @@
 #define CURRENT_OUTPUT_MA_MAX	200
 #define CURRENT_OUTPUT_MA_DEF	100
 
+#define FE_LEVEL_MIN			1
+#define FE_LEVEL_MAX			50
+#define FE_LEVEL_DEF			10
+
+#define FE_COUNTER_MIN			1
+#define FE_COUNTER_MAX			10
+#define FE_COUNTER_DEF			3
+
 // Types
 typedef struct __TableItemConstraint
 {
