@@ -38,6 +38,34 @@ void LL_ConnectCTRLRelay(bool NewState)
 }
 //-----------------------------
 
+void LL_OutputSelector(ACV_OutputLine OutputLine)
+{
+	switch(OutputLine)
+	{
+		case AC_None:
+			{
+				LL_ConnectPOWRelay(false);
+				LL_ConnectCTRLRelay(false);
+			}
+			break;
+
+		case AC_BUS_LV:
+			{
+				LL_ConnectPOWRelay(true);
+				LL_ConnectCTRLRelay(false);
+			}
+			break;
+
+		case AC_CTRL:
+			{
+				LL_ConnectPOWRelay(false);
+				LL_ConnectCTRLRelay(true);
+			}
+			break;
+	}
+}
+//-----------------------------
+
 void LL_EnablePWMOut(bool NewState)
 {
 	GPIO_SetState(GPIO_CTRL_PWMSD_1, NewState);
