@@ -186,8 +186,18 @@ static Boolean CONTROL_DispatchAction(Int16U ActionID, pInt16U pUserError)
 			{
 				if(CONTROL_State == DS_InProcess)
 				{
-					PWM_SignalStop();
-					CONTROL_SetDeviceState(DS_InProcess, DSS_RequestStop);
+					// Стандартная процедура завершения
+					if(CONTROL_SubState == DSS_None)
+					{
+						PWM_SignalStop();
+						CONTROL_SetDeviceState(DS_InProcess, DSS_RequestStop);
+					}
+					// Прерывание запуска
+					else if(CONTROL_SubState == DSS_ConnectRelays)
+					{
+						LL_OutputSelector(AC_None);
+						CONTROL_SetDeviceState(DS_Ready, DSS_None);
+					}
 				}
 				else if(CONTROL_State != DS_None)
 					*pUserError = ERR_OPERATION_BLOCKED;
