@@ -55,6 +55,13 @@
 #define VOLTAGE_READY_LVL_MAX	10
 #define VOLTAGE_READY_LVL_DEF	3
 
+typedef enum __ACV_OutputLine
+{
+	AC_None = 0,
+	AC_BUS_LV = 1,
+	AC_CTRL = 2
+} ACV_OutputLine;
+
 // Types
 typedef struct __TableItemConstraint
 {

@@ -92,6 +92,7 @@
 #define REG_WARNING						195	// Регистр Warning
 #define REG_PROBLEM						196	// Регистр Problem
 #define REG_OP_RESULT					197	// Регистр результата операции
+#define REG_SUB_STATE					198	// Регистр вспомогательного состояния
 
 #define REG_VOLTAGE_RESULT				200 // Результат измерения напряжения (в В)
 #define REG_CURRENT_RESULT				201 // Результат измерения тока (в мкА)

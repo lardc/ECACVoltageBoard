@@ -14,11 +14,32 @@
 #include "Measure.h"
 
 // Types
-//
+typedef enum __DeviceState
+{
+	DS_None = 0,
+	DS_Fault = 1,
+	DS_Disabled = 2,
+	DS_Ready = 3,
+	DS_InProcess = 4
+} DeviceState;
+
+typedef enum __DeviceSubState
+{
+	DSS_None = 0,
+
+	DSS_RequestStart = 1,
+	DSS_ConnectRelays = 2,
+	DSS_StartSignal = 3,
+
+	DSS_RequestStop = 4,
+	DSS_DisconnectRelays = 5
+} DeviceSubState;
+
 typedef void (*FUNC_AsyncDelegate)();
 
 // Variables
 //
+DeviceSubState CONTROL_SubState = DSS_None;
 volatile DeviceState CONTROL_State = DS_None;
 static Boolean CycleActive = false;
 volatile Int64U CONTROL_TimeCounter = 0;
@@ -37,11 +58,11 @@ volatile Int16U CONTROL_CounterRMS = 0;
 /// Forward functions
 //
 static Boolean CONTROL_DispatchAction(Int16U ActionID, pInt16U pUserError);
-void CONTROL_SetDeviceState(DeviceState NewState);
-void CONTROL_SwitchToFault(Int16U Reason);
+void CONTROL_SetDeviceState(DeviceState NewState, DeviceSubState NewSubState);
 void CONTROL_UpdateWatchDog();
 void CONTROL_ResetResults();
 void CONTROL_ResetToDefaultState();
+void CONTROL_ProcessSubStates();
 
 // Functions
 //
@@ -104,7 +125,7 @@ void CONTROL_ResetToDefaultState()
 	LL_ConnectCTRLRelay(false);
 
 	CONTROL_ResetResults();
-	CONTROL_SetDeviceState(DS_None);
+	CONTROL_SetDeviceState(DS_None, DSS_None);
 }
 //------------------------------------------
 
@@ -112,6 +133,8 @@ void CONTROL_Idle()
 {
 	DEVPROFILE_ProcessRequests();
 	CONTROL_UpdateWatchDog();
+
+	CONTROL_ProcessSubStates();
 }
 //------------------------------------------
 
@@ -124,7 +147,7 @@ static Boolean CONTROL_DispatchAction(Int16U ActionID, pInt16U pUserError)
 		case ACT_ENABLE_POWER:
 			{
 				if(CONTROL_State == DS_None)
-					CONTROL_SetDeviceState(DS_Ready);
+					CONTROL_SetDeviceState(DS_Ready, DSS_None);
 				else if(CONTROL_State != DS_Ready)
 					*pUserError = ERR_OPERATION_BLOCKED;
 			}
@@ -156,7 +179,7 @@ static Boolean CONTROL_DispatchAction(Int16U ActionID, pInt16U pUserError)
 				MEASURE_SetMeasureRange();
 				PWM_CacheParameters();
 				DELAY_MS(200);
-				CONTROL_SetDeviceState(DS_InProcess);
+				CONTROL_SetDeviceState(DS_InProcess, DSS_RequestStart);
 				PWM_SignalStart();
 			}
 			break;
@@ -164,7 +187,7 @@ static Boolean CONTROL_DispatchAction(Int16U ActionID, pInt16U pUserError)
 		case ACT_STOP_SIGNAL:
 			{
 				PWM_SignalStop();
-				CONTROL_SetDeviceState(DS_Ready);
+				CONTROL_SetDeviceState(DS_InProcess, DSS_RequestStop);
 			}
 			break;
 
@@ -176,24 +199,40 @@ static Boolean CONTROL_DispatchAction(Int16U ActionID, pInt16U pUserError)
 }
 //------------------------------------------
 
+void CONTROL_ProcessSubStates()
+{
+	static Int64U Timeout = 0;
+	if(CONTROL_State == DS_InProcess)
+	{
+		switch(CONTROL_SubState)
+		{
+			case DSS_RequestStart:
+				{
+
+				}
+				break;
+
+			default:
+				break;
+		}
+	}
+}
+//------------------------------------------
+
 void CONTROL_ProcessPWMStop(uint16_t Problem)
 {
 	DataTable[REG_PROBLEM] = Problem;
-	CONTROL_SetDeviceState(DS_Ready);
+	CONTROL_SetDeviceState(DS_InProcess, DSS_RequestStop);
 }
 //------------------------------------------
 
-void CONTROL_SwitchToFault(Int16U Reason)
-{
-	CONTROL_SetDeviceState(DS_Fault);
-	DataTable[REG_FAULT_REASON] = Reason;
-}
-//------------------------------------------
-
-void CONTROL_SetDeviceState(DeviceState NewState)
+void CONTROL_SetDeviceState(DeviceState NewState, DeviceSubState NewSubState)
 {
 	CONTROL_State = NewState;
 	DataTable[REG_DEV_STATE] = NewState;
+
+	CONTROL_SubState = NewSubState;
+	DataTable[REG_SUB_STATE] = NewSubState;
 }
 //------------------------------------------
 
