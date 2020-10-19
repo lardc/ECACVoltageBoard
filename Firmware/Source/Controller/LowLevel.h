@@ -3,6 +3,7 @@
 
 // Include
 #include "stdinc.h"
+#include "Global.h"
 
 // Functions
 void LL_ToggleBoardLED();

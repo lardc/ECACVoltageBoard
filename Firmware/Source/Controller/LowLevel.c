@@ -4,7 +4,6 @@
 // Includes
 #include "Board.h"
 #include "Delay.h"
-#include "Global.h"
 #include "SysConfig.h"
 
 // Functions
