@@ -113,7 +113,7 @@ void PWM_ProcessPeriodRegulation(uint16_t *Problem)
 		float RelativeError = fabsf(Error / ActualSetVoltageRMS);
 
 		// Расчёт FollowingError
-		if(RelativeError >= FollowingErrorLevel)
+		if((RelativeError >= FollowingErrorLevel) && (DataTable[REG_FE_ENABLE] == true))
 		{
 			if(++FollowingErrorCounter >= FollowingErrorCounterMax)
 			{
@@ -170,7 +170,7 @@ void PWM_ProcessInstantPWMOutput(VIPair Pair)
 	MU_LogFast(InstantVoltage, PWMSetpoint, Pair.Voltage, Pair.Current);
 
 	// Обработка запроса остановки
-	if(RequestSoftStop)
+	if(RequestSoftStop && (PWMTimerCounter == 0))
 		T1PWM_Stop();
 	else
 		T1PWM_SetDutyCycle(PWMSetpoint);
