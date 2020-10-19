@@ -69,6 +69,7 @@
 #define REG_PWM_TRANS_RATIO				60	// Коэффициент трансформации
 #define REG_PWM_OUT_VOLTAGE_LIMIT		61	// Ограничение по выходному напряжению (в В)
 #define REG_PWM_VOLTAGE_RISE_RATE		62	// Скорость нарастания выходного напряжения (в В/с)
+#define REG_PWM_VOLTAGE_READY_THR		63	// Относительная погрешность срабатывания флага готовности напряжения (в %)
 // 63 - 69
 #define REG_FE_ENABLE					70	// Разрешение контроля FollowingError
 #define REG_FE_LEVEL					71	// Уровень ошибки срабатывания счётчика FE (в %)
@@ -95,6 +96,7 @@
 #define REG_VOLTAGE_RESULT				200 // Результат измерения напряжения (в В)
 #define REG_CURRENT_RESULT				201 // Результат измерения тока (в мкА)
 #define REG_CURRENT_RESULT_32			202 // Результат измерения тока (в мкА)
+#define REG_VOLTAGE_READY				203	// Флаг готовности напряжения
 
 #define REG_EP_LAST_POINTER_FAST		250	// Указатель на последий элемент быстрого логгирования
 #define REG_EP_LAST_POINTER_RMS			251	// Указатель на последий элемент логгирования RMS

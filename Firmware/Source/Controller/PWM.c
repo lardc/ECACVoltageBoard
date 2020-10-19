@@ -24,7 +24,7 @@ static float ActualSetVoltageRMS, ControlSetVoltageRMS, ControlSetVoltageMaxRMS,
 static float VoltageStorageRMS, CurrentStorageRMS;
 static float CurrentLimitRMS;
 static bool RequestSoftStop = false;
-static float FollowingErrorLevel;
+static float FollowingErrorLevel, VoltageReadyErrorLevel;
 static uint16_t FollowingErrorCounter, FollowingErrorCounterMax;
 
 // Forward functions
@@ -123,6 +123,10 @@ void PWM_ProcessPeriodRegulation(uint16_t *Problem)
 		}
 		else
 			FollowingErrorCounter = 0;
+
+		// Проверка готовности напряжения
+		if(VoltageReadyErrorLevel <= RelativeError && ActualSetVoltageRMS == TargetVoltageRMS)
+			DataTable[REG_VOLTAGE_READY] = 1;
 
 		// Получение корректировки по завершённому периоду
 		float Control = PWM_GetControlAdjustment(Error);
@@ -233,5 +237,7 @@ void PWM_CacheParameters()
 
 	FollowingErrorLevel = (float)DataTable[REG_FE_LEVEL] / 100;
 	FollowingErrorCounterMax = DataTable[REG_FE_COUNTER_MAX];
+
+	VoltageReadyErrorLevel = (float)DataTable[REG_PWM_VOLTAGE_READY_THR] / 100;
 }
 //------------------------------------------------

@@ -81,7 +81,7 @@ const TableItemConstraint NVConstraint[DATA_TABLE_NV_SIZE] = {
 		{NO, YES, NO},																// 70
 		{FE_LEVEL_MIN, FE_LEVEL_MAX, FE_LEVEL_DEF},									// 71
 		{FE_COUNTER_MIN, FE_COUNTER_MAX, FE_COUNTER_DEF},							// 72
-		{0, 0, 0},																	// 73
+		{VOLTAGE_READY_LVL_MIN, VOLTAGE_READY_LVL_MAX, VOLTAGE_READY_LVL_DEF},		// 73
 		{0, 0, 0},																	// 74
 		{0, 0, 0},																	// 75
 		{0, 0, 0},																	// 76
