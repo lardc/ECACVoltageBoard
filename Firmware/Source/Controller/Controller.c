@@ -256,6 +256,7 @@ void CONTROL_ProcessSubStates()
 
 void CONTROL_ProcessPWMStop(uint16_t Problem)
 {
+	DataTable[REG_OP_RESULT] = (Problem == PROBLEM_NONE) ? OPRESULT_OK : OPRESULT_FAIL;
 	DataTable[REG_PROBLEM] = Problem;
 	CONTROL_SetDeviceState(DS_InProcess, DSS_DisconnectRelays);
 }
