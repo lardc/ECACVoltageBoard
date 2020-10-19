@@ -29,10 +29,10 @@ typedef enum __DeviceSubState
 
 	DSS_RequestStart = 1,
 	DSS_ConnectRelays = 2,
-	DSS_StartSignal = 3,
 
-	DSS_RequestStop = 4,
-	DSS_DisconnectRelays = 5
+	DSS_RequestStop = 3,
+	DSS_DisconnectRelays = 4,
+	DSS_WaitDisconnection = 5
 } DeviceSubState;
 
 typedef void (*FUNC_AsyncDelegate)();
@@ -175,19 +175,22 @@ static Boolean CONTROL_DispatchAction(Int16U ActionID, pInt16U pUserError)
 
 		case ACT_START_SIGNAL:
 			{
-				CONTROL_ResetResults();
-				MEASURE_SetMeasureRange();
-				PWM_CacheParameters();
-				DELAY_MS(200);
-				CONTROL_SetDeviceState(DS_InProcess, DSS_RequestStart);
-				PWM_SignalStart();
+				if(CONTROL_State == DS_Ready)
+					CONTROL_SetDeviceState(DS_InProcess, DSS_RequestStart);
+				else
+					*pUserError = ERR_DEVICE_NOT_READY;
 			}
 			break;
 
 		case ACT_STOP_SIGNAL:
 			{
-				PWM_SignalStop();
-				CONTROL_SetDeviceState(DS_InProcess, DSS_RequestStop);
+				if(CONTROL_State == DS_InProcess)
+				{
+					PWM_SignalStop();
+					CONTROL_SetDeviceState(DS_InProcess, DSS_RequestStop);
+				}
+				else if(CONTROL_State != DS_None)
+					*pUserError = ERR_OPERATION_BLOCKED;
 			}
 			break;
 
@@ -208,7 +211,39 @@ void CONTROL_ProcessSubStates()
 		{
 			case DSS_RequestStart:
 				{
+					CONTROL_ResetResults();
+					LL_OutputSelector(DataTable[REG_OUTPUT_LINE]);
+					MEASURE_SetMeasureRange();
+					PWM_CacheParameters();
 
+					Timeout = CONTROL_TimeCounter + RELAY_SWITCH_DELAY;
+					CONTROL_SetDeviceState(DS_InProcess, DSS_ConnectRelays);
+				}
+				break;
+
+			case DSS_ConnectRelays:
+				{
+					if(CONTROL_TimeCounter > Timeout)
+					{
+						PWM_SignalStart();
+						CONTROL_SetDeviceState(DS_InProcess, DSS_None);
+					}
+				}
+				break;
+
+			case DSS_DisconnectRelays:
+				{
+					LL_OutputSelector(AC_None);
+
+					Timeout = CONTROL_TimeCounter + RELAY_SWITCH_DELAY;
+					CONTROL_SetDeviceState(DS_InProcess, DSS_WaitDisconnection);
+				}
+				break;
+
+			case DSS_WaitDisconnection:
+				{
+					if(CONTROL_TimeCounter > Timeout)
+						CONTROL_SetDeviceState(DS_Ready, DSS_None);
 				}
 				break;
 
@@ -222,7 +257,7 @@ void CONTROL_ProcessSubStates()
 void CONTROL_ProcessPWMStop(uint16_t Problem)
 {
 	DataTable[REG_PROBLEM] = Problem;
-	CONTROL_SetDeviceState(DS_InProcess, DSS_RequestStop);
+	CONTROL_SetDeviceState(DS_InProcess, DSS_DisconnectRelays);
 }
 //------------------------------------------
 
