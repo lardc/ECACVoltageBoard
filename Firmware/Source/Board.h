@@ -34,7 +34,7 @@ GPIO_PortPinSettingMacro GPIO_U_RANGE = {GPIOB, Pin_15};
 
 // Определения для входныхпортов
 GPIO_PortPinSettingMacro GPIO_MEAS_U = {GPIOA, Pin_0};
-GPIO_PortPinSettingMacro GPIO_MEAS_I = {GPIOA, Pin_4};
+GPIO_PortPinSettingMacro GPIO_MEAS_I = {GPIOA, Pin_5};
 GPIO_PortPinSettingMacro GPIO_SYNC_1 = {GPIOB, Pin_6};
 GPIO_PortPinSettingMacro GPIO_SYNC_2 = {GPIOB, Pin_7};
 
