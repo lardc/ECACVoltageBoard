@@ -30,7 +30,13 @@
 #define REG_CURRENT_RANGE1_RES			2	// Сопротивление шунта диаразона тока 1
 #define REG_CURRENT_RANGE2_RES			3	// Сопротивление шунта диаразона тока 2
 #define REG_CURRENT_RANGE3_RES			4	// Сопротивление шунта диаразона тока 3
-// 5 - 9
+
+#define REG_ADC_V1_CONV_K_DENOM			5	// Знаменатель коэфф пересчета напряжения диапазона 1 x1000
+#define REG_ADC_V2_CONV_K_DENOM			6	// Знаменатель коэфф пересчета напряжения диапазона 1 x1000
+#define REG_ADC_I1_CONV_K_DENOM			7	// Знаменатель коэфф пересчета тока диапазона 1 x1000
+#define REG_ADC_I2_CONV_K_DENOM			8	// Знаменатель коэфф пересчета тока диапазона 2 x1000
+#define REG_ADC_I3_CONV_K_DENOM			9	// Знаменатель коэфф пересчета тока диапазона 3 x1000
+
 #define REG_VOLTAGE_RANGE1_LIMIT		10	// Граница диапазона 1 по действующему напряжению (в В)
 #define REG_CURRENT_RANGE1_LIMIT		11	// Граница диапазона 1 по действующему току (в мкА)
 #define REG_CURRENT_RANGE2_LIMIT		12	// Граница диапазона 2 по действующему току (в мкА)

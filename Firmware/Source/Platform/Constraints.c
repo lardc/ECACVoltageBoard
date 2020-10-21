@@ -13,11 +13,11 @@ const TableItemConstraint NVConstraint[DATA_TABLE_NV_SIZE] = {
 		{SHUNT_RES_MIN, SHUNT_RES_MAX, SHUNT_RES_DEF},								// 2
 		{SHUNT_RES_MIN, SHUNT_RES_MAX, SHUNT_RES_DEF},								// 3
 		{SHUNT_RES_MIN, SHUNT_RES_MAX, SHUNT_RES_DEF},								// 4
-		{0, 0, 0},																	// 5
-		{0, 0, 0},																	// 6
-		{0, 0, 0},																	// 7
-		{0, 0, 0},																	// 8
-		{0, 0, 0},																	// 9
+		{1, INT16U_MAX, 1000},														// 5
+		{1, INT16U_MAX, 1000},														// 6
+		{1, INT16U_MAX, 1000},														// 7
+		{1, INT16U_MAX, 1000},														// 8
+		{1, INT16U_MAX, 1000},														// 9
 		{VOLTAGE_OUTPUT_MIN, VOLTAGE_OUTPUT_MAX, VOLTAGE_OUTPUT_DEF},				// 10
 		{CURRENT_OUTPUT_UA_MIN, CURRENT_OUTPUT_UA_MAX, CURRENT_OUTPUT_UA_DEF},		// 11
 		{CURRENT_OUTPUT_UA_MIN, CURRENT_OUTPUT_UA_MAX, CURRENT_OUTPUT_UA_DEF},		// 12
