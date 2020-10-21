@@ -39,7 +39,7 @@
 #define DMA_ADC2_I_CHANNEL				DMA2_Channel1	// Канал DMA для АЦП тока
 //
 #define ADC1_VOLTAGE_CHANNEL			1				// АЦП1 номер канала напряжения
-#define ADC2_CURRENT_CHANNEL			1				// АЦП2 номер канала тока
+#define ADC2_CURRENT_CHANNEL			2				// АЦП2 номер канала тока
 // ----------------------------------------------
 
 #endif // __SYSCONFIG_H
