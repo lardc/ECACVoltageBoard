@@ -9,6 +9,7 @@
 #include "DataTable.h"
 #include "SysConfig.h"
 #include "LogUtils.h"
+#include "LowLevel.h"
 
 // Types
 typedef struct __VIPair
@@ -42,6 +43,7 @@ void PWM_ProcessInstantPWMOutput(VIPair Pair);
 // Functions
 void PWM_SignalStart()
 {
+	LL_SetStateRedLed(true);
 	T1PWM_Start();
 }
 //------------------------------------------------
@@ -62,13 +64,13 @@ bool PWM_SinRegulation(uint16_t *Problem)
 	{
 		*Problem = PROBLEM_INSTANT_OVERCURRENT;
 		T1PWM_Stop();
+		LL_SetStateRedLed(true);
 		return true;
 	}
 
 	PWM_AddToRMS(Sample);
 	PWM_ProcessPeriodRegulation(Problem);
 	PWM_ProcessInstantPWMOutput(Sample);
-
 	return RequestSoftStop;
 }
 //------------------------------------------------
@@ -171,7 +173,10 @@ void PWM_ProcessInstantPWMOutput(VIPair Pair)
 
 	// Обработка запроса остановки
 	if(RequestSoftStop && (PWMTimerCounter == 0))
+	{
 		T1PWM_Stop();
+		LL_SetStateRedLed(false);
+	}
 	else
 		T1PWM_SetDutyCycle(PWMSetpoint);
 }

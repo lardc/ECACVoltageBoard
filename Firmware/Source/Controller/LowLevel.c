@@ -81,3 +81,8 @@ void LL_DMAReload()
 	DMA_ChannelEnable(DMA_ADC2_I_CHANNEL, true);
 }
 //-----------------------------
+
+void LL_SetStateRedLed(bool NewState)
+{
+	GPIO_SetState(GPIO_LED_EXT, NewState);
+}

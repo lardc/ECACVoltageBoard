@@ -14,5 +14,6 @@ void LL_ConnectCTRLRelay(bool NewState);
 void LL_EnablePWMOut(bool NewState);
 void LL_DMAReload();
 void LL_OutputSelector(ACV_OutputLine OutputLine);
+void LL_SetStateRedLed(bool NewState);
 
 #endif //__LOWLEVEL_H
