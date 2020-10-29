@@ -6,6 +6,7 @@
 #include "DataTable.h"
 #include "Controller.h"
 #include "Global.h"
+#include "Measure.h"
 
 // Functions
 void MU_LogFast(float VSet, float PWMSet, float ResultV, float ResultI)
@@ -23,6 +24,10 @@ void MU_LogFast(float VSet, float PWMSet, float ResultV, float ResultI)
 		CONTROL_VSetFast[LocalCounter] = (int16_t)VSet;
 		CONTROL_PWMSetFast[LocalCounter] = (int16_t)PWMSet;
 		CONTROL_VResultFast[LocalCounter] = (int16_t)ResultV;
+
+		if(MEASURE_InMilliAmperes)
+			ResultI /= 1000;
+
 		CONTROL_IResultFast[LocalCounter] = (int16_t)ResultI;
 		
 		// Сохранение указателя на последний элемент

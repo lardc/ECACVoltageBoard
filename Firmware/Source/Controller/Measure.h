@@ -8,6 +8,7 @@
 // Variables
 extern volatile uint16_t ADC1DMAVoltageBuffer[];
 extern volatile uint16_t ADC2DMACurrentBuffer[];
+extern volatile bool MEASURE_InMilliAmperes;
 
 // Functions
 void MEASURE_SetMeasureRange();
