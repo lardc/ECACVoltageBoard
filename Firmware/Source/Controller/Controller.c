@@ -31,8 +31,9 @@ typedef enum __DeviceSubState
 	DSS_ConnectRelays = 2,
 
 	DSS_RequestStop = 3,
-	DSS_DisconnectRelays = 4,
-	DSS_WaitDisconnection = 5
+	DSS_RequestDisconnect = 4,
+	DSS_DisconnectRelays = 5,
+	DSS_WaitDisconnection = 6
 } DeviceSubState;
 
 typedef void (*FUNC_AsyncDelegate)();
@@ -188,10 +189,7 @@ static Boolean CONTROL_DispatchAction(Int16U ActionID, pInt16U pUserError)
 				{
 					// Стандартная процедура завершения
 					if(CONTROL_SubState == DSS_None)
-					{
-						PWM_SignalStop();
 						CONTROL_SetDeviceState(DS_InProcess, DSS_RequestStop);
-					}
 					// Прерывание запуска
 					else if(CONTROL_SubState == DSS_ConnectRelays)
 					{
@@ -241,12 +239,28 @@ void CONTROL_ProcessSubStates()
 				}
 				break;
 
+			case DSS_RequestStop:
+				{
+					PWM_SignalStop();
+				}
+				break;
+
+			case DSS_RequestDisconnect:
+				{
+					Timeout = CONTROL_TimeCounter + RELAY_SWITCH_DELAY;
+					CONTROL_SetDeviceState(DS_InProcess, DSS_DisconnectRelays);
+				}
+				break;
+
 			case DSS_DisconnectRelays:
 				{
-					LL_OutputSelector(AC_None);
+					if(CONTROL_TimeCounter > Timeout)
+					{
+						LL_OutputSelector(AC_None);
 
-					Timeout = CONTROL_TimeCounter + RELAY_SWITCH_DELAY;
-					CONTROL_SetDeviceState(DS_InProcess, DSS_WaitDisconnection);
+						Timeout = CONTROL_TimeCounter + RELAY_SWITCH_DELAY;
+						CONTROL_SetDeviceState(DS_InProcess, DSS_WaitDisconnection);
+					}
 				}
 				break;
 
@@ -268,7 +282,7 @@ void CONTROL_ProcessPWMStop(uint16_t Problem)
 {
 	DataTable[REG_OP_RESULT] = (Problem == PROBLEM_NONE) ? OPRESULT_OK : OPRESULT_FAIL;
 	DataTable[REG_PROBLEM] = Problem;
-	CONTROL_SetDeviceState(DS_InProcess, DSS_DisconnectRelays);
+	CONTROL_SetDeviceState(DS_InProcess, DSS_RequestDisconnect);
 }
 //------------------------------------------
 
