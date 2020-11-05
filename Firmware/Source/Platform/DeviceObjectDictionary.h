@@ -82,10 +82,11 @@
 #define REG_FE_COUNTER_MAX				72	// Максимальное значение счётчика FE
 
 // Несохраняемы регистры чтения-записи
-#define REG_VOLTAGE_SETPOINT			128 // Действующее значение напряжения выходного сигнала, В
-#define REG_CURRENT_SETPOINT			129 // Действующее значение тока выходного сигнала - младшее слово, мкА
-#define REG_CURRENT_SETPOINT_32			130 // Действующее значение тока выходного сигнала - старшее слово, мкА
-#define REG_OUTPUT_LINE					131 // Канал подачи выходного сигнала
+#define REG_VOLTAGE_SETPOINT			128 // Действующее значение напряжения выходного сигнала - младшее слово, мВ
+#define REG_VOLTAGE_SETPOINT_32			129 // Действующее значение напряжения выходного сигнала - старшее слово, мВ
+#define REG_CURRENT_SETPOINT			130 // Действующее значение тока выходного сигнала - младшее слово, мкА
+#define REG_CURRENT_SETPOINT_32			131 // Действующее значение тока выходного сигнала - старшее слово, мкА
+#define REG_OUTPUT_LINE					132 // Канал подачи выходного сигнала
 
 #define REG_SCOPE_RATE					150	// Шаг логгирования в эндпоинты
 
@@ -100,10 +101,11 @@
 #define REG_OP_RESULT					197	// Регистр результата операции
 #define REG_SUB_STATE					198	// Регистр вспомогательного состояния
 
-#define REG_VOLTAGE_RESULT				200 // Результат измерения напряжения (в В)
-#define REG_CURRENT_RESULT				201 // Результат измерения тока (в мкА)
-#define REG_CURRENT_RESULT_32			202 // Результат измерения тока (в мкА)
-#define REG_VOLTAGE_READY				203	// Флаг готовности напряжения
+#define REG_VOLTAGE_RESULT				200 // Результат измерения напряжения (в мВ)
+#define REG_VOLTAGE_RESULT_32			201 // Результат измерения напряжения (в мВ)
+#define REG_CURRENT_RESULT				202 // Результат измерения тока (в мкА)
+#define REG_CURRENT_RESULT_32			203 // Результат измерения тока (в мкА)
+#define REG_VOLTAGE_READY				204	// Флаг готовности напряжения
 
 #define REG_EP_LAST_POINTER_FAST		250	// Указатель на последий элемент быстрого логгирования
 #define REG_EP_LAST_POINTER_RMS			251	// Указатель на последий элемент логгирования RMS

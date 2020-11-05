@@ -139,11 +139,11 @@ const TableItemConstraint NVConstraint[DATA_TABLE_NV_SIZE] = {
 };
 
 const TableItemConstraint VConstraint[DATA_TABLE_WP_START - DATA_TABLE_WR_START] = {
-		{VOLTAGE_OUTPUT_MIN, VOLTAGE_OUTPUT_MAX, VOLTAGE_OUTPUT_DEF},				// 128
+		{0, INT16U_MAX, 0},															// 128
 		{0, INT16U_MAX, 0},															// 129
 		{0, INT16U_MAX, 0},															// 130
-		{AC_None, AC_CTRL, AC_None},												// 131
-		{0, 0, 0},																	// 132
+		{0, INT16U_MAX, 0},															// 131
+		{AC_None, AC_CTRL, AC_None},												// 132
 		{0, 0, 0},																	// 133
 		{0, 0, 0},																	// 134
 		{0, 0, 0},																	// 135
