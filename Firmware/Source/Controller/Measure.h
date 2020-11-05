@@ -11,6 +11,7 @@ extern volatile uint16_t ADC2DMACurrentBuffer[];
 extern volatile bool MEASURE_InMilliAmperes;
 
 // Functions
+bool MEASURE_InputParametersCorrect();
 void MEASURE_SetMeasureRange();
 float MEASURE_Voltage();
 float MEASURE_Current();

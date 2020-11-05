@@ -6,6 +6,7 @@
 #include "math.h"
 #include "Global.h"
 #include "DataTable.h"
+#include "Constraints.h"
 
 // Types
 typedef struct __MeasureSettings
@@ -22,7 +23,7 @@ typedef struct __MeasureSettings
 volatile uint16_t ADC1DMAVoltageBuffer[ADC_DMA_BUFF_SIZE] = {0};
 volatile uint16_t ADC2DMACurrentBuffer[ADC_DMA_BUFF_SIZE] = {0};
 static MeasureSettings VoltageSettings, CurrentSettings;
-static float CachedCurrentPeakLimit;
+static float CachedVoltage, CachedCurrent, CachedCurrentPeakLimit;
 volatile bool MEASURE_InMilliAmperes = false;
 
 // Forward functions
@@ -36,15 +37,32 @@ void MEASURE_CacheCurrentSettings(uint16_t RegKN, uint16_t RegKD, uint16_t Offse
 float MEASURE_ArrayToValue(pMeasureSettings Storage, uint16_t *Data, uint16_t DataLen);
 
 // Functions
-void MEASURE_SetMeasureRange()
+bool MEASURE_InputParametersCorrect()
 {
 	// Уставка напряжения (в В)
 	float Voltage = (float)DT_Read32(REG_VOLTAGE_SETPOINT, REG_VOLTAGE_SETPOINT_32) / 1000;
-	MEASURE_SetVoltageRange(Voltage);
 
 	// Уставка тока (в мкА)
 	float Current = (float)DT_Read32(REG_CURRENT_SETPOINT, REG_CURRENT_SETPOINT_32);
-	MEASURE_SetCurrentRange(Current);
+
+	bool ParametersOk = true;
+	ParametersOk &= (Voltage >= VOLTAGE_OUTPUT_MIN) && (Voltage <= VOLTAGE_OUTPUT_MAX);
+	ParametersOk &= (Current >= CURRENT_OUTPUT_MIN) && (Current <= CURRENT_OUTPUT_MAX);
+
+	if(ParametersOk)
+	{
+		CachedVoltage = Voltage;
+		CachedCurrent = Current;
+	}
+
+	return ParametersOk;
+}
+//------------------------------------------------
+
+void MEASURE_SetMeasureRange()
+{
+	MEASURE_SetVoltageRange(CachedVoltage);
+	MEASURE_SetCurrentRange(CachedCurrent);
 }
 //------------------------------------------------
 

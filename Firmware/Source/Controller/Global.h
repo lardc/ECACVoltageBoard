@@ -11,6 +11,10 @@
 // Временные параметры
 #define TIME_LED_BLINK			500		// Мигание светодиодом (в мс)
 
+// Ограничения задаваемой величины тока (в мкА)
+#define CURRENT_OUTPUT_MIN		10
+#define CURRENT_OUTPUT_MAX		110000
+
 // Параметры оцифровки
 #define ADC_REF_VOLTAGE			3300.0f	// Опорное напряжение (в В)
 #define ADC_RESOLUTION			4095	// Разрешение АЦП

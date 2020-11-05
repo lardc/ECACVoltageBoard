@@ -4,7 +4,6 @@
 // Include
 #include "stdinc.h"
 #include "DataTable.h"
-#include "Global.h"
 
 // Definitions
 #define NO		0

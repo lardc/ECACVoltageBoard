@@ -178,7 +178,12 @@ static Boolean CONTROL_DispatchAction(Int16U ActionID, pInt16U pUserError)
 		case ACT_START_SIGNAL:
 			{
 				if(CONTROL_State == DS_Ready)
-					CONTROL_SetDeviceState(DS_InProcess, DSS_RequestStart);
+				{
+					if(MEASURE_InputParametersCorrect())
+						CONTROL_SetDeviceState(DS_InProcess, DSS_RequestStart);
+					else
+						*pUserError = ERR_BAD_CONFIG;
+				}
 				else
 					*pUserError = ERR_DEVICE_NOT_READY;
 			}

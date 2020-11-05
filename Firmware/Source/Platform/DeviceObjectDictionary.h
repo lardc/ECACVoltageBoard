@@ -151,5 +151,6 @@
 #define ERR_OPERATION_BLOCKED			2	//  Операция не может быть выполнена в текущем состоянии устройства
 #define ERR_DEVICE_NOT_READY			3	//  Устройство не готово для смены состояния
 #define ERR_WRONG_PWD					4	//  Неправильный ключ
+#define ERR_BAD_CONFIG					5	//  Попытка запуска измерения с неверной конфигурацией
 
 #endif //  __DEV_OBJ_DIC_H
