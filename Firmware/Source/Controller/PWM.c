@@ -77,11 +77,8 @@ bool PWM_SinRegulation(uint16_t *Problem)
 
 void PWM_SaveResultToDataTable(VIPair Pair)
 {
-	DataTable[REG_VOLTAGE_RESULT] = (uint16_t)Pair.Voltage;
-
-	uint32_t CurrentInt = (uint32_t)Pair.Current;
-	DataTable[REG_CURRENT_RESULT] = CurrentInt;
-	DataTable[REG_CURRENT_RESULT_32] = CurrentInt >> 16;
+	DT_Write32(REG_VOLTAGE_RESULT, REG_VOLTAGE_RESULT_32, Pair.Voltage * 1000);
+	DT_Write32(REG_CURRENT_RESULT, REG_CURRENT_RESULT_32, Pair.Current);
 }
 //------------------------------------------------
 

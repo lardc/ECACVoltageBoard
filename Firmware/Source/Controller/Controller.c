@@ -109,6 +109,7 @@ void CONTROL_ResetResults()
 	DataTable[REG_OP_RESULT] = OPRESULT_NONE;
 
 	DataTable[REG_VOLTAGE_RESULT] = 0;
+	DataTable[REG_VOLTAGE_RESULT_32] = 0;
 	DataTable[REG_CURRENT_RESULT] = 0;
 	DataTable[REG_CURRENT_RESULT_32] = 0;
 	DataTable[REG_VOLTAGE_READY] = 0;
