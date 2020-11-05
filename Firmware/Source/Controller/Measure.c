@@ -11,7 +11,6 @@
 typedef struct __MeasureSettings
 {
 	float K;
-	float KDenom;
 	float Offset;
 	float P2;
 	float P1;
@@ -29,10 +28,10 @@ volatile bool MEASURE_InMilliAmperes = false;
 // Forward functions
 void MEASURE_SetCurrentRange(uint32_t Current);
 void MEASURE_SetVoltageRange(uint16_t Voltage);
-void MEASURE_CacheSettings(pMeasureSettings Storage, uint16_t RegK, uint16_t RegKDenom, uint16_t Offset, uint16_t RegP2, uint16_t RegP1,
+void MEASURE_CacheSettings(pMeasureSettings Storage, uint16_t RegKN, uint16_t RegKD, uint16_t Offset, uint16_t RegP2, uint16_t RegP1,
 		uint16_t RegP0);
-void MEASURE_CacheVoltageSettings(uint16_t RegK, uint16_t RegKDenom, uint16_t Offset, uint16_t RegP2, uint16_t RegP1, uint16_t RegP0);
-void MEASURE_CacheCurrentSettings(uint16_t RegK, uint16_t RegKDenom, uint16_t Offset, uint16_t RegP2, uint16_t RegP1, uint16_t RegP0,
+void MEASURE_CacheVoltageSettings(uint16_t RegKN, uint16_t RegKD, uint16_t Offset, uint16_t RegP2, uint16_t RegP1, uint16_t RegP0);
+void MEASURE_CacheCurrentSettings(uint16_t RegKN, uint16_t RegKD, uint16_t Offset, uint16_t RegP2, uint16_t RegP1, uint16_t RegP0,
 		uint16_t RegShunt);
 float MEASURE_ArrayToValue(pMeasureSettings Storage, uint16_t *Data, uint16_t DataLen);
 
@@ -104,12 +103,10 @@ void MEASURE_SetVoltageRange(uint16_t Voltage)
 }
 //------------------------------------------------
 
-void MEASURE_CacheSettings(pMeasureSettings Storage, uint16_t RegK, uint16_t RegKDenom, uint16_t Offset, uint16_t RegP2,
+void MEASURE_CacheSettings(pMeasureSettings Storage, uint16_t RegKN, uint16_t RegKD, uint16_t Offset, uint16_t RegP2,
 		uint16_t RegP1, uint16_t RegP0)
 {
-	Storage->K = (float)DataTable[RegK] / 1000;
-	Storage->KDenom = (float)DataTable[RegKDenom] / 1000;
-
+	Storage->K = (float)DataTable[RegKN] / DataTable[RegKD];
 	Storage->Offset = (float)((int16_t)DataTable[Offset]);
 	
 	Storage->P2 = (float)((int16_t)DataTable[RegP2]) / 1e6;
@@ -139,16 +136,12 @@ float MEASURE_ArrayToValue(pMeasureSettings Storage, uint16_t *Data, uint16_t Da
 {
 	// Рассчёт среднего
 	float tmp = 0;
-	float K;
 	for(uint8_t i = 0; i < DataLen; ++i)
 		tmp += (float)Data[i];
 	tmp /= DataLen;
 
-	// Получение коэффициента пропорциональности
-	K = Storage->K / Storage->KDenom;
-
 	// Пересчёт тиков в милливольты
-	tmp = (tmp * ADC_REF_VOLTAGE / ADC_RESOLUTION + Storage->Offset) * K;
+	tmp = (tmp * ADC_REF_VOLTAGE / ADC_RESOLUTION + Storage->Offset) * Storage->K;
 
 	// Для канала тока - пересчёт в ток
 	if(Storage->Rshunt != 0)
