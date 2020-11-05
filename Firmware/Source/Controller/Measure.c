@@ -26,8 +26,8 @@ static float CachedCurrentPeakLimit;
 volatile bool MEASURE_InMilliAmperes = false;
 
 // Forward functions
-void MEASURE_SetCurrentRange(uint32_t Current);
-void MEASURE_SetVoltageRange(uint16_t Voltage);
+void MEASURE_SetCurrentRange(float Current);
+void MEASURE_SetVoltageRange(float Voltage);
 void MEASURE_CacheSettings(pMeasureSettings Storage, uint16_t RegKN, uint16_t RegKD, uint16_t Offset, uint16_t RegP2, uint16_t RegP1,
 		uint16_t RegP0);
 void MEASURE_CacheVoltageSettings(uint16_t RegKN, uint16_t RegKD, uint16_t Offset, uint16_t RegP2, uint16_t RegP1, uint16_t RegP0);
@@ -38,14 +38,17 @@ float MEASURE_ArrayToValue(pMeasureSettings Storage, uint16_t *Data, uint16_t Da
 // Functions
 void MEASURE_SetMeasureRange()
 {
-	MEASURE_SetVoltageRange(DataTable[REG_VOLTAGE_SETPOINT]);
+	// Уставка напряжения (в В)
+	float Voltage = (float)DT_Read32(REG_VOLTAGE_SETPOINT, REG_VOLTAGE_SETPOINT_32) / 1000;
+	MEASURE_SetVoltageRange(Voltage);
 
-	uint32_t PeakCurrent = (uint32_t)DataTable[REG_CURRENT_SETPOINT_32] << 16 | DataTable[REG_CURRENT_SETPOINT];
-	MEASURE_SetCurrentRange(PeakCurrent);
+	// Уставка тока (в мкА)
+	float Current = (float)DT_Read32(REG_CURRENT_SETPOINT, REG_CURRENT_SETPOINT_32);
+	MEASURE_SetCurrentRange(Current);
 }
 //------------------------------------------------
 
-void MEASURE_SetCurrentRange(uint32_t Current)
+void MEASURE_SetCurrentRange(float Current)
 {
 	if(Current <= DataTable[REG_CURRENT_RANGE1_LIMIT])
 	{
@@ -86,7 +89,7 @@ float MEASURE_GetCurrentPeakLimit()
 }
 //------------------------------------------------
 
-void MEASURE_SetVoltageRange(uint16_t Voltage)
+void MEASURE_SetVoltageRange(float Voltage)
 {
 	if(Voltage <= DataTable[REG_VOLTAGE_RANGE1_LIMIT])
 	{
