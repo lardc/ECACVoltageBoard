@@ -24,11 +24,7 @@ void MU_LogFast(float VSet, float PWMSet, float ResultV, float ResultI)
 		CONTROL_VSetFast[LocalCounter] = (int16_t)VSet;
 		CONTROL_PWMSetFast[LocalCounter] = (int16_t)PWMSet;
 		CONTROL_VResultFast[LocalCounter] = (int16_t)ResultV;
-
-		if(MEASURE_InMilliAmperes)
-			ResultI /= 1000;
-
-		CONTROL_IResultFast[LocalCounter] = (int16_t)ResultI;
+		CONTROL_IResultFast[LocalCounter] = (int16_t)(ResultI / (MEASURE_InMilliAmperes ? 10 : 1));
 		
 		// Сохранение указателя на последний элемент
 		DataTable[REG_EP_LAST_POINTER_FAST] = LocalCounter;
@@ -61,7 +57,7 @@ void MU_LogRMS(float VSet, float VControlSet, float ResultV, float ResultI)
 		CONTROL_VSetRMS[LocalCounter] = (int16_t)VSet;
 		CONTROL_VControlRMS[LocalCounter] = (int16_t)VControlSet;
 		CONTROL_VResultRMS[LocalCounter] = (int16_t)ResultV;
-		CONTROL_IResultRMS[LocalCounter] = (int16_t)ResultI;
+		CONTROL_IResultRMS[LocalCounter] = (int16_t)(ResultI / (MEASURE_InMilliAmperes ? 10 : 1));
 
 		// Сохранение указателя на последний элемент
 		DataTable[REG_EP_LAST_POINTER_RMS] = LocalCounter;
