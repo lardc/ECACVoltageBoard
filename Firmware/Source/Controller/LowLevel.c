@@ -86,3 +86,4 @@ void LL_SetStateRedLed(bool NewState)
 {
 	GPIO_SetState(GPIO_LED_EXT, NewState);
 }
+//-----------------------------

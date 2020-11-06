@@ -40,6 +40,7 @@ void INITCFG_ConfigIO()
 	GPIO_InitPushPullOutput(GPIO_CTRL_RELAY);
 	GPIO_InitPushPullOutput(GPIO_CTRL_PWMSD_1);
 	GPIO_InitPushPullOutput(GPIO_CTRL_PWMSD_2);
+	GPIO_InitPushPullOutput(GPIO_HIGH_VOLTAGE);
 	
 	// Входы аналоговые
 	GPIO_InitAnalog(GPIO_MEAS_U);

@@ -112,14 +112,16 @@ void MEASURE_SetVoltageRange(float Voltage)
 	if(Voltage <= DataTable[REG_VOLTAGE_RANGE1_LIMIT])
 	{
 		GPIO_SetState(GPIO_U_RANGE, true);
+		GPIO_SetState(GPIO_HIGH_VOLTAGE, false);
 		MEASURE_CacheVoltageSettings(REG_ADC_V1_CONV_K, REG_ADC_V1_CONV_K_DENOM, REG_ADC_V1_CONV_B, REG_ADC_V1_FINE_P2, REG_ADC_V1_FINE_P1,
 				REG_ADC_V1_FINE_P0);
 	}
 	else
 	{
+		GPIO_SetState(GPIO_U_RANGE, false);
+		GPIO_SetState(GPIO_HIGH_VOLTAGE, true);
 		MEASURE_CacheVoltageSettings(REG_ADC_V2_CONV_K, REG_ADC_V2_CONV_K_DENOM, REG_ADC_V2_CONV_B, REG_ADC_V2_FINE_P2, REG_ADC_V2_FINE_P1,
 				REG_ADC_V2_FINE_P0);
-		GPIO_SetState(GPIO_U_RANGE, false);
 	}
 }
 //------------------------------------------------

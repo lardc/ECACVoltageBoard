@@ -20,6 +20,8 @@
 GPIO_PortPinSettingMacro GPIO_CTRL_PWMSD_1 = {GPIOA, Pin_6};
 GPIO_PortPinSettingMacro GPIO_CTRL_PWMSD_2 = {GPIOA, Pin_7};
 
+GPIO_PortPinSettingMacro GPIO_HIGH_VOLTAGE = {GPIOA, Pin_15};
+
 GPIO_PortPinSettingMacro GPIO_POW_RELAY = {GPIOB, Pin_5};
 GPIO_PortPinSettingMacro GPIO_CTRL_RELAY = {GPIOB, Pin_4};
 
@@ -32,7 +34,7 @@ GPIO_PortPinSettingMacro GPIO_I_RANGE_H = {GPIOB, Pin_13};
 GPIO_PortPinSettingMacro GPIO_I_RANGE_L = {GPIOB, Pin_14};
 GPIO_PortPinSettingMacro GPIO_U_RANGE = {GPIOB, Pin_15};
 
-// Определения для входныхпортов
+// Определения для входных портов
 GPIO_PortPinSettingMacro GPIO_MEAS_U = {GPIOA, Pin_0};
 GPIO_PortPinSettingMacro GPIO_MEAS_I = {GPIOA, Pin_5};
 GPIO_PortPinSettingMacro GPIO_SYNC_1 = {GPIOB, Pin_6};
