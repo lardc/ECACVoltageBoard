@@ -71,7 +71,7 @@ const TableItemConstraint NVConstraint[DATA_TABLE_NV_SIZE] = {
 		{TRANSFORMER_RATIO_MIN, TRANSFORMER_RATIO_MAX, TRANSFORMER_RATIO_DEF},		// 60
 		{VOLTAGE_OUTPUT_MIN, VOLTAGE_OUTPUT_MAX, VOLTAGE_OUTPUT_DEF},				// 61
 		{VOLTAGE_RISE_RATE_MIN, VOLTAGE_RISE_RATE_MAX, VOLTAGE_RISE_RATE_DEF},		// 62
-		{0, 0, 0},																	// 63
+		{VOLTAGE_READY_LVL_MIN, VOLTAGE_READY_LVL_MAX, VOLTAGE_READY_LVL_DEF},		// 63
 		{0, 0, 0},																	// 64
 		{0, 0, 0},																	// 65
 		{0, 0, 0},																	// 66
@@ -81,7 +81,7 @@ const TableItemConstraint NVConstraint[DATA_TABLE_NV_SIZE] = {
 		{NO, YES, YES},																// 70
 		{FE_LEVEL_MIN, FE_LEVEL_MAX, FE_LEVEL_DEF},									// 71
 		{FE_COUNTER_MIN, FE_COUNTER_MAX, FE_COUNTER_DEF},							// 72
-		{VOLTAGE_READY_LVL_MIN, VOLTAGE_READY_LVL_MAX, VOLTAGE_READY_LVL_DEF},		// 73
+		{0, 0, 0},																	// 73
 		{0, 0, 0},																	// 74
 		{0, 0, 0},																	// 75
 		{0, 0, 0},																	// 76
