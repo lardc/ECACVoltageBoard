@@ -21,7 +21,7 @@
 #define ADC_DMA_BUFF_SIZE 		4		// Размер буфера ДМА для АЦП
 
 // Параметры регулятора
-#define REGULATOR_I_ERR_SAT		100.0f	// Величина насыщения интегральной ошибки
+#define REGULATOR_I_ERR_SAT		15000.0f	// Величина насыщения интегральной ошибки
 
 // Прочие
 #define RELAY_SWITCH_DELAY		100		// Задержка переключения реле (в мс)
