@@ -203,8 +203,6 @@ static Boolean CONTROL_DispatchAction(Int16U ActionID, pInt16U pUserError)
 						CONTROL_SetDeviceState(DS_Ready, DSS_None);
 					}
 				}
-				else if(CONTROL_State != DS_None)
-					*pUserError = ERR_OPERATION_BLOCKED;
 			}
 			break;
 
