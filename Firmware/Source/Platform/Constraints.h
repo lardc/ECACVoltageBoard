@@ -22,7 +22,7 @@
 
 // в В (RMS)
 #define VOLTAGE_OUTPUT_MIN		5
-#define VOLTAGE_OUTPUT_MAX		350
+#define VOLTAGE_OUTPUT_MAX		750
 #define VOLTAGE_OUTPUT_DEF		20
 
 // в В/сек
