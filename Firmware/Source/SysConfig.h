@@ -23,7 +23,8 @@
 #define PWM_PERIOD						(1000000 / PWM_FREQUENCY)	// в мкс
 #define PWM_SINE_FREQ					50			// Частота формируемой синусоиды (в Гц)
 #define PWM_SINE_COUNTER_MAX			(PWM_FREQUENCY / PWM_SINE_FREQ)
-#define PWM_PRIMARY_VOLTAGE				24			// в В
+#define PWM_PRIMARY_VOLTAGE_LOW			12			// в В
+#define PWM_PRIMARY_VOLTAGE_HIGH		50			// в В
 // ----------------------------------------------
 
 // Timers

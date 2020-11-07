@@ -187,7 +187,7 @@ float PWM_GetInstantVoltageSetpoint()
 
 float PWM_ConvertVoltageToPWM(float Voltage)
 {
-	return Voltage / TransformerRatio / PWM_PRIMARY_VOLTAGE * T1PWM_GetPWMBase();
+		return Voltage / TransformerRatio / MEASURE_PrimaryVoltage * T1PWM_GetPWMBase();
 }
 //------------------------------------------------
 

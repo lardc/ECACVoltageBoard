@@ -9,6 +9,7 @@
 extern volatile uint16_t ADC1DMAVoltageBuffer[];
 extern volatile uint16_t ADC2DMACurrentBuffer[];
 extern volatile bool MEASURE_InMilliAmperes;
+extern volatile float MEASURE_PrimaryVoltage;
 
 // Functions
 bool MEASURE_InputParametersCorrect();

@@ -25,6 +25,8 @@ volatile uint16_t ADC2DMACurrentBuffer[ADC_DMA_BUFF_SIZE] = {0};
 static MeasureSettings VoltageSettings, CurrentSettings;
 static float CachedVoltage, CachedCurrent, CachedCurrentPeakLimit;
 volatile bool MEASURE_InMilliAmperes = false;
+volatile float MEASURE_PrimaryVoltage = 0;
+
 
 // Forward functions
 void MEASURE_SetCurrentRange(float Current);
@@ -111,6 +113,7 @@ void MEASURE_SetVoltageRange(float Voltage)
 {
 	if(Voltage <= DataTable[REG_VOLTAGE_RANGE1_LIMIT])
 	{
+		MEASURE_PrimaryVoltage = PWM_PRIMARY_VOLTAGE_LOW;
 		GPIO_SetState(GPIO_U_RANGE, true);
 		GPIO_SetState(GPIO_HIGH_VOLTAGE, false);
 		MEASURE_CacheVoltageSettings(REG_ADC_V1_CONV_K, REG_ADC_V1_CONV_K_DENOM, REG_ADC_V1_CONV_B, REG_ADC_V1_FINE_P2, REG_ADC_V1_FINE_P1,
@@ -118,6 +121,7 @@ void MEASURE_SetVoltageRange(float Voltage)
 	}
 	else
 	{
+		MEASURE_PrimaryVoltage = PWM_PRIMARY_VOLTAGE_HIGH;
 		GPIO_SetState(GPIO_U_RANGE, false);
 		GPIO_SetState(GPIO_HIGH_VOLTAGE, true);
 		MEASURE_CacheVoltageSettings(REG_ADC_V2_CONV_K, REG_ADC_V2_CONV_K_DENOM, REG_ADC_V2_CONV_B, REG_ADC_V2_FINE_P2, REG_ADC_V2_FINE_P1,
