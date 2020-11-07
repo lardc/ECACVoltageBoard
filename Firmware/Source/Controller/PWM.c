@@ -124,7 +124,7 @@ void PWM_ProcessPeriodRegulation(uint16_t *Problem)
 			FollowingErrorCounter = 0;
 
 		// Проверка готовности напряжения
-		if(VoltageReadyErrorLevel <= RelativeError && ActualSetVoltageRMS == TargetVoltageRMS)
+		if((VoltageReadyErrorLevel >= RelativeError) && (ActualSetVoltageRMS == TargetVoltageRMS))
 			DataTable[REG_VOLTAGE_READY] = 1;
 
 		// Получение корректировки по завершённому периоду
