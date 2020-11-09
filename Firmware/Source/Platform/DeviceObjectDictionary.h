@@ -71,7 +71,10 @@
 #define REG_ADC_I3_FINE_P0				37	// Коэффициент тонкой подстройки тока диапазона 3 P0
 #define REG_ADC_I3_CONV_K				38	// Коэффициент пересчёта тока диапазона 3 x1000
 #define REG_ADC_I3_CONV_B				39	// Оффсет тока диапазона 3 (в мВ входа АЦП)
-// 40 - 59
+
+#define REG_PWM_DUTY_OFFSET				40	// Оффсет минимальной ширины импульса (тик)
+
+// 41 - 59
 #define REG_PWM_TRANS_RATIO				60	// Коэффициент трансформации
 #define REG_PWM_OUT_VOLTAGE_LIMIT		61	// Ограничение по выходному напряжению (в В)
 #define REG_PWM_VOLTAGE_RISE_RATE		62	// Скорость нарастания выходного напряжения (в В/с)

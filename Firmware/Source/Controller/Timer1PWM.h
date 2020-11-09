@@ -4,6 +4,9 @@
 // Include
 #include "stdinc.h"
 
+// Variables
+extern volatile uint32_t T1PWM_Offset;
+
 // Functions
 void T1PWM_Init(uint32_t SystemClock, uint32_t Period);
 void T1PWM_SetDutyCycle(float Value);

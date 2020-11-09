@@ -11,6 +11,7 @@
 
 // Variables
 static uint32_t PWMBase = 0;
+volatile uint32_t T1PWM_Offset = 0;
 
 // Functions
 void T1PWM_Init(uint32_t SystemClock, uint32_t Period)
@@ -64,13 +65,13 @@ void T1PWM_SetDutyCycle(float Value)
 	// Выбор полярности формирователя
 	if(Value > 0)
 	{
-		TIM1->CCR1 = IntValue;
+		TIM1->CCR1 = IntValue + T1PWM_Offset;
 		TIM1->CCR2 = 0;
 	}
 	else if(Value < 0)
 	{
 		TIM1->CCR1 = 0;
-		TIM1->CCR2 = IntValue;
+		TIM1->CCR2 = IntValue + T1PWM_Offset;
 	}
 	else
 		TIM1->CCR1 = TIM1->CCR2 = 0;

@@ -54,6 +54,10 @@
 #define VOLTAGE_READY_LVL_MAX	10
 #define VOLTAGE_READY_LVL_DEF	3
 
+// в значении регистра CCR
+#define PWM_DUTY_OFFSET_MAX	100
+#define PWM_DUTY_OFFSET_DEF	0
+
 // Types
 typedef struct __TableItemConstraint
 {

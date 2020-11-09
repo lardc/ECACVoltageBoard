@@ -241,5 +241,7 @@ void PWM_CacheParameters()
 	FollowingErrorCounterMax = DataTable[REG_FE_COUNTER_MAX];
 
 	VoltageReadyErrorLevel = (float)DataTable[REG_PWM_VOLTAGE_READY_THR] / 100;
+
+	T1PWM_Offset = (uint32_t)DataTable[REG_PWM_DUTY_OFFSET];
 }
 //------------------------------------------------
