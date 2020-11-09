@@ -27,6 +27,12 @@
 #define PWM_PRIMARY_VOLTAGE_HIGH		50			// в В
 // ----------------------------------------------
 
+// MEAS RANGE
+#define MEASURE_RANGE_LOW				1
+#define MEASURE_RANGE_MIDDLE			2
+#define MEASURE_RANGE_HIGH				3
+// ----------------------------------------------
+
 // Timers
 #define TIMER7_uS						1000		// в мкс
 // ----------------------------------------------

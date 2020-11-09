@@ -18,6 +18,13 @@ typedef struct __VIPair
 	float Current;
 } VIPair, pVIPair;
 
+typedef struct __CoefficientsRMS
+{
+	float P2;
+	float P1;
+	float P0;
+} CoefficientsRMS;
+
 // Variables
 volatile uint32_t PWMTimerCounter = 0;
 static float TransformerRatio, Kp, Ki, ErrorI;
@@ -27,6 +34,8 @@ static float CurrentLimitRMS;
 static bool RequestSoftStop = false;
 static float FollowingErrorLevel, VoltageReadyErrorLevel;
 static uint16_t FollowingErrorCounter, FollowingErrorCounterMax;
+static volatile CoefficientsRMS Voltage, Current;
+
 
 // Forward functions
 void PWM_CacheParameters();
@@ -39,6 +48,7 @@ void PWM_AddToRMS(VIPair Pair);
 VIPair PWM_CalculateRMSValue();
 void PWM_ProcessPeriodRegulation(uint16_t *Problem);
 void PWM_ProcessInstantPWMOutput(VIPair Pair);
+void PWM_CacheRMSCoefficients();
 
 // Functions
 void PWM_SignalStart()
@@ -212,6 +222,10 @@ VIPair PWM_CalculateRMSValue()
 	VIPair Result;
 	Result.Voltage = sqrtf(VoltageStorageRMS / PWM_SINE_COUNTER_MAX);
 	Result.Current = sqrtf(CurrentStorageRMS / PWM_SINE_COUNTER_MAX);
+
+	Result.Voltage = Result.Voltage * Result.Voltage * Voltage.P2 + Result.Voltage * Voltage.P1 + Voltage.P0;
+	Result.Current = Result.Current * Result.Current * Current.P2 + Result.Current * Current.P1 + Current.P0;
+
 	VoltageStorageRMS = CurrentStorageRMS = 0;
 	return Result;
 }
@@ -243,5 +257,45 @@ void PWM_CacheParameters()
 	VoltageReadyErrorLevel = (float)DataTable[REG_PWM_VOLTAGE_READY_THR] / 100;
 
 	T1PWM_Offset = (uint32_t)DataTable[REG_PWM_DUTY_OFFSET];
+
+	PWM_CacheRMSCoefficients();
 }
 //------------------------------------------------
+
+void PWM_CacheRMSCoefficients()
+{
+	if(MEASURE_RangeU == MEASURE_RANGE_LOW)
+	{
+		Voltage.P2 = (float)((int16_t)DataTable[REG_RMS_V1_FINE_P2]) / 1e6;
+		Voltage.P1 = (float)DataTable[REG_RMS_V1_FINE_P1] / 1000;
+		Voltage.P0 = (float)((int16_t)DataTable[REG_RMS_V1_FINE_P0]);
+	}
+	else
+	{
+		Voltage.P2 = (float)((int16_t)DataTable[REG_RMS_V2_FINE_P2]) / 1e6;
+		Voltage.P1 = (float)DataTable[REG_RMS_V2_FINE_P1] / 1000;
+		Voltage.P0 = (float)((int16_t)DataTable[REG_RMS_V2_FINE_P0]);
+	}
+
+	if(MEASURE_RangeI == MEASURE_RANGE_LOW)
+	{
+		Current.P2 = (float)((int16_t)DataTable[REG_RMS_I1_FINE_P2]) / 1e6;
+		Current.P1 = (float)DataTable[REG_RMS_I1_FINE_P1] / 1000;
+		Current.P0 = (float)((int16_t)DataTable[REG_RMS_I1_FINE_P0]);
+	}
+	else
+	{
+		if(MEASURE_RangeI == MEASURE_RANGE_MIDDLE)
+		{
+			Current.P2 = (float)((int16_t)DataTable[REG_RMS_I2_FINE_P2]) / 1e6;
+			Current.P1 = (float)DataTable[REG_RMS_I2_FINE_P1] / 1000;
+			Current.P0 = (float)((int16_t)DataTable[REG_RMS_I2_FINE_P0]);
+		}
+		else
+		{
+			Current.P2 = (float)((int16_t)DataTable[REG_RMS_I3_FINE_P2]) / 1e6;
+			Current.P1 = (float)DataTable[REG_RMS_I3_FINE_P1] / 1000;
+			Current.P0 = (float)((int16_t)DataTable[REG_RMS_I3_FINE_P0]);
+		}
+	}
+}

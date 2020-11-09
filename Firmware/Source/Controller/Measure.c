@@ -26,7 +26,7 @@ static MeasureSettings VoltageSettings, CurrentSettings;
 static float CachedVoltage, CachedCurrent, CachedCurrentPeakLimit;
 volatile bool MEASURE_InMilliAmperes = false;
 volatile float MEASURE_PrimaryVoltage = 0;
-
+volatile uint16_t MEASURE_RangeI, MEASURE_RangeU;
 
 // Forward functions
 void MEASURE_SetCurrentRange(float Current);
@@ -72,6 +72,7 @@ void MEASURE_SetCurrentRange(float Current)
 {
 	if(Current <= DataTable[REG_CURRENT_RANGE1_LIMIT])
 	{
+		MEASURE_RangeI = MEASURE_RANGE_LOW;
 		GPIO_SetState(GPIO_I_RANGE_H, false);
 		GPIO_SetState(GPIO_I_RANGE_M, false);
 		GPIO_SetState(GPIO_I_RANGE_L, true);
@@ -79,9 +80,11 @@ void MEASURE_SetCurrentRange(float Current)
 		MEASURE_CacheCurrentSettings(REG_ADC_I1_CONV_K, REG_ADC_I1_CONV_K_DENOM, REG_ADC_I1_CONV_B, REG_ADC_I1_FINE_P2, REG_ADC_I1_FINE_P1,
 				REG_ADC_I1_FINE_P0, REG_CURRENT_RANGE1_RES);
 		MEASURE_InMilliAmperes = false;
+
 	}
 	else if(Current <= DataTable[REG_CURRENT_RANGE2_LIMIT])
 	{
+		MEASURE_RangeI = MEASURE_RANGE_MIDDLE;
 		GPIO_SetState(GPIO_I_RANGE_H, false);
 		GPIO_SetState(GPIO_I_RANGE_M, true);
 		GPIO_SetState(GPIO_I_RANGE_L, false);
@@ -92,6 +95,7 @@ void MEASURE_SetCurrentRange(float Current)
 	}
 	else
 	{
+		MEASURE_RangeI = MEASURE_RANGE_HIGH;
 		GPIO_SetState(GPIO_I_RANGE_H, true);
 		GPIO_SetState(GPIO_I_RANGE_M, false);
 		GPIO_SetState(GPIO_I_RANGE_L, false);
@@ -113,6 +117,7 @@ void MEASURE_SetVoltageRange(float Voltage)
 {
 	if(Voltage <= DataTable[REG_VOLTAGE_RANGE1_LIMIT])
 	{
+		MEASURE_RangeU = MEASURE_RANGE_LOW;
 		MEASURE_PrimaryVoltage = PWM_PRIMARY_VOLTAGE_LOW;
 		GPIO_SetState(GPIO_U_RANGE, true);
 		GPIO_SetState(GPIO_HIGH_VOLTAGE, false);
@@ -121,6 +126,7 @@ void MEASURE_SetVoltageRange(float Voltage)
 	}
 	else
 	{
+		MEASURE_RangeU = MEASURE_RANGE_HIGH;
 		MEASURE_PrimaryVoltage = PWM_PRIMARY_VOLTAGE_HIGH;
 		GPIO_SetState(GPIO_U_RANGE, false);
 		GPIO_SetState(GPIO_HIGH_VOLTAGE, true);
