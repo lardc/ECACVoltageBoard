@@ -268,20 +268,20 @@ void PWM_CacheRMSCoefficients()
 	{
 		Voltage.P2 = (float)((int16_t)DataTable[REG_RMS_V1_FINE_P2]) / 1e6;
 		Voltage.P1 = (float)DataTable[REG_RMS_V1_FINE_P1] / 1000;
-		Voltage.P0 = (float)((int16_t)DataTable[REG_RMS_V1_FINE_P0] / 1000);
+		Voltage.P0 = (float)((int16_t)DataTable[REG_RMS_V1_FINE_P0]) / 1000;
 	}
 	else
 	{
 		Voltage.P2 = (float)((int16_t)DataTable[REG_RMS_V2_FINE_P2]) / 1e6;
 		Voltage.P1 = (float)DataTable[REG_RMS_V2_FINE_P1] / 1000;
-		Voltage.P0 = (float)((int16_t)DataTable[REG_RMS_V2_FINE_P0] / 1000);
+		Voltage.P0 = (float)((int16_t)DataTable[REG_RMS_V2_FINE_P0]) / 1000;
 	}
 
 	if(MEASURE_RangeI == MEASURE_RANGE_LOW)
 	{
 		Current.P2 = (float)((int16_t)DataTable[REG_RMS_I1_FINE_P2]) / 1e6;
 		Current.P1 = (float)DataTable[REG_RMS_I1_FINE_P1] / 1000;
-		Current.P0 = (float)((int16_t)DataTable[REG_RMS_I1_FINE_P0] / 1000);
+		Current.P0 = (float)((int16_t)DataTable[REG_RMS_I1_FINE_P0]) / 1000;
 	}
 	else
 	{
@@ -289,13 +289,13 @@ void PWM_CacheRMSCoefficients()
 		{
 			Current.P2 = (float)((int16_t)DataTable[REG_RMS_I2_FINE_P2]) / 1e6;
 			Current.P1 = (float)DataTable[REG_RMS_I2_FINE_P1] / 1000;
-			Current.P0 = (float)((int16_t)DataTable[REG_RMS_I2_FINE_P0] / 1000);
+			Current.P0 = (float)((int16_t)DataTable[REG_RMS_I2_FINE_P0]) / 1000;
 		}
 		else
 		{
 			Current.P2 = (float)((int16_t)DataTable[REG_RMS_I3_FINE_P2]) / 1e6;
 			Current.P1 = (float)DataTable[REG_RMS_I3_FINE_P1] / 1000;
-			Current.P0 = (float)((int16_t)DataTable[REG_RMS_I3_FINE_P0] / 1000);
+			Current.P0 = (float)((int16_t)DataTable[REG_RMS_I3_FINE_P0]) / 1000;
 		}
 	}
 }
