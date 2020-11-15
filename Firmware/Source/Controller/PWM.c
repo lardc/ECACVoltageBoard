@@ -295,7 +295,7 @@ void PWM_CacheRMSCoefficients()
 		{
 			Current.P2 = (float)((int16_t)DataTable[REG_RMS_I3_FINE_P2]) / 1e6;
 			Current.P1 = (float)DataTable[REG_RMS_I3_FINE_P1] / 1000;
-			Current.P0 = (float)((int16_t)DataTable[REG_RMS_I3_FINE_P0]) / 1000;
+			Current.P0 = (float)((int16_t)DataTable[REG_RMS_I3_FINE_P0]);
 		}
 	}
 }
