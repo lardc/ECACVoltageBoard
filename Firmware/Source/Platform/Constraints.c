@@ -192,9 +192,9 @@ const TableItemConstraint VConstraint[DATA_TABLE_WP_START - DATA_TABLE_WR_START]
 		{0, 0, 0},																	// 178
 		{0, 0, 0},																	// 179
 		{0, 0, 0},																	// 180
-		{0, 0, 0},																	// 181
-		{0, 0, 0},																	// 182
-		{0, 0, 0},																	// 183
+		{0, REG_CURR_RANGE_SAFETY_LIMIT, 0},										// 181
+		{0, REG_CURR_RANGE_SAFETY_LIMIT, 0},										// 182
+		{0, REG_CURR_RANGE_SAFETY_LIMIT, 0},										// 183
 		{0, 0, 0},																	// 184
 		{0, 0, 0},																	// 185
 		{0, 0, 0},																	// 186

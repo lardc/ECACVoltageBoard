@@ -54,6 +54,9 @@
 #define VOLTAGE_READY_LVL_MAX	10
 #define VOLTAGE_READY_LVL_DEF	3
 
+// в %
+#define REG_CURR_RANGE_SAFETY_LIMIT 15
+
 // в значении регистра CCR
 #define PWM_DUTY_OFFSET_MAX	100
 #define PWM_DUTY_OFFSET_DEF	0
