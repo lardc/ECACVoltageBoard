@@ -195,7 +195,7 @@ float PWM_GetInstantVoltageSetpoint()
 
 float PWM_ConvertVoltageToPWM(float Voltage)
 {
-		return Voltage / TransformerRatio / MEASURE_PrimaryVoltage * T1PWM_GetPWMBase();
+	return Voltage / TransformerRatio / MEASURE_PrimaryVoltage * T1PWM_GetPWMBase();
 }
 //------------------------------------------------
 
@@ -245,7 +245,6 @@ void PWM_CacheParameters()
 	TargetVoltageRMS = (float)DT_Read32(REG_VOLTAGE_SETPOINT, REG_VOLTAGE_SETPOINT_32) / 1000;
 	CurrentLimitRMS = (float)DT_Read32(REG_CURRENT_SETPOINT, REG_CURRENT_SETPOINT_32) * (float)DataTable[REG_CURR_RANGE_1_SAFETY_LIMIT];
 	CurrentLimitRMS += (float)DT_Read32(REG_CURRENT_SETPOINT, REG_CURRENT_SETPOINT_32);
-
 
 	TransformerRatio = (float)DataTable[REG_PWM_TRANS_RATIO];
 	ControlSetVoltageMaxRMS = (float)DataTable[REG_PWM_OUT_VOLTAGE_LIMIT];
@@ -299,3 +298,4 @@ void PWM_CacheRMSCoefficients()
 		}
 	}
 }
+//------------------------------------------------
