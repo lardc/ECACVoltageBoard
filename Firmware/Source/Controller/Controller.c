@@ -261,7 +261,6 @@ void CONTROL_ProcessSubStates()
 					if(CONTROL_TimeCounter > Timeout)
 					{
 						LL_OutputSelector(AC_None);
-
 						Timeout = CONTROL_TimeCounter + RELAY_SWITCH_DELAY;
 						CONTROL_SetDeviceState(DS_InProcess, DSS_WaitDisconnection);
 					}

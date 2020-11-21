@@ -5,6 +5,7 @@
 #include "ZwTIM.h"
 #include "ZwRCC.h"
 #include "math.h"
+#include "LowLevel.h"
 
 // Defines
 #define T1PWM_MAX_OUTPUT	0.95f
@@ -106,5 +107,7 @@ void T1PWM_Stop()
 
 	// Разрешение прерывания
 	TIM1->DIER |= TIM_DIER_UIE;
+
+	LL_SetStateRedLed(false);
 }
 //------------------------------------------------

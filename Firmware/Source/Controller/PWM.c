@@ -74,7 +74,6 @@ bool PWM_SinRegulation(uint16_t *Problem)
 	{
 		*Problem = PROBLEM_INSTANT_OVERCURRENT;
 		T1PWM_Stop();
-		LL_SetStateRedLed(true);
 		return true;
 	}
 
@@ -182,7 +181,6 @@ void PWM_ProcessInstantPWMOutput(VIPair Pair)
 	if(RequestSoftStop && (PWMTimerCounter == 0))
 	{
 		T1PWM_Stop();
-		LL_SetStateRedLed(false);
 	}
 	else
 		T1PWM_SetDutyCycle(PWMSetpoint);
