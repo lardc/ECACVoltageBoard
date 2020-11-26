@@ -72,7 +72,14 @@ bool PWM_SinRegulation(uint16_t *Problem)
 	// Защита от КЗ
 	if(fabsf(Sample.Current) > MEASURE_GetCurrentPeakLimit())
 	{
-		*Problem = PROBLEM_INSTANT_OVERCURRENT;
+		// "Быстрое" преобразование в RMS
+		Sample.Current = fabsf(Sample.Current) * M_SQRT2;
+		Sample.Voltage = fabsf(Sample.Voltage) * M_SQRT2;
+
+		PWM_SaveResultToDataTable(Sample);
+		DataTable[REG_WARNING] = WARNING_INSTANT_OVERCURRENT;
+		*Problem = PROBLEM_NONE;
+
 		T1PWM_Stop();
 		LL_SetStateRedLed(true);
 		return true;
@@ -161,7 +168,9 @@ void PWM_ProcessPeriodRegulation(uint16_t *Problem)
 		// Проверка превышения действующего значения тока
 		else if(ValuesRMS.Current > CurrentLimitRMS)
 		{
-			*Problem = PROBLEM_RMS_OVER_CURRENT;
+			PWM_SaveResultToDataTable(ValuesRMS);
+			DataTable[REG_WARNING] = WARNING_RMS_OVER_CURRENT;
+			*Problem = PROBLEM_NONE;
 			RequestSoftStop = true;
 		}
 
