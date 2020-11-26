@@ -46,7 +46,7 @@
 #define FE_LEVEL_DEF			10
 
 #define FE_COUNTER_MIN			1
-#define FE_COUNTER_MAX			10
+#define FE_COUNTER_MAX			50
 #define FE_COUNTER_DEF			3
 
 // в %
