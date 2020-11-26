@@ -49,6 +49,11 @@
 #define FE_COUNTER_MAX			50
 #define FE_COUNTER_DEF			3
 
+// в В
+#define FE_ABS_LEVEL_MIN		1
+#define FE_ABS_LEVEL_MAX		50
+#define FE_ABS_LEVEL_DEF		5
+
 // в %
 #define VOLTAGE_READY_LVL_MIN	1
 #define VOLTAGE_READY_LVL_MAX	10

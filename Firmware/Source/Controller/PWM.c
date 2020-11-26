@@ -31,8 +31,8 @@ static float TransformerRatio, Kp, Ki, ErrorI;
 static float ActualSetVoltageRMS, ControlSetVoltageRMS, ControlSetVoltageMaxRMS, TargetVoltageRMS, VoltageStepRMS;
 static float VoltageStorageRMS, CurrentStorageRMS;
 static float CurrentLimitRMS;
-static bool RequestSoftStop = false;
-static float FollowingErrorLevel, VoltageReadyErrorLevel;
+static bool RequestSoftStop = false, FollowingErrorEnable;
+static float FollowingErrorRelativeLevel, FollowingErrorAbsoluteLevel, VoltageReadyErrorLevel;
 static uint16_t FollowingErrorCounter, FollowingErrorCounterMax;
 static volatile CoefficientsRMS Voltage, Current;
 
@@ -128,16 +128,19 @@ void PWM_ProcessPeriodRegulation(uint16_t *Problem)
 		float RelativeError = fabsf(Error / ActualSetVoltageRMS);
 
 		// Расчёт FollowingError
-		if((RelativeError >= FollowingErrorLevel) && (DataTable[REG_FE_ENABLE] == true))
+		if(FollowingErrorEnable)
 		{
-			if(++FollowingErrorCounter >= FollowingErrorCounterMax)
+			if((RelativeError >= FollowingErrorRelativeLevel) && (fabsf(Error) >= FollowingErrorAbsoluteLevel))
 			{
-				*Problem = PROBLEM_FOLLOWING_ERROR;
-				RequestSoftStop = true;
+				if(++FollowingErrorCounter >= FollowingErrorCounterMax)
+				{
+					*Problem = PROBLEM_FOLLOWING_ERROR;
+					RequestSoftStop = true;
+				}
 			}
+			else
+				FollowingErrorCounter = 0;
 		}
-		else
-			FollowingErrorCounter = 0;
 
 		// Проверка готовности напряжения
 		if((VoltageReadyErrorLevel >= RelativeError) && (ActualSetVoltageRMS == TargetVoltageRMS))
@@ -259,7 +262,9 @@ void PWM_CacheParameters()
 	ControlSetVoltageMaxRMS = (float)DataTable[REG_PWM_OUT_VOLTAGE_LIMIT];
 	VoltageStepRMS = (float)DataTable[REG_PWM_VOLTAGE_RISE_RATE] / PWM_SINE_FREQ;
 
-	FollowingErrorLevel = (float)DataTable[REG_FE_LEVEL] / 100;
+	FollowingErrorEnable = DataTable[REG_FE_ENABLE];
+	FollowingErrorRelativeLevel = (float)DataTable[REG_FE_RELATIVE_LEVEL] / 100;
+	FollowingErrorAbsoluteLevel = (float)DataTable[REG_FE_ABSOLUTE_LEVEL];
 	FollowingErrorCounterMax = DataTable[REG_FE_COUNTER_MAX];
 
 	VoltageReadyErrorLevel = (float)DataTable[REG_PWM_VOLTAGE_READY_THR] / 100;
