@@ -76,7 +76,7 @@ void MEASURE_SetCurrentRange(float Current)
 		GPIO_SetState(GPIO_I_RANGE_H, false);
 		GPIO_SetState(GPIO_I_RANGE_M, false);
 		GPIO_SetState(GPIO_I_RANGE_L, true);
-		CachedCurrentPeakLimit = (float)DataTable[REG_CURRENT_RANGE1_LIMIT] + (float)DataTable[REG_CURRENT_RANGE1_LIMIT] * (float)DataTable[REG_CURR_RANGE_1_SAFETY_LIMIT];
+		CachedCurrentPeakLimit = (float)DataTable[REG_CURRENT_RANGE1_LIMIT] * (1 + (float)DataTable[REG_CURR_RANGE_1_SAFETY_LIMIT] / 100);
 		CachedCurrentPeakLimit = CachedCurrentPeakLimit * M_SQRT2;
 		MEASURE_CacheCurrentSettings(REG_ADC_I1_CONV_K, REG_ADC_I1_CONV_K_DENOM, REG_ADC_I1_CONV_B, REG_ADC_I1_FINE_P2, REG_ADC_I1_FINE_P1,
 				REG_ADC_I1_FINE_P0, REG_CURRENT_RANGE1_RES);
@@ -89,7 +89,7 @@ void MEASURE_SetCurrentRange(float Current)
 		GPIO_SetState(GPIO_I_RANGE_H, false);
 		GPIO_SetState(GPIO_I_RANGE_M, true);
 		GPIO_SetState(GPIO_I_RANGE_L, false);
-		CachedCurrentPeakLimit = (float)DataTable[REG_CURRENT_RANGE2_LIMIT] + (float)DataTable[REG_CURRENT_RANGE2_LIMIT] * (float)DataTable[REG_CURR_RANGE_2_SAFETY_LIMIT];
+		CachedCurrentPeakLimit = (float)DataTable[REG_CURRENT_RANGE2_LIMIT] * (1 + (float)DataTable[REG_CURR_RANGE_2_SAFETY_LIMIT] / 100);
 		CachedCurrentPeakLimit = CachedCurrentPeakLimit * M_SQRT2;
 		MEASURE_CacheCurrentSettings(REG_ADC_I2_CONV_K, REG_ADC_I2_CONV_K_DENOM, REG_ADC_I2_CONV_B, REG_ADC_I2_FINE_P2, REG_ADC_I2_FINE_P1,
 				REG_ADC_I2_FINE_P0, REG_CURRENT_RANGE2_RES);
@@ -101,7 +101,7 @@ void MEASURE_SetCurrentRange(float Current)
 		GPIO_SetState(GPIO_I_RANGE_H, true);
 		GPIO_SetState(GPIO_I_RANGE_M, false);
 		GPIO_SetState(GPIO_I_RANGE_L, false);
-		CachedCurrentPeakLimit = (float)DataTable[REG_CURRENT_RANGE3_LIMIT] + (float)DataTable[REG_CURRENT_RANGE3_LIMIT] * (float)DataTable[REG_CURR_RANGE_3_SAFETY_LIMIT];
+		CachedCurrentPeakLimit = (float)DataTable[REG_CURRENT_RANGE3_LIMIT] * (1 + (float)DataTable[REG_CURR_RANGE_3_SAFETY_LIMIT] / 100);
 		CachedCurrentPeakLimit = CachedCurrentPeakLimit * 1000 * M_SQRT2;
 		MEASURE_CacheCurrentSettings(REG_ADC_I3_CONV_K, REG_ADC_I3_CONV_K_DENOM, REG_ADC_I3_CONV_B, REG_ADC_I3_FINE_P2, REG_ADC_I3_FINE_P1,
 				REG_ADC_I3_FINE_P0, REG_CURRENT_RANGE3_RES);

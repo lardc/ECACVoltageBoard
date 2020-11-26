@@ -70,7 +70,7 @@ bool PWM_SinRegulation(uint16_t *Problem)
 	VIPair Sample = PWM_GetMeasureData();
 
 	// Защита от КЗ
-	if(Sample.Current > MEASURE_GetCurrentPeakLimit())
+	if(fabsf(Sample.Current) > MEASURE_GetCurrentPeakLimit())
 	{
 		*Problem = PROBLEM_INSTANT_OVERCURRENT;
 		T1PWM_Stop();
@@ -284,20 +284,17 @@ void PWM_CacheRMSCoefficients()
 		Current.P1 = (float)DataTable[REG_RMS_I1_FINE_P1] / 1000;
 		Current.P0 = (float)((int16_t)DataTable[REG_RMS_I1_FINE_P0]) / 1000;
 	}
+	else if(MEASURE_RangeI == MEASURE_RANGE_MIDDLE)
+	{
+		Current.P2 = (float)((int16_t)DataTable[REG_RMS_I2_FINE_P2]) / 1e6;
+		Current.P1 = (float)DataTable[REG_RMS_I2_FINE_P1] / 1000;
+		Current.P0 = (float)((int16_t)DataTable[REG_RMS_I2_FINE_P0]) / 1000;
+	}
 	else
 	{
-		if(MEASURE_RangeI == MEASURE_RANGE_MIDDLE)
-		{
-			Current.P2 = (float)((int16_t)DataTable[REG_RMS_I2_FINE_P2]) / 1e6;
-			Current.P1 = (float)DataTable[REG_RMS_I2_FINE_P1] / 1000;
-			Current.P0 = (float)((int16_t)DataTable[REG_RMS_I2_FINE_P0]) / 1000;
-		}
-		else
-		{
-			Current.P2 = (float)((int16_t)DataTable[REG_RMS_I3_FINE_P2]) / 1e6;
-			Current.P1 = (float)DataTable[REG_RMS_I3_FINE_P1] / 1000;
-			Current.P0 = (float)((int16_t)DataTable[REG_RMS_I3_FINE_P0]);
-		}
+		Current.P2 = (float)((int16_t)DataTable[REG_RMS_I3_FINE_P2]) / 1e6;
+		Current.P1 = (float)DataTable[REG_RMS_I3_FINE_P1] / 1000;
+		Current.P0 = (float)((int16_t)DataTable[REG_RMS_I3_FINE_P0]);
 	}
 }
 //------------------------------------------------
