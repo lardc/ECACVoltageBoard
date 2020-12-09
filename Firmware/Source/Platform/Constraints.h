@@ -27,7 +27,7 @@
 
 // в В/сек
 #define VOLTAGE_RISE_RATE_MIN	10
-#define VOLTAGE_RISE_RATE_MAX	100
+#define VOLTAGE_RISE_RATE_MAX	200
 #define VOLTAGE_RISE_RATE_DEF	10
 
 // в мкА
